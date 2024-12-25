@@ -24,7 +24,7 @@ public class ClubServiceImpl implements ClubService{
     public Club createClub(Club club) {
 
         // Check the club exist
-        checkClubExist(club);
+        
 
         // If not exist
             if (club.getClubId() == null || club.getClubId().isEmpty()) {
@@ -77,29 +77,6 @@ public class ClubServiceImpl implements ClubService{
         }
         else {
             return findClub;
-        }
-    }
-
-    private void checkClubExist(Club club) {
-
-        // Example fields to check for existence
-        String clubName = club.getClubName();
-        String clubAddress = club.getClubAddress();
-        String clubProducer = club.getClubProducer();
-
-        // Query the database to check if a club with the same name and location exists
-        Optional<Club> existingClubByName = Optional.ofNullable(clubRepository.findByClubName(clubName));
-        Optional<Club> existingClubByAddress = Optional.ofNullable(clubRepository.findByClubAddress(clubAddress));
-        Optional<Club> existingClubByProducer = Optional.ofNullable(clubRepository.findByClubProducer(clubProducer));
-
-        if (existingClubByName.isPresent()) {
-            throw new RuntimeException("A club with the same name already exists.");
-        }
-        else if (existingClubByAddress.isPresent()) {
-            throw new RuntimeException("A club with the same address already exists.");
-        }
-        else if (existingClubByProducer.isPresent()) {
-            throw new RuntimeException("A club with the same producer already exists.");
         }
     }
 }
