@@ -64,7 +64,7 @@ public class ClubServiceImpl implements ClubService{
             System.out.println("Deleted Club: " + deleteClub.getClubId());
         }
         catch (Exception e) {
-            throw new RuntimeException("MainAdmin not found with id: " + clubId);
+            throw new RuntimeException("Club not found with id: " + clubId);
         }
     }
 
@@ -85,27 +85,20 @@ public class ClubServiceImpl implements ClubService{
         // Example fields to check for existence
         String clubName = club.getClubName();
         String clubAddress = club.getClubAddress();
-        String clubSeniorAdvisor = club.getClubSeniorAdviser();
         String clubProducer = club.getClubProducer();
 
         // Query the database to check if a club with the same name and location exists
         Optional<Club> existingClubByName = Optional.ofNullable(clubRepository.findByClubName(clubName));
+        Optional<Club> existingClubByAddress = Optional.ofNullable(clubRepository.findByClubAddress(clubAddress));
+        Optional<Club> existingClubByProducer = Optional.ofNullable(clubRepository.findByClubProducer(clubProducer));
+
         if (existingClubByName.isPresent()) {
             throw new RuntimeException("A club with the same name already exists.");
         }
-
-        Optional<Club> existingClubByAddress = Optional.ofNullable(clubRepository.findByClubAddress(clubAddress));
-        if (existingClubByAddress.isPresent()) {
+        else if (existingClubByAddress.isPresent()) {
             throw new RuntimeException("A club with the same address already exists.");
         }
-
-        Optional<Club> existingClubByAdvisor  = Optional.ofNullable(clubRepository.findByClubSeniorAdviser(clubSeniorAdvisor));
-        if (existingClubByAdvisor.isPresent()) {
-            throw new RuntimeException("A club with the same adviser already exists.");
-        }
-
-        Optional<Club> existingClubByProducer = Optional.ofNullable(clubRepository.findByClubProducer(clubProducer));
-        if (existingClubByProducer.isPresent()) {
+        else if (existingClubByProducer.isPresent()) {
             throw new RuntimeException("A club with the same producer already exists.");
         }
     }
