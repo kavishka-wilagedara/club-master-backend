@@ -1,8 +1,6 @@
 package com.uokclubmanagement.service;
 
 import com.uokclubmanagement.entity.Club;
-import com.uokclubmanagement.entity.DatabaseSequence;
-import com.uokclubmanagement.entity.MainAdmin;
 import com.uokclubmanagement.repository.ClubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class ClubServiceImpl implements ClubService{
+public class ClubServiceImpl implements ClubService {
 
     @Autowired
     private ClubRepository clubRepository;
@@ -45,7 +43,7 @@ public class ClubServiceImpl implements ClubService{
     @Override
     public Club updateClubById(String clubId, Club club) {
         Club existingClub = clubRepository.findClubByClubId(clubId);
-        // Check if existingMainAdmin is null
+        // Check if existingClub is null
         if (existingClub == null) {
             throw new RuntimeException("Club not found with id: " + clubId);
         }
@@ -82,12 +80,12 @@ public class ClubServiceImpl implements ClubService{
 
     private void checkClubExist(Club club) {
 
-        // Example fields to check for existence
+        // Fields to check for existence
         String clubName = club.getClubName();
         String clubAddress = club.getClubAddress();
         String clubProducer = club.getClubProducer();
 
-        // Query the database to check if a club with the same name and location exists
+        // Query the database to check if a club with the same name, address and producer exists
         Optional<Club> existingClubByName = Optional.ofNullable(clubRepository.findByClubName(clubName));
         Optional<Club> existingClubByAddress = Optional.ofNullable(clubRepository.findByClubAddress(clubAddress));
         Optional<Club> existingClubByProducer = Optional.ofNullable(clubRepository.findByClubProducer(clubProducer));

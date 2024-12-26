@@ -2,9 +2,14 @@ package com.uokclubmanagement.entity;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
+@Document("member")
 public class Member {
+
+    @Id
+    private String memberId;
 
     private String firstName;
     private String lastName;
@@ -14,6 +19,14 @@ public class Member {
     private String password;
 
     public Member() {
+    }
+
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
     }
 
     public String getFirstName() {

@@ -51,7 +51,7 @@ public class MainAdminController {
             throw new RuntimeException("Login failed");
     }
 
-    @GetMapping("/findMember/{id}")
+    @GetMapping("/find-mainAdmin/{id}")
     public ResponseEntity<MainAdmin> findMember(@PathVariable("id") String mainAdminId) {
         MainAdmin mainAdmin = mainAdminService.getMainAdminById(mainAdminId);
         return ResponseEntity.ok(mainAdmin);

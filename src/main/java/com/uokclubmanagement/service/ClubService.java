@@ -11,5 +11,4 @@ public interface ClubService {
     Club updateClubById(String clubId, Club club);
     void deleteClubById(String clubId);
     Club getClubById(String clubId);
-//    Club getClubByName(String clubName);
 }

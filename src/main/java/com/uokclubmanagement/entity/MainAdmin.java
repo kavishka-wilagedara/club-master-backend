@@ -9,19 +9,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("admin")
 public class MainAdmin extends Member {
 
-    @Id
-    private String id;
     private String mainAdminId;
 
     public MainAdmin() {
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getMainAdminId() {
