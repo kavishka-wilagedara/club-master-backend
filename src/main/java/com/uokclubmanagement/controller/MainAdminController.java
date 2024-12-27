@@ -44,7 +44,7 @@ public class MainAdminController {
     @PostMapping("/login")
     public ResponseEntity<String> loginMainAdmin(@RequestBody MainAdmin loginMainAdmin) {
         MainAdmin mainAdmin = mainAdminService.getMainAdminById(loginMainAdmin.getMainAdminId());
-        if(mainAdmin.getPassword().equals(loginMainAdmin.getPassword())) {
+        if(mainAdmin.getMainAdminPassword().equals(loginMainAdmin.getMainAdminPassword())) {
             return ResponseEntity.ok("Login successful");
         }
         else

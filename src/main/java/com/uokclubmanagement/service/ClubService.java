@@ -1,6 +1,7 @@
 package com.uokclubmanagement.service;
 
 import com.uokclubmanagement.entity.Club;
+import com.uokclubmanagement.entity.Member;
 
 import java.util.List;
 

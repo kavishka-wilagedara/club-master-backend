@@ -18,44 +18,31 @@ public class MainAdminServiceImpl implements MainAdminService {
     @Autowired
     private MainAdminRepository mainAdminRepository;
     @Autowired
-    private MemberRepository memberRepository;
-    @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
 
     @Override
     public MainAdmin createMainAdmin(MainAdmin mainAdmin) {
 
-        // Check the member exist
-        String memberId = mainAdmin.getMemberId();
+        // Check username exists
+        String username = mainAdmin.getMainAdminUsername();
 
-        // Query the database to check if a member with the same memberId exists
-        Optional<Member> existingMemberByMemberId = Optional.ofNullable(memberRepository.findMemberByMemberId(memberId));
+        Optional<MainAdmin> optionalMainAdmin = Optional.ofNullable(mainAdminRepository.findMainAdminByMainAdminUsername(username));
 
-        if (existingMemberByMemberId.isPresent()) {
+        if (optionalMainAdmin.isPresent()) {
+            throw new RuntimeException("username already exists");
+        }
 
-            // Set adminId
-            if (mainAdmin.getMainAdminId()   == null || mainAdmin.getMainAdminId().isEmpty()){
-                long seqValue = sequenceGeneratorService.generateSequence("Main Admin Sequence");
-                String mainAdminId = String.format("Adm-%04d", seqValue);
+        // If not exist
+        else{
+        // Set adminId
+        if (mainAdmin.getMainAdminId()   == null || mainAdmin.getMainAdminId().isEmpty()){
+            long seqValue = sequenceGeneratorService.generateSequence("Main Admin Sequence");
+            String mainAdminId = String.format("Adm-%04d", seqValue);
+            mainAdmin.setMainAdminId(mainAdminId);
 
-                // Set member's information into mainAdmin's information
-                mainAdmin.setMainAdminId(mainAdminId);
-                mainAdmin.setFirstName(existingMemberByMemberId.get().getFirstName());
-                mainAdmin.setLastName(existingMemberByMemberId.get().getLastName());
-                mainAdmin.setPhoneNo(existingMemberByMemberId.get().getPhoneNo());
-                mainAdmin.setEmail(existingMemberByMemberId.get().getEmail());
-                mainAdmin.setUserName(existingMemberByMemberId.get().getUserName());
-                mainAdmin.setPassword(existingMemberByMemberId.get().getPassword());
-
-                return mainAdminRepository.save(mainAdmin);
             }
+            return mainAdminRepository.save(mainAdmin);
         }
-
-        // If member not exist
-        else {
-            throw new RuntimeException("Member Id not found with memberId: " + memberId);
-        }
-        return null;
     }
 
     @Override
@@ -74,40 +61,23 @@ public class MainAdminServiceImpl implements MainAdminService {
         // Update the mainAdmin fields
         updateMainAdminFields(existingMainAdmin, mainAdmin);
 
-        // Check the mainAdmin is member
-        Optional<Member> existingMemberByMemberId = Optional.ofNullable(memberRepository.findMemberByMemberId(mainAdmin.getMemberId()));
-        if (existingMemberByMemberId.isPresent()) {
-
-            // Update the member fields
-            existingMemberByMemberId.get().setFirstName(mainAdmin.getFirstName());
-            existingMemberByMemberId.get().setLastName(mainAdmin.getLastName());
-            existingMemberByMemberId.get().setEmail(mainAdmin.getEmail());
-            existingMemberByMemberId.get().setPhoneNo(mainAdmin.getPhoneNo());
-            existingMemberByMemberId.get().setPassword(mainAdmin.getPassword());
-
-        }
-        // Save on member collection
-        memberRepository.save(existingMainAdmin);
         // Save on mainAdmin collection
         return mainAdminRepository.save(existingMainAdmin);
     }
 
     private void updateMainAdminFields(MainAdmin existingMainAdmin, MainAdmin mainAdmin) {
 
-        if (mainAdmin.getFirstName() != null) {
-            existingMainAdmin.setFirstName(mainAdmin.getFirstName());
+        if (mainAdmin.getMainAdminName() != null) {
+            existingMainAdmin.setMainAdminName(mainAdmin.getMainAdminName());
         }
-        if (mainAdmin.getLastName() != null) {
-            existingMainAdmin.setLastName(mainAdmin.getLastName());
+        if (mainAdmin.getMainAdminEmail() != null) {
+            existingMainAdmin.setMainAdminEmail(mainAdmin.getMainAdminEmail());
         }
-        if (mainAdmin.getEmail() != null) {
-            existingMainAdmin.setEmail(mainAdmin.getEmail());
+        if (mainAdmin.getMainAdminPhone() != null) {
+            existingMainAdmin.setMainAdminPhone(mainAdmin.getMainAdminPhone());
         }
-        if (mainAdmin.getPhoneNo() != null) {
-            existingMainAdmin.setPhoneNo(mainAdmin.getPhoneNo());
-        }
-        if (mainAdmin.getPassword() != null) {
-            existingMainAdmin.setPassword(mainAdmin.getPassword());
+        if (mainAdmin.getMainAdminPassword() != null) {
+            existingMainAdmin.setMainAdminPassword(mainAdmin.getMainAdminPassword());
         }
     }
 

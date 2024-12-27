@@ -1,6 +1,7 @@
 package com.uokclubmanagement.controller;
 
 import com.uokclubmanagement.entity.Club;
+import com.uokclubmanagement.entity.Member;
 import com.uokclubmanagement.service.ClubService;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,5 +47,4 @@ public class ClubController {
     public Club findClubById(@PathVariable("id") String clubId) {
         return clubService.getClubById(clubId);
     }
-
 }

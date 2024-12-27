@@ -1,11 +1,14 @@
 package com.uokclubmanagement.service;
 
 import com.uokclubmanagement.entity.Club;
+import com.uokclubmanagement.entity.Member;
 import com.uokclubmanagement.repository.ClubRepository;
+import com.uokclubmanagement.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,13 +19,28 @@ public class ClubServiceImpl implements ClubService {
     @Autowired
     private ClubRepository clubRepository;
     @Autowired
+    private MemberRepository memberRepository;
+    @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
 
     @Override
     public Club createClub(Club club) {
 
         // Check the club exist
-        checkClubExist(club);
+        Optional<Club> optionalClubByName = Optional.ofNullable(clubRepository.findClubByClubName(club.getClubName()));
+        if (optionalClubByName.isPresent()) {
+                throw new RuntimeException("A club with the same name already exists.");
+        }
+
+        Optional<Club> optionalClubByAddress = Optional.ofNullable(clubRepository.findClubByClubAddress(club.getClubAddress()));
+        if (optionalClubByAddress.isPresent()) {
+            throw new RuntimeException("A club with the same address already exists.");
+        }
+
+        Optional<Club> optionalClubByProducer = Optional.ofNullable(clubRepository.findClubByClubProducer(club.getClubProducer()));
+        if (optionalClubByProducer.isPresent()) {
+            throw new RuntimeException("A club with the same producer already exists.");
+        }
 
         // If not exist
             if (club.getClubId() == null || club.getClubId().isEmpty()) {
@@ -75,29 +93,6 @@ public class ClubServiceImpl implements ClubService {
         }
         else {
             return findClub;
-        }
-    }
-
-    private void checkClubExist(Club club) {
-
-        // Fields to check for existence
-        String clubName = club.getClubName();
-        String clubAddress = club.getClubAddress();
-        String clubProducer = club.getClubProducer();
-
-        // Query the database to check if a club with the same name, address and producer exists
-        Optional<Club> existingClubByName = Optional.ofNullable(clubRepository.findByClubName(clubName));
-        Optional<Club> existingClubByAddress = Optional.ofNullable(clubRepository.findByClubAddress(clubAddress));
-        Optional<Club> existingClubByProducer = Optional.ofNullable(clubRepository.findByClubProducer(clubProducer));
-
-        if (existingClubByName.isPresent()) {
-            throw new RuntimeException("A club with the same name already exists.");
-        }
-        else if (existingClubByAddress.isPresent()) {
-            throw new RuntimeException("A club with the same address already exists.");
-        }
-        else if (existingClubByProducer.isPresent()) {
-            throw new RuntimeException("A club with the same producer already exists.");
         }
     }
 }

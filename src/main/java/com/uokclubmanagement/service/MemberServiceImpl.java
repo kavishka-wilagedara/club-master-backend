@@ -3,6 +3,7 @@ package com.uokclubmanagement.service;
 import com.uokclubmanagement.entity.Club;
 import com.uokclubmanagement.entity.MainAdmin;
 import com.uokclubmanagement.entity.Member;
+import com.uokclubmanagement.repository.ClubRepository;
 import com.uokclubmanagement.repository.MainAdminRepository;
 import com.uokclubmanagement.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class MemberServiceImpl implements MemberService {
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
-    private MainAdminRepository mainAdminRepository;
+    private ClubRepository clubRepository;
     @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
 
@@ -70,18 +71,10 @@ public class MemberServiceImpl implements MemberService {
         if (existingMember == null) {
             throw new RuntimeException("MainAdmin not found with id: " + memberId);
         }
-
-        // Check the existingMember is mainAdmin
-        Optional<MainAdmin> existingMainAdmin = Optional.ofNullable(mainAdminRepository.findMainAdminByMemberId(memberId));
-        if(existingMainAdmin.isPresent()){
-            // As a mainAdmin cant update profile
-            throw new RuntimeException("You cant update at this moment, you have already registered as a mainAdmin." +
-                    "Please log as a MainAdmin to update your profile ");
-        }
         // Update the fields
-        else {
-            updateMemberFields(existingMember, member);
-        }
+
+        updateMemberFields(existingMember, member);
+
         return memberRepository.save(existingMember);
 
     }
