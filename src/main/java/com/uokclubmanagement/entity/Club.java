@@ -7,7 +7,9 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Document("clubs")
@@ -22,6 +24,8 @@ public class Club {
     private String clubSeniorAdviser;
     @Indexed(unique = true)
     private String clubProducer;
+
+    private List<String> associatedMembers = new ArrayList<>();
 
     public Club() {
     }
@@ -66,4 +70,11 @@ public class Club {
         this.clubProducer = clubProducer;
     }
 
+    public List<String> getAssociatedMembers() {
+        return associatedMembers;
+    }
+
+    public void setAssociatedMembers(List<String> associatedMembers) {
+        this.associatedMembers = associatedMembers;
+    }
 }

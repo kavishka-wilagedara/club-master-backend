@@ -6,7 +6,9 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Document("member")
@@ -21,6 +23,8 @@ public class Member {
     private String phoneNo;
     private String userName;
     private String password;
+
+    private List<String> associatedClubs = new ArrayList<>();
 
     public Member() {
     }
@@ -81,4 +85,11 @@ public class Member {
         this.password = password;
     }
 
-}
+    public List<String> getAssociatedClubs() {
+        return associatedClubs;
+    }
+
+    public void setAssociatedClubs(List<String> associatedClubs) {
+        this.associatedClubs = associatedClubs;
+    }
+   }

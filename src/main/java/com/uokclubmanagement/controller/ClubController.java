@@ -3,10 +3,7 @@ package com.uokclubmanagement.controller;
 import com.uokclubmanagement.entity.Club;
 import com.uokclubmanagement.entity.Member;
 import com.uokclubmanagement.service.ClubService;
-import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,23 +25,28 @@ public class ClubController {
         return clubService.getAllClubs();
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateClub(@PathVariable("id") String clubId, @RequestBody Club club) {
-        try {
-            clubService.updateClubById(clubId, club);
-            return ResponseEntity.ok().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    @PutMapping("/update/{clubId}")
+    public Club updateClub(@PathVariable String clubId, @RequestBody Club club) {
+        return clubService.updateClubById(clubId, club);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteClub(@PathVariable("id") String clubId) {
-        clubService.deleteClubById(clubId);
+    public Club deleteClub(@PathVariable("id") String clubId) {
+        return clubService.deleteClubById(clubId);
     }
 
-    @GetMapping("findClub/{id}")
+    @GetMapping("/findClub/{id}")
     public Club findClubById(@PathVariable("id") String clubId) {
-        return clubService.getClubById(clubId);
+        return clubService.getClubByClubId(clubId);
+    }
+
+    @PostMapping("/{memberId}/enroll-member/{clubId}")
+    public Member assignMember(@PathVariable String memberId, @PathVariable String clubId) {
+        return clubService.enrollMemberToClub(memberId, clubId);
+    }
+
+    @DeleteMapping("/{memberId}/unroll-member/{clubId}")
+    public Member unassignMember(@PathVariable String memberId, @PathVariable String clubId) {
+        return clubService.unrollMemberFromClub(memberId, clubId);
     }
 }
