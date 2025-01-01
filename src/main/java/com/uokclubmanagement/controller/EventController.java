@@ -23,4 +23,54 @@ public class EventController {
     public List<Event> getAllEvents() {
         return eventService.getAllEvents();
     }
+
+    @PutMapping("/update/{eventId}")
+    public Event updateEvent(@PathVariable("eventId") String eventId, @RequestBody Event event) {
+        return eventService.updateEventById(eventId, event);
+    }
+
+    @DeleteMapping("/delete/{eventId}")
+    public void deleteEvent(@PathVariable("eventId") String eventId) {
+        eventService.deleteEventById(eventId);
+    }
+
+    @GetMapping("/{clubId}/events")
+    public List<Event> getEventsByClub(@PathVariable("clubId") String clubId) {
+        return eventService.getAllEventsByClubId(clubId);
+    }
+
+    @GetMapping("/ongoing-events/{clubId}")
+    public List<Event> ongoingEventsByClubId(@PathVariable("clubId") String clubId) {
+        return eventService.getAllOngoingEventsByClubId(clubId);
+    }
+
+    @GetMapping("/upcoming-events/{clubId}")
+    public List<Event> upcomingEventsByClubId(@PathVariable("clubId") String clubId) {
+        return eventService.getAllUpcomingEventsByClubId(clubId);
+    }
+
+    @GetMapping("past-events/{clubId}")
+    public List<Event> pastEventsByClubId(@PathVariable("clubId") String clubId) {
+        return eventService.getAllPastEventsByClubId(clubId);
+    }
+
+    @GetMapping("/getEvent/{eventId}")
+    public Event getEvent(@PathVariable("eventId") String eventId) {
+        return eventService.getEventById(eventId);
+    }
+
+    @GetMapping("/all-ongoing-events")
+    public List<Event> getAllOngoingEvents() {
+        return eventService.getAllOngoingEvents();
+    }
+
+    @GetMapping("/all-upcoming-events")
+    public List<Event> getAllUpcomingEvents() {
+        return eventService.getAllUpcomingEvents();
+    }
+
+    @GetMapping("all-past-events")
+    public List<Event> getAllPastEvents() {
+        return eventService.getAllPastEvents();
+    }
 }

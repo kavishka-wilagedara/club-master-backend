@@ -10,7 +10,7 @@ public interface ClubService {
     Club createClub(Club club);
     List<Club> getAllClubs();
     Club updateClubById(String clubId, Club club);
-    Club deleteClubById(String clubId);
+    void deleteClubById(String clubId);
     Club getClubByClubId(String clubId);
     Member enrollMemberToClub(String memberId, String clubId);
     Member unrollMemberFromClub(String memberId, String clubId);

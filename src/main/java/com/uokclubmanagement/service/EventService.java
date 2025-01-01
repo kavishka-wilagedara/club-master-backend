@@ -11,7 +11,12 @@ public interface EventService {
     List<Event> getAllEvents();
     Event updateEventById(String eventId, Event event);
     void deleteEventById(String eventId);
-    List<Event> getAllEventsByOrganizingClub(String clubId);
-    List<Event> getAllOngoingEventsByOrganizingClub(String clubId);
-    List<Event> getAllUpcomingEventsByOrganizingClub(String clubId);
+    List<Event> getAllEventsByClubId(String clubId);
+    List<Event> getAllOngoingEventsByClubId(String clubId);
+    List<Event> getAllUpcomingEventsByClubId(String clubId);
+    List<Event> getAllPastEventsByClubId(String clubId);
+    Event getEventById(String eventId);
+    List<Event> getAllOngoingEvents();
+    List<Event> getAllUpcomingEvents();
+    List<Event> getAllPastEvents();
 }

@@ -20,8 +20,6 @@ public class MemberServiceImpl implements MemberService {
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
-    private ClubRepository clubRepository;
-    @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
 
     @Override
@@ -50,11 +48,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member getMemberById(String memberId) {
-        Member findMember = memberRepository.findMemberByMemberId(memberId);
-        if (findMember == null) {
+        Optional<Member> findMember = memberRepository.findById(memberId);
+        if (findMember.isEmpty()) {
             throw new RuntimeException("Member not found with memberId: " + memberId);
         }
-        return findMember;
+        return findMember.get();
     }
 
     @Override
@@ -65,17 +63,17 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member updateMemberById(String memberId, Member member) {
 
-        Member existingMember = memberRepository.findMemberByMemberId(memberId);
+        Optional<Member> existingMember = memberRepository.findById(memberId);
 
         // Check the existingMember is null
-        if (existingMember == null) {
+        if (existingMember.isEmpty()) {
             throw new RuntimeException("MainAdmin not found with id: " + memberId);
         }
         // Update the fields
 
-        updateMemberFields(existingMember, member);
+        updateMemberFields(existingMember.get(), member);
 
-        return memberRepository.save(existingMember);
+        return memberRepository.save(existingMember.get());
 
     }
 
@@ -99,12 +97,12 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void deleteMemberById(String memberId) {
-        try {
-            Member deleteMember = memberRepository.findMemberByMemberId(memberId);
-            memberRepository.delete(deleteMember);
-            System.out.println("Deleted Member: " + deleteMember.getMemberId());
+        Optional<Member> deleteMember = memberRepository.findById(memberId);
+        if (deleteMember.isPresent()) {
+            memberRepository.delete(deleteMember.get());
+            System.out.println("Deleted member with id: " + memberId);
         }
-        catch (Exception e) {
+        else {
             throw new RuntimeException("Member not found with id: " + memberId);
         }
     }

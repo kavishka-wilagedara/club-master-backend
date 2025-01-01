@@ -53,16 +53,16 @@ public class MainAdminServiceImpl implements MainAdminService {
     @Override
     public MainAdmin updateMainAdminById(String mainAdminID, MainAdmin mainAdmin) {
 
-        MainAdmin existingMainAdmin = mainAdminRepository.findMainAdminByMainAdminId(mainAdminID);
+        Optional<MainAdmin> existingMainAdmin = mainAdminRepository.findById(mainAdminID);
         // Check if existingMainAdmin is null
-        if (existingMainAdmin == null) {
+        if (existingMainAdmin.isEmpty()) {
             throw new RuntimeException("MainAdmin not found with id: " + mainAdminID);
         }
         // Update the mainAdmin fields
-        updateMainAdminFields(existingMainAdmin, mainAdmin);
+        updateMainAdminFields(existingMainAdmin.get(), mainAdmin);
 
         // Save on mainAdmin collection
-        return mainAdminRepository.save(existingMainAdmin);
+        return mainAdminRepository.save(existingMainAdmin.get());
     }
 
     private void updateMainAdminFields(MainAdmin existingMainAdmin, MainAdmin mainAdmin) {
@@ -83,11 +83,13 @@ public class MainAdminServiceImpl implements MainAdminService {
 
     @Override
     public void deleteMainAdminById(String mainAdminId) {
-        try {
-            MainAdmin deleteMainAdmin = mainAdminRepository.findMainAdminByMainAdminId(mainAdminId);
-            mainAdminRepository.delete(deleteMainAdmin);
+
+        Optional<MainAdmin> deleteMainAdmin = mainAdminRepository.findById(mainAdminId);
+            if (deleteMainAdmin.isPresent()) {
+                MainAdmin mainAdmin = deleteMainAdmin.get();
+                System.out.println("Deleted mainAdmin: " + mainAdminId);
         }
-        catch (Exception e) {
+        else {
             throw new RuntimeException("MainAdmin not found with id: " + mainAdminId);
         }
     }
@@ -95,12 +97,12 @@ public class MainAdminServiceImpl implements MainAdminService {
     @Override
     public MainAdmin getMainAdminById(String mainAdminId) {
 
-        MainAdmin findMainAdmin = mainAdminRepository.findMainAdminByMainAdminId(mainAdminId);
-        if (findMainAdmin == null) {
+        Optional<MainAdmin> findMainAdmin = mainAdminRepository.findById(mainAdminId);
+        if (findMainAdmin.isEmpty()) {
             throw new RuntimeException("MainAdmin not found with id: " + mainAdminId);
         }
         else {
-            return findMainAdmin;
+            return findMainAdmin.get();
         }
     }
 }

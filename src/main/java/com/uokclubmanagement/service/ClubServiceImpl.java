@@ -60,29 +60,28 @@ public class ClubServiceImpl implements ClubService {
 
     @Override
     public Club updateClubById(String clubId, Club club) {
-        Club existingClub = clubRepository.findClubByClubId(clubId);
+        Optional<Club> existingClub = clubRepository.findById(clubId);
         // Check if existingClub is null
-        if (existingClub == null) {
+        if (existingClub.isEmpty()) {
             throw new RuntimeException("Club not found with id: " + clubId);
         }
         // Update the fields
-        existingClub.setClubAddress(club.getClubAddress());
-        existingClub.setClubSeniorAdviser(club.getClubSeniorAdviser());
-        System.out.println("New Senior Adviser: " + existingClub.getClubSeniorAdviser());
+        existingClub.get().setClubAddress(club.getClubAddress());
+        existingClub.get().setClubSeniorAdviser(club.getClubSeniorAdviser());
+        System.out.println("New Senior Adviser: " + existingClub.get().getClubSeniorAdviser());
 
-        return clubRepository.save(existingClub);
+        return clubRepository.save(existingClub.get());
     }
 
     @Override
-    public Club deleteClubById(String clubId) {
-        try {
-            Club deleteClub = clubRepository.findClubByClubId(clubId);
-            clubRepository.delete(deleteClub);
-            System.out.println("Deleted Club: ");
+    public void deleteClubById(String clubId) {
 
-            return deleteClub;
-        }
-        catch (Exception e) {
+        Optional<Club> deleteClub = clubRepository.findById(clubId);
+            if (deleteClub.isPresent()) {
+                clubRepository.delete(deleteClub.get());
+                System.out.println("Deleted Club with id: " + clubId);
+            }
+        else{
             throw new RuntimeException("Club not found with id: " + clubId);
         }
     }
@@ -90,12 +89,12 @@ public class ClubServiceImpl implements ClubService {
     @Override
     public Club getClubByClubId(String clubId) {
 
-        Club findClub = clubRepository.findClubByClubId(clubId);
-        if (findClub == null) {
+        Optional<Club> findClub = clubRepository.findById(clubId);
+        if (findClub.isEmpty()) {
             throw new RuntimeException("Club not found with Id: " + clubId);
         }
         else {
-            return findClub;
+            return findClub.get();
         }
     }
 
