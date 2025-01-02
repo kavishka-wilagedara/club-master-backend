@@ -23,13 +23,18 @@ public class MainAdminServiceImpl implements MainAdminService {
     @Override
     public MainAdmin createMainAdmin(MainAdmin mainAdmin) {
 
-        // Check username exists
+        // Check username and email exists
         String username = mainAdmin.getMainAdminUsername();
+        String email = mainAdmin.getMainAdminEmail();
 
-        Optional<MainAdmin> optionalMainAdmin = Optional.ofNullable(mainAdminRepository.findMainAdminByMainAdminUsername(username));
+        Optional<MainAdmin> optionalMainAdminByUsername = Optional.ofNullable(mainAdminRepository.findMainAdminByMainAdminUsername(username));
+        Optional<MainAdmin> optionalMainAdminByEmail = Optional.ofNullable(mainAdminRepository.findMainAdminByMainAdminEmail(email));
 
-        if (optionalMainAdmin.isPresent()) {
+        if (optionalMainAdminByUsername.isPresent()) {
             throw new RuntimeException("username already exists");
+        }
+        else if (optionalMainAdminByEmail.isPresent()) {
+            throw new RuntimeException("email already exists");
         }
 
         // If not exist

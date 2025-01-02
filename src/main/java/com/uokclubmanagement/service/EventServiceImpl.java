@@ -226,7 +226,7 @@ public class EventServiceImpl implements EventService {
             throw new RuntimeException("The event date is not at least three days before the current date");
         }
 
-        // Set publish date and time
+        // Set publish date and time without seconds
         LocalTime currentTime = LocalTime.now();
         LocalTime timeWithoutSeconds = currentTime.withNano(0);
 
@@ -249,9 +249,7 @@ public class EventServiceImpl implements EventService {
             exisitingEvent.setEventDescription(event.getEventDescription());
         }
         if(exisitingEvent.getEventDate() != null){
-            exisitingEvent.setEventDate(exisitingEvent.getEventDate());
-        }
-        if(exisitingEvent.getEventDate() != null){
+            validateDateAndTime(event);
             exisitingEvent.setEventDate(event.getEventDate());
         }
         if(exisitingEvent.getEventTime() != null){

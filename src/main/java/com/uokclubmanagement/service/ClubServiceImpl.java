@@ -105,8 +105,18 @@ public class ClubServiceImpl implements ClubService {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         Optional<Club> optionalClub = clubRepository.findById(clubId);
 
-        if (optionalMember.isPresent() && optionalClub.isPresent()) {
+        // Check already enrolled in to club
+        if(optionalMember.isPresent() && optionalClub.isPresent()){
             Member member = optionalMember.get();
+            List<String> memberAssociatedClubs = member.getAssociatedClubs();
+
+            for (String id : memberAssociatedClubs) {
+                if (id.equals(clubId)) {
+                    throw new RuntimeException("Already enrolled with clubId: "+clubId);
+                }
+            }
+
+            // If not enrolled in club
             Club club = optionalClub.get();
 
             // Update member and club
@@ -118,9 +128,11 @@ public class ClubServiceImpl implements ClubService {
 
             return member;
         }
-
+        else if (optionalMember.isEmpty()) {
+            throw new RuntimeException("Invalid memberId.");
+        }
         else {
-            throw new RuntimeException("Invalid memberId or ClubId.");
+            throw new RuntimeException("Invalid clubId.");
         }
     }
 

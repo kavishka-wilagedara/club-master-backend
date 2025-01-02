@@ -25,14 +25,19 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member createMember(Member member) {
 
-        // Check the username already exist
+        // Check the username and email already exist
         String userName = member.getUserName();
+        String email = member.getEmail();
 
         // Query the database to check if a member with the same username exists
         Optional<Member> existingMemberByUserName = Optional.ofNullable(memberRepository.findMemberByUserName(userName));
+        Optional<Member> existingMemberByEmail = Optional.ofNullable(memberRepository.findMemberByEmail(email));
 
         if (existingMemberByUserName.isPresent()) {
             throw new RuntimeException("Username already exist");
+        }
+        else if (existingMemberByEmail.isPresent()) {
+            throw new RuntimeException("Email already exist");
         }
 
         // If not exist
