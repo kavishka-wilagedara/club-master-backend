@@ -1,8 +1,10 @@
 package com.uokclubmanagement.service;
 
 import com.uokclubmanagement.entity.Club;
+import com.uokclubmanagement.entity.ClubAdmin;
 import com.uokclubmanagement.entity.MainAdmin;
 import com.uokclubmanagement.entity.Member;
+import com.uokclubmanagement.repository.ClubAdminRepository;
 import com.uokclubmanagement.repository.ClubRepository;
 import com.uokclubmanagement.repository.MainAdminRepository;
 import com.uokclubmanagement.repository.MemberRepository;
@@ -19,6 +21,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private ClubAdminRepository clubAdminRepository;
     @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
 
@@ -74,9 +78,18 @@ public class MemberServiceImpl implements MemberService {
         if (existingMember.isEmpty()) {
             throw new RuntimeException("MainAdmin not found with id: " + memberId);
         }
-        // Update the fields
 
+        // Update the fields
         updateMemberFields(existingMember.get(), member);
+
+        // Check if member is clubAdmin
+        Optional<ClubAdmin> optionalClubAdmin = Optional.ofNullable(clubAdminRepository.findClubAdminByMemberId(memberId));
+        if (optionalClubAdmin.isPresent()) {
+            ClubAdmin clubAdmin = optionalClubAdmin.get();
+            // Update clubAdmin fullName
+            clubAdmin.setFullName(member.getFirstName()+" "+member.getLastName());
+            clubAdminRepository.save(clubAdmin);
+        }
 
         return memberRepository.save(existingMember.get());
 

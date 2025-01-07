@@ -14,4 +14,6 @@ public interface ClubService {
     Club getClubByClubId(String clubId);
     Member enrollMemberToClub(String memberId, String clubId);
     Member unrollMemberFromClub(String memberId, String clubId);
+
+    List<String> getClubsByMemberId(String memberId);
 }

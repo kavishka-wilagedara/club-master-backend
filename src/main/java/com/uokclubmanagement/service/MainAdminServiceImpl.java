@@ -1,7 +1,9 @@
 package com.uokclubmanagement.service;
 
+import com.uokclubmanagement.entity.ClubAdmin;
 import com.uokclubmanagement.entity.MainAdmin;
 import com.uokclubmanagement.entity.Member;
+import com.uokclubmanagement.repository.ClubAdminRepository;
 import com.uokclubmanagement.repository.MainAdminRepository;
 import com.uokclubmanagement.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;

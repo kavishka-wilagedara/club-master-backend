@@ -13,4 +13,5 @@ public interface ClubRepository extends MongoRepository<Club, String> {
     Club findClubByClubName(String clubName);
     Club findClubByClubAddress(String clubAddress);
     Club findClubByClubProducer(String clubProducer);
+
 }
