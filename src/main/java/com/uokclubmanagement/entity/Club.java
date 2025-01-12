@@ -24,6 +24,7 @@ public class Club {
     private String clubSeniorAdviser;
     @Indexed(unique = true)
     private String clubProducer;
+    private byte[] clubImage;
 
     private List<String> associatedMembers = new ArrayList<>();
 
@@ -76,5 +77,13 @@ public class Club {
 
     public void setAssociatedMembers(List<String> associatedMembers) {
         this.associatedMembers = associatedMembers;
+    }
+
+    public byte[] getClubImage() {
+        return clubImage;
+    }
+
+    public void setClubImage(byte[] clubImage) {
+        this.clubImage = clubImage;
     }
 }

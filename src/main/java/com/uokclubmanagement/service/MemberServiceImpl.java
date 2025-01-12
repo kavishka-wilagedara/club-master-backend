@@ -24,6 +24,8 @@ public class MemberServiceImpl implements MemberService {
     @Autowired
     private ClubAdminRepository clubAdminRepository;
     @Autowired
+    private MainAdminRepository mainAdminRepository;
+    @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
 
     @Override
@@ -33,14 +35,18 @@ public class MemberServiceImpl implements MemberService {
         String userName = member.getUserName();
         String email = member.getEmail();
 
-        // Query the database to check if a member with the same username exists
+        // Query the database to check if a user with the same username and email exists
         Optional<Member> existingMemberByUserName = Optional.ofNullable(memberRepository.findMemberByUserName(userName));
         Optional<Member> existingMemberByEmail = Optional.ofNullable(memberRepository.findMemberByEmail(email));
+        Optional<MainAdmin> existingMainAdminByUserName = Optional.ofNullable(mainAdminRepository.findMainAdminByMainAdminUsername(userName));
+        Optional<MainAdmin> existingMainAdminByEmail = Optional.ofNullable(mainAdminRepository.findMainAdminByMainAdminEmail(email));
+        Optional<ClubAdmin> existingClubAdminByUserName = Optional.ofNullable(clubAdminRepository.findClubAdminByUsername(userName));
 
-        if (existingMemberByUserName.isPresent()) {
+
+        if (existingMemberByUserName.isPresent() || existingMainAdminByUserName.isPresent() || existingClubAdminByUserName.isPresent()) {
             throw new RuntimeException("Username already exist");
         }
-        else if (existingMemberByEmail.isPresent()) {
+        else if (existingMemberByEmail.isPresent() || existingMainAdminByEmail.isPresent()) {
             throw new RuntimeException("Email already exist");
         }
 
@@ -110,6 +116,9 @@ public class MemberServiceImpl implements MemberService {
         }
         if (member.getPassword() != null) {
             existingMember.setPassword(member.getPassword());
+        }
+        if(member.getMemberImage() != null){
+            existingMember.setMemberImage(member.getMemberImage());
         }
     }
 

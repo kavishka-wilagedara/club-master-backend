@@ -23,6 +23,7 @@ public class Member {
     private String phoneNo;
     private String userName;
     private String password;
+    private byte[] memberImage;
 
 
     private List<String> associatedClubs = new ArrayList<>();
@@ -93,4 +94,12 @@ public class Member {
     public void setAssociatedClubs(List<String> associatedClubs) {
         this.associatedClubs = associatedClubs;
     }
-   }
+
+    public byte[] getMemberImage() {
+        return memberImage;
+    }
+
+    public void setMemberImage(byte[] memberImage) {
+        this.memberImage = memberImage;
+    }
+}

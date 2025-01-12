@@ -69,6 +69,7 @@ public class ClubServiceImpl implements ClubService {
         // Update the fields
         existingClub.get().setClubAddress(club.getClubAddress());
         existingClub.get().setClubSeniorAdviser(club.getClubSeniorAdviser());
+        existingClub.get().setClubImage(club.getClubImage());
         System.out.println("New Senior Adviser: " + existingClub.get().getClubSeniorAdviser());
 
         return clubRepository.save(existingClub.get());

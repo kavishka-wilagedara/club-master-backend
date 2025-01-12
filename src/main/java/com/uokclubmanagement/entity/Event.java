@@ -23,6 +23,7 @@ public class Event {
     private String organizingClub;
     private LocalDate publishedDate;
     private LocalTime publishedTime;
+    private byte[] eventImage;
 
     public Event() {}
 
@@ -104,5 +105,13 @@ public class Event {
 
     public void setPublishedTime(LocalTime publishedTime) {
         this.publishedTime = publishedTime;
+    }
+
+    public byte[] getEventImage() {
+        return eventImage;
+    }
+
+    public void setEventImage(byte[] eventImage) {
+        this.eventImage = eventImage;
     }
 }

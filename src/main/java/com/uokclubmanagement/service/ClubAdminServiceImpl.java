@@ -75,6 +75,7 @@ public class ClubAdminServiceImpl implements ClubAdminService {
                 clubAdmin.setClubAdminId(clubAdminId);
                 clubAdmin.setMemberId(memberId);
                 clubAdmin.setFullName(member.getFirstName()+" "+member.getLastName());
+                clubAdmin.setClubAdminImage(member.getMemberImage());
             }
         }
         return clubAdminRepository.save(clubAdmin);

@@ -255,5 +255,8 @@ public class EventServiceImpl implements EventService {
         if(exisitingEvent.getEventTime() != null){
             exisitingEvent.setEventTime(event.getEventTime());
         }
+        if (exisitingEvent.getEventImage() != null){
+            exisitingEvent.setEventImage(event.getEventImage());
+        }
     }
 }
