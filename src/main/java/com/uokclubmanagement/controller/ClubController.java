@@ -31,8 +31,8 @@ public class ClubController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public Club deleteClub(@PathVariable("id") String clubId) {
-        return clubService.deleteClubById(clubId);
+    public void deleteClub(@PathVariable("id") String clubId) {
+        clubService.deleteClubById(clubId);
     }
 
     @GetMapping("/findClub/{id}")
@@ -48,5 +48,10 @@ public class ClubController {
     @DeleteMapping("/{memberId}/unroll-member/{clubId}")
     public Member unassignMember(@PathVariable String memberId, @PathVariable String clubId) {
         return clubService.unrollMemberFromClub(memberId, clubId);
+    }
+
+    @GetMapping("/{memberId}/getClubs")
+    public List<String> getClubsByMemberId(@PathVariable String memberId) {
+        return clubService.getClubsByMemberId(memberId);
     }
 }

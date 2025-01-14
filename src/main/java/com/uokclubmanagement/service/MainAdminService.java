@@ -8,7 +8,7 @@ import java.util.List;
 public interface MainAdminService {
     MainAdmin createMainAdmin(MainAdmin mainAdmin);
     List<MainAdmin> getAllMainAdmins();
-    MainAdmin updateMainAdminById(String memberId, MainAdmin mainAdmin);
+    MainAdmin updateMainAdminById(String mainAdminId, MainAdmin mainAdmin);
     void deleteMainAdminById(String mainAdminId);
     MainAdmin getMainAdminById(String mainAdminId);
 

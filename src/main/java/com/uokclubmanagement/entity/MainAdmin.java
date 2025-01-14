@@ -17,6 +17,7 @@ public class MainAdmin {
     private String mainAdminPhone;
     private String mainAdminUsername;
     private String mainAdminPassword;
+    private byte[] mainAdminImage;
 
     public MainAdmin() {
     }
@@ -67,5 +68,13 @@ public class MainAdmin {
 
     public void setMainAdminUsername(String mainAdminUsername) {
         this.mainAdminUsername = mainAdminUsername;
+    }
+
+    public byte[] getMainAdminImage() {
+        return mainAdminImage;
+    }
+
+    public void setMainAdminImage(byte[] mainAdminImage) {
+        this.mainAdminImage = mainAdminImage;
     }
 }

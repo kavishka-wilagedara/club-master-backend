@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +50,6 @@ public class ClubServiceImpl implements ClubService {
                 club.setClubId(clubId);
             }
 
-
             return clubRepository.save(club);
     }
 
@@ -60,29 +60,32 @@ public class ClubServiceImpl implements ClubService {
 
     @Override
     public Club updateClubById(String clubId, Club club) {
-        Club existingClub = clubRepository.findClubByClubId(clubId);
+        Optional<Club> existingClub = clubRepository.findById(clubId);
         // Check if existingClub is null
-        if (existingClub == null) {
+        if (existingClub.isEmpty()) {
             throw new RuntimeException("Club not found with id: " + clubId);
         }
         // Update the fields
-        existingClub.setClubAddress(club.getClubAddress());
-        existingClub.setClubSeniorAdviser(club.getClubSeniorAdviser());
-        System.out.println("New Senior Adviser: " + existingClub.getClubSeniorAdviser());
+        existingClub.get().setClubAddress(club.getClubAddress());
+        existingClub.get().setClubSeniorAdviser(club.getClubSeniorAdviser());
+        existingClub.get().setClubLogo(club.getClubLogo());
+        existingClub.get().setBackgroundImage1(existingClub.get().getBackgroundImage1());
+        existingClub.get().setBackgroundImage2(existingClub.get().getBackgroundImage2());
+        existingClub.get().setBackgroundImage3(existingClub.get().getBackgroundImage3());
+        System.out.println("New Senior Adviser: " + existingClub.get().getClubSeniorAdviser());
 
-        return clubRepository.save(existingClub);
+        return clubRepository.save(existingClub.get());
     }
 
     @Override
-    public Club deleteClubById(String clubId) {
-        try {
-            Club deleteClub = clubRepository.findClubByClubId(clubId);
-            clubRepository.delete(deleteClub);
-            System.out.println("Deleted Club: ");
+    public void deleteClubById(String clubId) {
 
-            return deleteClub;
-        }
-        catch (Exception e) {
+        Optional<Club> deleteClub = clubRepository.findById(clubId);
+            if (deleteClub.isPresent()) {
+                clubRepository.delete(deleteClub.get());
+                System.out.println("Deleted Club with id: " + clubId);
+            }
+        else{
             throw new RuntimeException("Club not found with id: " + clubId);
         }
     }
@@ -90,12 +93,12 @@ public class ClubServiceImpl implements ClubService {
     @Override
     public Club getClubByClubId(String clubId) {
 
-        Club findClub = clubRepository.findClubByClubId(clubId);
-        if (findClub == null) {
+        Optional<Club> findClub = clubRepository.findById(clubId);
+        if (findClub.isEmpty()) {
             throw new RuntimeException("Club not found with Id: " + clubId);
         }
         else {
-            return findClub;
+            return findClub.get();
         }
     }
 
@@ -106,8 +109,18 @@ public class ClubServiceImpl implements ClubService {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         Optional<Club> optionalClub = clubRepository.findById(clubId);
 
-        if (optionalMember.isPresent() && optionalClub.isPresent()) {
+        // Check already enrolled in to club
+        if(optionalMember.isPresent() && optionalClub.isPresent()){
             Member member = optionalMember.get();
+            List<String> memberAssociatedClubs = member.getAssociatedClubs();
+
+            for (String id : memberAssociatedClubs) {
+                if (id.equals(clubId)) {
+                    throw new RuntimeException("Already enrolled with clubId: "+clubId);
+                }
+            }
+
+            // If not enrolled in club
             Club club = optionalClub.get();
 
             // Update member and club
@@ -119,9 +132,11 @@ public class ClubServiceImpl implements ClubService {
 
             return member;
         }
-
+        else if (optionalMember.isEmpty()) {
+            throw new RuntimeException("Invalid memberId.");
+        }
         else {
-            throw new RuntimeException("Invalid memberId or ClubId.");
+            throw new RuntimeException("Invalid clubId.");
         }
     }
 
@@ -150,6 +165,33 @@ public class ClubServiceImpl implements ClubService {
         }
         else {
             throw new RuntimeException("Invalid clubId.");
+        }
+    }
+
+    @Override
+    public List<String> getClubsByMemberId(String memberId) {
+
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
+        if (optionalMember.isPresent()) {
+            Member member = optionalMember.get();
+
+            // Get clubs in to List
+            List<String> memberAssociatedClubs = member.getAssociatedClubs();
+            List<String> memberAssociatedClubsName = new ArrayList<String>();
+
+            // update club names in to List
+            for (int i = 0; i < memberAssociatedClubs.size(); i++) {
+                Optional<Club> optionalClub = clubRepository.findById(memberAssociatedClubs.get(i));
+                if (optionalClub.isPresent()) {
+                    Club club = optionalClub.get();
+                    club.getClubName();
+                    memberAssociatedClubsName.add(club.getClubName());
+                }
+            }
+            return memberAssociatedClubsName;
+        }
+        else {
+            throw new RuntimeException("Member not found with id: " + memberId);
         }
     }
 }

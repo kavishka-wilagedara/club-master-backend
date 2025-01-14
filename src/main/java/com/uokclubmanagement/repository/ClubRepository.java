@@ -10,8 +10,8 @@ import java.util.Optional;
 
 public interface ClubRepository extends MongoRepository<Club, String> {
 
-    Club findClubByClubId(String clubId);
     Club findClubByClubName(String clubName);
     Club findClubByClubAddress(String clubAddress);
     Club findClubByClubProducer(String clubProducer);
+
 }
