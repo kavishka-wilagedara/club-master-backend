@@ -1,5 +1,6 @@
 package com.uokclubmanagement.service;
 
+import com.uokclubmanagement.dto.EnrollmentDTO;
 import com.uokclubmanagement.entity.Club;
 import com.uokclubmanagement.entity.MainAdmin;
 import com.uokclubmanagement.entity.Member;
@@ -103,7 +104,7 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
-    public Member enrollMemberToClub(String memberId, String clubId) {
+    public Member enrollMemberToClub(String memberId, String clubId, EnrollmentDTO enrollmentKey) {
 
         // Find member and club is exist
         Optional<Member> optionalMember = memberRepository.findById(memberId);
@@ -123,14 +124,20 @@ public class ClubServiceImpl implements ClubService {
             // If not enrolled in club
             Club club = optionalClub.get();
 
-            // Update member and club
-            member.getAssociatedClubs().add(clubId);
-            club.getAssociatedMembers().add(memberId);
+            // Enrollment key checking
+            if(!enrollmentKey.getEnrollmentKey().equals(clubId)) {
+                throw new RuntimeException("Enrollment key not correct with clubId: "+clubId);
 
-            memberRepository.save(member);
-            clubRepository.save(club);
+            }
 
-            return member;
+                // Update member and club
+                member.getAssociatedClubs().add(clubId);
+                club.getAssociatedMembers().add(memberId);
+
+                memberRepository.save(member);
+                clubRepository.save(club);
+
+                return member;
         }
         else if (optionalMember.isEmpty()) {
             throw new RuntimeException("Invalid memberId.");

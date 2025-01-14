@@ -17,7 +17,6 @@ public class News extends ContentSchedule{
     private String newsId;
 
     private String newsTitle;
-    private String newsContent;
 
     private List<String> membersLike =new ArrayList<>();
     private List<String> membersDislike =new ArrayList<>();
@@ -38,14 +37,6 @@ public class News extends ContentSchedule{
 
     public void setNewsTitle(String newsTitle) {
         this.newsTitle = newsTitle;
-    }
-
-    public String getNewsContent() {
-        return newsContent;
-    }
-
-    public void setNewsContent(String newsContent) {
-        this.newsContent = newsContent;
     }
 
     public List<String> getMembersLike() {

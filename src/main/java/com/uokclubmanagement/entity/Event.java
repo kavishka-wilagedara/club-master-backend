@@ -17,7 +17,6 @@ public class Event extends ContentSchedule {
     private String eventName;
     private String eventType;
     private String eventLocation;
-    private String eventDescription;
 
     private byte[] eventImage;
 
@@ -53,14 +52,6 @@ public class Event extends ContentSchedule {
 
     public void setEventLocation(String eventLocation) {
         this.eventLocation = eventLocation;
-    }
-
-    public String getEventDescription() {
-        return eventDescription;
-    }
-
-    public void setEventDescription(String eventDescription) {
-        this.eventDescription = eventDescription;
     }
 
     public byte[] getEventImage() {

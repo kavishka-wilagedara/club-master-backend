@@ -15,6 +15,7 @@ public class ContentSchedule {
     private LocalTime scheduledTime;
     private String publisherName;
     private String responseClub;
+    private String description;
 
 
     public ContentSchedule() {}
@@ -65,5 +66,13 @@ public class ContentSchedule {
 
     public void setResponseClub(String responseClub) {
         this.responseClub = responseClub;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
