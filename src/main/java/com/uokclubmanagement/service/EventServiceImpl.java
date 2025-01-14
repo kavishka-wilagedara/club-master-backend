@@ -1,8 +1,7 @@
 package com.uokclubmanagement.service;
 
-import com.uokclubmanagement.entity.Club;
-import com.uokclubmanagement.entity.Event;
-import com.uokclubmanagement.entity.MainAdmin;
+import com.uokclubmanagement.entity.*;
+import com.uokclubmanagement.repository.ClubAdminRepository;
 import com.uokclubmanagement.repository.ClubRepository;
 import com.uokclubmanagement.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,15 +24,27 @@ public class EventServiceImpl implements EventService {
     @Autowired
     private ClubRepository clubRepository;
     @Autowired
+    private ClubAdminRepository clubAdminRepository;
+    @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
 
     @Override
-    public Event createEvent(Event event, String clubId) {
+    public Event createEvent(Event event, String clubId,  String clubAdminId){
 
-        // Find club is exist
+        // Find club and clubAdmin are exist
+        Optional<ClubAdmin> clubAdminOptional = clubAdminRepository.findById(clubAdminId);
         Optional<Club> clubOptional = clubRepository.findById(clubId);
 
-        if (clubOptional.isPresent()) {
+//        ClubAdmin clubAdmin = clubAdminOptional.get();
+        if(clubAdminOptional.isEmpty()){
+            throw new RuntimeException("Invalid Club Admin");
+        }
+
+        else if(clubOptional.isEmpty()){
+            throw new RuntimeException("Invalid Club ID");
+        }
+
+        else {
 
             // Set the eventId
             if (event.getEventId() == null || event.getEventId().isEmpty()) {
@@ -45,10 +56,12 @@ public class EventServiceImpl implements EventService {
             // Validate date and time
             validateDateAndTime(event);
 
-            // Set the organizing club
-            event.setOrganizingClub(clubId);
+            // Set the organizing club and publisher name
+            event.setResponseClub(clubId);
+            event.setPublisherName(clubAdminOptional.get().getFullName());
+            return eventRepository.save(event);
         }
-        return eventRepository.save(event);
+
     }
 
     @Override
@@ -57,19 +70,29 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event updateEventById(String eventId, Event event) {
+    public Event updateEventById(String clubAdminId, String eventId, Event event) {
 
-        // Find event is existing
+        // Find event and clubAdmin are existing
         Optional<Event> findEvent = eventRepository.findById(eventId);
-        if (findEvent.isPresent()) {
+        Optional<ClubAdmin> findClubAdmin = clubAdminRepository.findById(clubAdminId);
+
+        if(findEvent.isEmpty()) {
+            throw new RuntimeException("Invalid Event ID");
+        }
+
+        else if(findClubAdmin.isEmpty()) {
+            throw new RuntimeException("Invalid Club Admin ID");
+        }
+
+        else {
             Event exisitingEvent = findEvent.get();
             updateEventFields(exisitingEvent, event);
 
+            // Set publisher name
+            exisitingEvent.setPublisherName(findClubAdmin.get().getFullName());
+
             // Save updated fields on events collection
             return eventRepository.save(exisitingEvent);
-        }
-        else {
-            throw new RuntimeException("Invalid Event ID");
         }
     }
 
@@ -90,7 +113,7 @@ public class EventServiceImpl implements EventService {
 
         Optional<Club> findClub = clubRepository.findById(clubId);
         if (findClub.isPresent()) {
-            return eventRepository.getAllEventsByOrganizingClub(clubId);
+            return eventRepository.getAllEventsByResponseClub(clubId);
         }
         else {
             throw new RuntimeException("Invalid Club ID: "+clubId);
@@ -103,10 +126,10 @@ public class EventServiceImpl implements EventService {
         LocalDate currentDate = LocalDate.now();
 
         // List events by clubId
-        List<Event> events = eventRepository.getAllEventsByOrganizingClub(clubId);
+        List<Event> events = eventRepository.getAllEventsByResponseClub(clubId);
 
         List<Event> ongoingEvents =  events.stream()
-                .filter(event -> event.getEventDate().isEqual(currentDate))
+                .filter(event -> event.getScheduledDate().isEqual(currentDate))
                 .collect(Collectors.toList());
 
         // Check event availability
@@ -122,10 +145,10 @@ public class EventServiceImpl implements EventService {
         LocalDate currentDate = LocalDate.now();
 
         // List events by clubId
-        List<Event> events = eventRepository.getAllEventsByOrganizingClub(clubId);
+        List<Event> events = eventRepository.getAllEventsByResponseClub(clubId);
 
         List<Event> upcomingEvents =  events.stream()
-                .filter(event -> event.getEventDate().isAfter(currentDate))
+                .filter(event -> event.getScheduledDate().isAfter(currentDate))
                 .collect(Collectors.toList());
 
         // Check event availability
@@ -141,10 +164,10 @@ public class EventServiceImpl implements EventService {
         LocalDate currentDate = LocalDate.now();
 
         // List events by clubId
-        List<Event> events = eventRepository.getAllEventsByOrganizingClub(clubId);
+        List<Event> events = eventRepository.getAllEventsByResponseClub(clubId);
 
         List<Event> pastEvents =  events.stream()
-                .filter(event -> event.getEventDate().isBefore(currentDate))
+                .filter(event -> event.getScheduledDate().isBefore(currentDate))
                 .collect(Collectors.toList());
 
         // Check event availability
@@ -168,7 +191,7 @@ public class EventServiceImpl implements EventService {
         List<Event> events = eventRepository.findAll();
 
         List<Event> allOngoingEvents =  events.stream()
-                .filter(event -> event.getEventDate().isEqual(currentDate))
+                .filter(event -> event.getScheduledDate().isEqual(currentDate))
                 .collect(Collectors.toList());
 
         // Check event availability
@@ -187,7 +210,7 @@ public class EventServiceImpl implements EventService {
         List<Event> events = eventRepository.findAll();
 
         List<Event> allUpComingEvents =  events.stream()
-                .filter(event -> event.getEventDate().isAfter(currentDate))
+                .filter(event -> event.getScheduledDate().isAfter(currentDate))
                 .collect(Collectors.toList());
 
         // Check event availability
@@ -206,7 +229,7 @@ public class EventServiceImpl implements EventService {
         List<Event> events = eventRepository.findAll();
 
         List<Event> allPastEvents =  events.stream()
-                .filter(event -> event.getEventDate().isBefore(currentDate))
+                .filter(event -> event.getScheduledDate().isBefore(currentDate))
                 .collect(Collectors.toList());
 
         // Check event availability
@@ -216,12 +239,12 @@ public class EventServiceImpl implements EventService {
         return allPastEvents;
     }
 
-    private void validateDateAndTime(Event event) {
+    private void validateDateAndTime(ContentSchedule validateDate) {
         // Check the date is valid
         LocalDate currentDate = LocalDate.now();
 
         // Event should display to member before at least three days //
-        LocalDate threeDaysBeforeEventDate = event.getEventDate().minusDays(3);
+        LocalDate threeDaysBeforeEventDate = validateDate.getScheduledDate().minusDays(3);
         if(!currentDate.isBefore(threeDaysBeforeEventDate)){
             throw new RuntimeException("The event date is not at least three days before the current date");
         }
@@ -230,8 +253,8 @@ public class EventServiceImpl implements EventService {
         LocalTime currentTime = LocalTime.now();
         LocalTime timeWithoutSeconds = currentTime.withNano(0);
 
-        event.setPublishedDate(currentDate);
-        event.setPublishedTime(timeWithoutSeconds);
+        validateDate.setPublishedDate(currentDate);
+        validateDate.setPublishedTime(timeWithoutSeconds);
     }
 
     private void updateEventFields(Event exisitingEvent, Event event){
@@ -248,12 +271,12 @@ public class EventServiceImpl implements EventService {
         if(exisitingEvent.getEventDescription() != null){
             exisitingEvent.setEventDescription(event.getEventDescription());
         }
-        if(exisitingEvent.getEventDate() != null){
+        if(exisitingEvent.getScheduledDate() != null){
             validateDateAndTime(event);
-            exisitingEvent.setEventDate(event.getEventDate());
+            exisitingEvent.setScheduledDate(event.getScheduledDate());
         }
-        if(exisitingEvent.getEventTime() != null){
-            exisitingEvent.setEventTime(event.getEventTime());
+        if(exisitingEvent.getScheduledTime() != null){
+            exisitingEvent.setScheduledTime(event.getScheduledTime());
         }
         if (exisitingEvent.getEventImage() != null){
             exisitingEvent.setEventImage(event.getEventImage());

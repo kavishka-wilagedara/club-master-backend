@@ -24,6 +24,7 @@ public class MainAdminServiceImpl implements MainAdminService {
     @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
 
+    
 
     @Override
     public MainAdmin createMainAdmin(MainAdmin mainAdmin) {

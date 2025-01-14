@@ -24,7 +24,11 @@ public class Club {
     private String clubSeniorAdviser;
     @Indexed(unique = true)
     private String clubProducer;
-    private byte[] clubImage;
+    private String clubVision;
+    private byte[] clubLogo;
+    private byte[] backgroundImage1;
+    private byte[] backgroundImage2;
+    private byte[] backgroundImage3;
 
     private List<String> associatedMembers = new ArrayList<>();
 
@@ -71,6 +75,14 @@ public class Club {
         this.clubProducer = clubProducer;
     }
 
+    public String getClubVision() {
+        return clubVision;
+    }
+
+    public void setClubVision(String clubVision) {
+        this.clubVision = clubVision;
+    }
+
     public List<String> getAssociatedMembers() {
         return associatedMembers;
     }
@@ -79,11 +91,35 @@ public class Club {
         this.associatedMembers = associatedMembers;
     }
 
-    public byte[] getClubImage() {
-        return clubImage;
+    public byte[] getClubLogo() {
+        return clubLogo;
     }
 
-    public void setClubImage(byte[] clubImage) {
-        this.clubImage = clubImage;
+    public void setClubLogo(byte[] clubLogo) {
+        this.clubLogo = clubLogo;
+    }
+
+    public byte[] getBackgroundImage1() {
+        return backgroundImage1;
+    }
+
+    public void setBackgroundImage1(byte[] backgroundImage1) {
+        this.backgroundImage1 = backgroundImage1;
+    }
+
+    public byte[] getBackgroundImage2() {
+        return backgroundImage2;
+    }
+
+    public void setBackgroundImage2(byte[] backgroundImage2) {
+        this.backgroundImage2 = backgroundImage2;
+    }
+
+    public byte[] getBackgroundImage3() {
+        return backgroundImage3;
+    }
+
+    public void setBackgroundImage3(byte[] backgroundImage3) {
+        this.backgroundImage3 = backgroundImage3;
     }
 }
