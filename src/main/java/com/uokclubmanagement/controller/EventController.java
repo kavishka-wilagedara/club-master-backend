@@ -14,9 +14,9 @@ public class EventController {
     @Autowired
     private EventService eventService;
 
-    @PostMapping("/save/{clubId}")
-    public Event createEvent(@PathVariable("clubId") String clubId, @RequestBody Event event) {
-        return eventService.createEvent(event, clubId);
+    @PostMapping("/{clubId}/save/{clubAdminId}")
+    public Event createEvent(@PathVariable("clubId") String clubId, @PathVariable("clubAdminId") String clubAdminId, @RequestBody Event event) {
+        return eventService.createEvent(event, clubId, clubAdminId);
     }
 
     @GetMapping("/all")
@@ -24,9 +24,9 @@ public class EventController {
         return eventService.getAllEvents();
     }
 
-    @PutMapping("/update/{eventId}")
-    public Event updateEvent(@PathVariable("eventId") String eventId, @RequestBody Event event) {
-        return eventService.updateEventById(eventId, event);
+    @PutMapping("/{clubAdminId}/update/{eventId}")
+    public Event updateEvent(@PathVariable("clubAdminId") String clubAdminId, @PathVariable("eventId") String eventId, @RequestBody Event event) {
+        return eventService.updateEventById(clubAdminId, eventId, event);
     }
 
     @DeleteMapping("/delete/{eventId}")

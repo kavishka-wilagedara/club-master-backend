@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface EventService {
 
-    Event createEvent(Event event, String clubId);
+    Event createEvent(Event event, String clubId, String clubAdminId);
     List<Event> getAllEvents();
-    Event updateEventById(String eventId, Event event);
+    Event updateEventById(String clubAdminId, String eventId, Event event);
     void deleteEventById(String eventId);
     List<Event> getAllEventsByClubId(String clubId);
     List<Event> getAllOngoingEventsByClubId(String clubId);

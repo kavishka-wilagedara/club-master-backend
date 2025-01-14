@@ -49,4 +49,9 @@ public class ClubController {
     public Member unassignMember(@PathVariable String memberId, @PathVariable String clubId) {
         return clubService.unrollMemberFromClub(memberId, clubId);
     }
+
+    @GetMapping("/{memberId}/getClubs")
+    public List<String> getClubsByMemberId(@PathVariable String memberId) {
+        return clubService.getClubsByMemberId(memberId);
+    }
 }

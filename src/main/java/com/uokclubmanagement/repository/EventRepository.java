@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface EventRepository extends MongoRepository<Event, String> {
 
-    List<Event> getAllEventsByOrganizingClub(String clubId);
+    List<Event> getAllEventsByResponseClub(String clubId);
 }

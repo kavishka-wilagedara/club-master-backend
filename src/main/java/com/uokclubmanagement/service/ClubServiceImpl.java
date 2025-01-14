@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +50,6 @@ public class ClubServiceImpl implements ClubService {
                 club.setClubId(clubId);
             }
 
-
             return clubRepository.save(club);
     }
 
@@ -68,6 +68,10 @@ public class ClubServiceImpl implements ClubService {
         // Update the fields
         existingClub.get().setClubAddress(club.getClubAddress());
         existingClub.get().setClubSeniorAdviser(club.getClubSeniorAdviser());
+        existingClub.get().setClubLogo(club.getClubLogo());
+        existingClub.get().setBackgroundImage1(existingClub.get().getBackgroundImage1());
+        existingClub.get().setBackgroundImage2(existingClub.get().getBackgroundImage2());
+        existingClub.get().setBackgroundImage3(existingClub.get().getBackgroundImage3());
         System.out.println("New Senior Adviser: " + existingClub.get().getClubSeniorAdviser());
 
         return clubRepository.save(existingClub.get());
@@ -161,6 +165,33 @@ public class ClubServiceImpl implements ClubService {
         }
         else {
             throw new RuntimeException("Invalid clubId.");
+        }
+    }
+
+    @Override
+    public List<String> getClubsByMemberId(String memberId) {
+
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
+        if (optionalMember.isPresent()) {
+            Member member = optionalMember.get();
+
+            // Get clubs in to List
+            List<String> memberAssociatedClubs = member.getAssociatedClubs();
+            List<String> memberAssociatedClubsName = new ArrayList<String>();
+
+            // update club names in to List
+            for (int i = 0; i < memberAssociatedClubs.size(); i++) {
+                Optional<Club> optionalClub = clubRepository.findById(memberAssociatedClubs.get(i));
+                if (optionalClub.isPresent()) {
+                    Club club = optionalClub.get();
+                    club.getClubName();
+                    memberAssociatedClubsName.add(club.getClubName());
+                }
+            }
+            return memberAssociatedClubsName;
+        }
+        else {
+            throw new RuntimeException("Member not found with id: " + memberId);
         }
     }
 }
