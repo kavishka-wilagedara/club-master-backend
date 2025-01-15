@@ -130,14 +130,14 @@ public class ClubServiceImpl implements ClubService {
 
             }
 
-                // Update member and club
-                member.getAssociatedClubs().add(clubId);
-                club.getAssociatedMembers().add(memberId);
+            // Update member and club
+            member.getAssociatedClubs().add(clubId);
+            club.getAssociatedMembers().add(memberId);
 
-                memberRepository.save(member);
-                clubRepository.save(club);
+            memberRepository.save(member);
+            clubRepository.save(club);
 
-                return member;
+            return member;
         }
         else if (optionalMember.isEmpty()) {
             throw new RuntimeException("Invalid memberId.");
