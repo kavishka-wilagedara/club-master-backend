@@ -17,7 +17,6 @@ public class News extends ContentSchedule{
     private String newsId;
 
     private String newsTitle;
-
     private List<String> membersLike =new ArrayList<>();
     private List<String> membersDislike =new ArrayList<>();
 

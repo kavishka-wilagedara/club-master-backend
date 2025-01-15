@@ -17,6 +17,8 @@ public class Event extends ContentSchedule {
     private String eventName;
     private String eventType;
     private String eventLocation;
+    private LocalDate scheduledDate;
+    private LocalTime scheduledTime;
 
     private byte[] eventImage;
 
@@ -56,6 +58,22 @@ public class Event extends ContentSchedule {
 
     public byte[] getEventImage() {
         return eventImage;
+    }
+
+    public LocalDate getScheduledDate() {
+        return scheduledDate;
+    }
+
+    public void setScheduledDate(LocalDate scheduledDate) {
+        this.scheduledDate = scheduledDate;
+    }
+
+    public LocalTime getScheduledTime() {
+        return scheduledTime;
+    }
+
+    public void setScheduledTime(LocalTime scheduledTime) {
+        this.scheduledTime = scheduledTime;
     }
 
     public void setEventImage(byte[] eventImage) {

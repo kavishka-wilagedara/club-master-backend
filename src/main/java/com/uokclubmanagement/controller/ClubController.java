@@ -42,7 +42,7 @@ public class ClubController {
     }
 
     @PostMapping("/{memberId}/enroll-member/{clubId}")
-    public Member assignMember(@PathVariable String memberId, @PathVariable String clubId, @RequestBody EnrollmentDTO enrollmentKey) throws RuntimeException {
+    public Member assignMember(@PathVariable String memberId, @PathVariable String clubId, @RequestBody EnrollmentDTO enrollmentKey) {
         return clubService.enrollMemberToClub(memberId, clubId, enrollmentKey);
     }
 

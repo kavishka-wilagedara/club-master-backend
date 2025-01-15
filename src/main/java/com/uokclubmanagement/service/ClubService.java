@@ -13,7 +13,7 @@ public interface ClubService {
     Club updateClubById(String clubId, Club club);
     void deleteClubById(String clubId);
     Club getClubByClubId(String clubId);
-    Member enrollMemberToClub(String memberId, String clubId, EnrollmentDTO enrollmentKey) throws RuntimeException;
+    Member enrollMemberToClub(String memberId, String clubId, EnrollmentDTO enrollmentKey);
     Member unrollMemberFromClub(String memberId, String clubId);
 
     List<String> getClubsByMemberId(String memberId);

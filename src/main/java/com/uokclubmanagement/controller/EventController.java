@@ -1,6 +1,7 @@
 package com.uokclubmanagement.controller;
 
 import com.uokclubmanagement.entity.Event;
+import com.uokclubmanagement.repository.EventRepository;
 import com.uokclubmanagement.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
