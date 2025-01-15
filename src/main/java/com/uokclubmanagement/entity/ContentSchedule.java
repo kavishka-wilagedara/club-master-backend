@@ -11,10 +11,9 @@ public class ContentSchedule {
 
     private LocalDate publishedDate;
     private LocalTime publishedTime;
-    private LocalDate scheduledDate;
-    private LocalTime scheduledTime;
     private String publisherName;
     private String responseClub;
+    private String description;
 
 
     public ContentSchedule() {}
@@ -32,23 +31,7 @@ public class ContentSchedule {
     }
 
     public void setPublishedTime(LocalTime publishedTime) {
-        this.publishedTime = publishedTime.withNano(0);
-    }
-
-    public LocalDate getScheduledDate() {
-        return scheduledDate;
-    }
-
-    public void setScheduledDate(LocalDate scheduledDate) {
-        this.scheduledDate = scheduledDate;
-    }
-
-    public LocalTime getScheduledTime() {
-        return scheduledTime;
-    }
-
-    public void setScheduledTime(LocalTime scheduledTime) {
-        this.scheduledTime = scheduledTime.withNano(0);
+        this.publishedTime = publishedTime;
     }
 
     public String getPublisherName() {
@@ -65,5 +48,13 @@ public class ContentSchedule {
 
     public void setResponseClub(String responseClub) {
         this.responseClub = responseClub;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

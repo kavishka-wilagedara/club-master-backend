@@ -45,6 +45,7 @@ public class ClubAdminServiceImpl implements ClubAdminService {
             throw new RuntimeException("Club not found with clubId " + clubId);
         }
 
+
         // Find club admin username exist
         Optional<ClubAdmin> optionalClubAdmin = Optional.ofNullable(clubAdminRepository.findClubAdminByUsername(clubAdmin.getUsername()));
 

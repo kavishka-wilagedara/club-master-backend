@@ -1,5 +1,6 @@
 package com.uokclubmanagement.controller;
 
+import com.uokclubmanagement.dto.EnrollmentDTO;
 import com.uokclubmanagement.entity.Club;
 import com.uokclubmanagement.entity.Member;
 import com.uokclubmanagement.service.ClubService;
@@ -41,8 +42,8 @@ public class ClubController {
     }
 
     @PostMapping("/{memberId}/enroll-member/{clubId}")
-    public Member assignMember(@PathVariable String memberId, @PathVariable String clubId) {
-        return clubService.enrollMemberToClub(memberId, clubId);
+    public Member assignMember(@PathVariable String memberId, @PathVariable String clubId, @RequestBody EnrollmentDTO enrollmentKey) {
+        return clubService.enrollMemberToClub(memberId, clubId, enrollmentKey);
     }
 
     @DeleteMapping("/{memberId}/unroll-member/{clubId}")

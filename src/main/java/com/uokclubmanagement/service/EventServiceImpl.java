@@ -35,13 +35,19 @@ public class EventServiceImpl implements EventService {
         Optional<ClubAdmin> clubAdminOptional = clubAdminRepository.findById(clubAdminId);
         Optional<Club> clubOptional = clubRepository.findById(clubId);
 
-//        ClubAdmin clubAdmin = clubAdminOptional.get();
         if(clubAdminOptional.isEmpty()){
             throw new RuntimeException("Invalid Club Admin");
         }
 
         else if(clubOptional.isEmpty()){
             throw new RuntimeException("Invalid Club ID");
+        }
+
+        // Get clubAdmin
+
+        ClubAdmin clubAdmin = clubAdminOptional.get();
+        if (!clubAdmin.getClubId().equals(clubId)){
+            throw new RuntimeException("Club ID does not match with Club Admin ID");
         }
 
         else {
@@ -58,7 +64,7 @@ public class EventServiceImpl implements EventService {
 
             // Set the organizing club and publisher name
             event.setResponseClub(clubId);
-            event.setPublisherName(clubAdminOptional.get().getFullName());
+            event.setPublisherName(clubAdmin.getFullName());
             return eventRepository.save(event);
         }
 
@@ -84,9 +90,14 @@ public class EventServiceImpl implements EventService {
             throw new RuntimeException("Invalid Club Admin ID");
         }
 
+        else if (!findClubAdmin.get().getClubId().equals(findEvent.get().getResponseClub())){
+            throw new RuntimeException("Club Admin ID does not match with response club ID");
+        }
+
         else {
             Event exisitingEvent = findEvent.get();
             updateEventFields(exisitingEvent, event);
+            contentScheduleUpdating(exisitingEvent, event);
 
             // Set publisher name
             exisitingEvent.setPublisherName(findClubAdmin.get().getFullName());
@@ -179,7 +190,14 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event getEventById(String eventId) {
-        return eventRepository.findById(eventId).get();
+
+        Optional<Event> optionalEvent = eventRepository.findById(eventId);
+
+        if (optionalEvent.isEmpty()){
+            throw new RuntimeException("Event not found with: "+eventId);
+        }
+
+        return optionalEvent.get();
     }
 
     @Override
@@ -239,7 +257,7 @@ public class EventServiceImpl implements EventService {
         return allPastEvents;
     }
 
-    private void validateDateAndTime(ContentSchedule validateDate) {
+    private void validateDateAndTime(Event validateDate) {
         // Check the date is valid
         LocalDate currentDate = LocalDate.now();
 
@@ -268,18 +286,30 @@ public class EventServiceImpl implements EventService {
         if(exisitingEvent.getEventLocation() != null){
             exisitingEvent.setEventLocation(event.getEventLocation());
         }
-        if(exisitingEvent.getEventDescription() != null){
-            exisitingEvent.setEventDescription(event.getEventDescription());
-        }
-        if(exisitingEvent.getScheduledDate() != null){
+        if (exisitingEvent.getScheduledDate() != null) {
             validateDateAndTime(event);
             exisitingEvent.setScheduledDate(event.getScheduledDate());
-        }
-        if(exisitingEvent.getScheduledTime() != null){
-            exisitingEvent.setScheduledTime(event.getScheduledTime());
         }
         if (exisitingEvent.getEventImage() != null){
             exisitingEvent.setEventImage(event.getEventImage());
         }
+        if (exisitingEvent.getDescription() != null){
+            exisitingEvent.setDescription(event.getDescription());
+        }
+    }
+
+    static void contentScheduleUpdating(ContentSchedule existingEvent, ContentSchedule contentSchedule) {
+
+        LocalDate currentDate = LocalDate.now();
+        LocalTime currentTime = LocalTime.now();
+        LocalTime timeWithoutSeconds = currentTime.withNano(0);
+
+        existingEvent.setPublishedDate(currentDate);
+        existingEvent.setPublishedTime(timeWithoutSeconds);
+
+        if (existingEvent.getDescription() != null) {
+            existingEvent.setDescription(contentSchedule.getDescription());
+        }
     }
 }
+
