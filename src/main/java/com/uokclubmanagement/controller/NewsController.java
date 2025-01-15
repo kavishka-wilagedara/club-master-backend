@@ -40,4 +40,23 @@ public class NewsController {
         return newsService.getNewsById(newsId);
     }
 
+    @PostMapping("/{newsId}/addLike/{clubId}/{memberId}")
+    public News addLike(@PathVariable("newsId") String newsId, @PathVariable("clubId") String clubId, @PathVariable("memberId") String memberId) {
+        return newsService.addLikeToNews(newsId, clubId, memberId);
+    }
+
+    @PostMapping("/{newsId}/removeLike/{clubId}/{memberId}")
+    public News removeLike(@PathVariable("newsId") String newsId, @PathVariable("clubId") String clubId, @PathVariable("memberId") String memberId) {
+        return newsService.removeLikeFromNews(newsId, clubId, memberId);
+    }
+
+    @PostMapping("/{newsId}/likeCount/{clubId}/{memberId}")
+    public int likeCount(@PathVariable("newsId") String newsId, @PathVariable("clubId") String clubId, @PathVariable("memberId") String memberId) {
+        return newsService.getNewsLikeCount(newsId, clubId, memberId);
+    }
+
+    @PostMapping("/{newsId}/dislikeCount/{clubId}/{memberId}")
+    public int dislikeCount(@PathVariable("newsId") String newsId, @PathVariable("clubId") String clubId, @PathVariable("memberId") String memberId) {
+        return newsService.getNewsDislikeCount(newsId, clubId, memberId);
+    }
 }

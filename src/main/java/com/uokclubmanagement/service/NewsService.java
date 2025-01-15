@@ -11,5 +11,8 @@ public interface NewsService {
     News getNewsById(String newsId);
     News updateNewsById(String clubAdminId, String newsId, News news);
     void deleteNewsById(String newsId);
-
+    News addLikeToNews(String newsId, String clubId, String memberId);
+    News removeLikeFromNews(String newsId, String clubId, String memberId);
+    Integer getNewsLikeCount(String newsId, String clubId, String memberId);
+    Integer getNewsDislikeCount(String newsId, String clubId, String memberId);
 }
