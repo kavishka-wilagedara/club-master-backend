@@ -6,6 +6,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Document("events")
@@ -21,6 +23,8 @@ public class Event extends ContentSchedule {
     private LocalTime scheduledTime;
 
     private byte[] eventImage;
+
+    private List<String> comments = new ArrayList<>();
 
     public Event() {}
 
@@ -78,5 +82,13 @@ public class Event extends ContentSchedule {
 
     public void setEventImage(byte[] eventImage) {
         this.eventImage = eventImage;
+    }
+
+    public List<String> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<String> comments) {
+        this.comments = comments;
     }
 }

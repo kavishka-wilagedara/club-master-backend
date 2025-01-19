@@ -73,7 +73,6 @@ public class ClubServiceImpl implements ClubService {
         existingClub.get().setBackgroundImage1(existingClub.get().getBackgroundImage1());
         existingClub.get().setBackgroundImage2(existingClub.get().getBackgroundImage2());
         existingClub.get().setBackgroundImage3(existingClub.get().getBackgroundImage3());
-        System.out.println("New Senior Adviser: " + existingClub.get().getClubSeniorAdviser());
 
         return clubRepository.save(existingClub.get());
     }
