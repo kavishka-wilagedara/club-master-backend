@@ -2,6 +2,7 @@ package com.uokclubmanagement.entity;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -21,10 +22,11 @@ public class Member {
     private String lastName;
     private String email;
     private String phoneNo;
+    private String faculty;
+    @Indexed(unique = true)
     private String userName;
     private String password;
     private byte[] memberImage;
-
 
     private List<String> associatedClubs = new ArrayList<>();
 
@@ -69,6 +71,14 @@ public class Member {
 
     public void setPhoneNo(String phoneNo) {
         this.phoneNo = phoneNo;
+    }
+
+    public String getFaculty() {
+        return faculty;
+    }
+
+    public void setFaculty(String faculty) {
+        this.faculty = faculty;
     }
 
     public String getUserName() {

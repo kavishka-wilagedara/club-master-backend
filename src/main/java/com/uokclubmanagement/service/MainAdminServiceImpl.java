@@ -22,6 +22,10 @@ public class MainAdminServiceImpl implements MainAdminService {
     @Autowired
     private MainAdminRepository mainAdminRepository;
     @Autowired
+    private MemberRepository memberRepository;
+    @Autowired
+    private ClubAdminRepository clubAdminRepository;
+    @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
 
     
@@ -33,14 +37,19 @@ public class MainAdminServiceImpl implements MainAdminService {
         String username = mainAdmin.getMainAdminUsername();
         String email = mainAdmin.getMainAdminEmail();
 
-        Optional<MainAdmin> optionalMainAdminByUsername = Optional.ofNullable(mainAdminRepository.findMainAdminByMainAdminUsername(username));
-        Optional<MainAdmin> optionalMainAdminByEmail = Optional.ofNullable(mainAdminRepository.findMainAdminByMainAdminEmail(email));
+        // Query the database to check if a user with the same username and email exists
+        Optional<Member> existingMemberByUsername = Optional.ofNullable(memberRepository.findMemberByUserName(username));
+        Optional<Member> existingMemberByEmail = Optional.ofNullable(memberRepository.findMemberByEmail(email));
+        Optional<MainAdmin> existingMainAdminByUsername = Optional.ofNullable(mainAdminRepository.findMainAdminByMainAdminUsername(username));
+        Optional<MainAdmin> existingMainAdminByEmail = Optional.ofNullable(mainAdminRepository.findMainAdminByMainAdminEmail(email));
+        Optional<ClubAdmin> existingClubAdminByUsername = Optional.ofNullable(clubAdminRepository.findClubAdminByUsername(username));
 
-        if (optionalMainAdminByUsername.isPresent()) {
-            throw new RuntimeException("username already exists");
+
+        if (existingMemberByUsername.isPresent() || existingMainAdminByUsername.isPresent() || existingClubAdminByUsername.isPresent()) {
+            throw new RuntimeException("Username already exist");
         }
-        else if (optionalMainAdminByEmail.isPresent()) {
-            throw new RuntimeException("email already exists");
+        else if (existingMemberByEmail.isPresent() || existingMainAdminByEmail.isPresent()) {
+            throw new RuntimeException("Email already exist");
         }
 
         // If not exist

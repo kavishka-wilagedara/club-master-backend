@@ -3,6 +3,7 @@ package com.uokclubmanagement.entity;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
@@ -13,8 +14,10 @@ public class MainAdmin {
     private String mainAdminId;
 
     private String mainAdminName;
+    @Indexed(unique = true)
     private String mainAdminEmail;
     private String mainAdminPhone;
+    @Indexed(unique = true)
     private String mainAdminUsername;
     private String mainAdminPassword;
     private byte[] mainAdminImage;

@@ -2,9 +2,11 @@ package com.uokclubmanagement.service;
 
 import com.uokclubmanagement.entity.Club;
 import com.uokclubmanagement.entity.ClubAdmin;
+import com.uokclubmanagement.entity.MainAdmin;
 import com.uokclubmanagement.entity.Member;
 import com.uokclubmanagement.repository.ClubAdminRepository;
 import com.uokclubmanagement.repository.ClubRepository;
+import com.uokclubmanagement.repository.MainAdminRepository;
 import com.uokclubmanagement.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,8 @@ public class ClubAdminServiceImpl implements ClubAdminService {
     private ClubRepository clubRepository;
     @Autowired
     private ClubAdminRepository clubAdminRepository;
+    @Autowired
+    private MainAdminRepository mainAdminRepository;
     @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
 
@@ -45,24 +49,25 @@ public class ClubAdminServiceImpl implements ClubAdminService {
             throw new RuntimeException("Club not found with clubId " + clubId);
         }
 
-
-        // Find club admin username exist
+        // Query the database to check if a user with the same username
         Optional<ClubAdmin> optionalClubAdmin = Optional.ofNullable(clubAdminRepository.findClubAdminByUsername(clubAdmin.getUsername()));
+        Optional<MainAdmin> existingMainAdminByUserName = Optional.ofNullable(mainAdminRepository.findMainAdminByMainAdminUsername(clubAdmin.getUsername()));
+        Optional<Member> existingMemberByUsername = Optional.ofNullable(memberRepository.findMemberByUserName(clubAdmin.getUsername()));
 
+        if (optionalClubAdmin.isPresent() || existingMainAdminByUserName.isPresent()) {
+            throw new RuntimeException("username already exist: " + clubAdmin.getUsername());
+        }
         // Check club admin username with member username
-        Member member = optionalMember.get();
+        else if(existingMemberByUsername.isPresent()){
+            throw new RuntimeException("ClubAdmin username can not as your member profile's username: " + clubAdmin.getUsername());
+        }
+
         // Check the availability of clubId on member associated clubs
+        Member member = optionalMember.get();
+
         List<String> memberAssociatedClub = member.getAssociatedClubs();
 
-        if (optionalClubAdmin.isPresent()) {
-            throw new RuntimeException("ClubAdmin username already exist: " + clubAdmin.getUsername());
-        }
-
-        else if(clubAdmin.getUsername().equals(member.getUserName())){
-            throw new RuntimeException("ClubAdmin username can not as member: " + clubAdmin.getUsername());
-        }
-
-        else if(!memberAssociatedClub.contains(clubId)){
+        if(!memberAssociatedClub.contains(clubId)){
             throw new RuntimeException("Member is not associated with clubId: " + clubId);
         }
 
@@ -90,14 +95,23 @@ public class ClubAdminServiceImpl implements ClubAdminService {
     @Override
     public List<ClubAdmin> getAllClubAdminsByClubId(String clubId) {
 
-        List<ClubAdmin> clubAdmins = new ArrayList<>();
+        Optional<Club> optionalClub = clubRepository.findById(clubId);
 
-        for (int i = 0; i < getAllClubAdmins().size(); i++) {
-            if (getAllClubAdmins().get(i).getClubId().equals(clubId)) {
-                clubAdmins.add(getAllClubAdmins().get(i));
+        if (optionalClub.isPresent()) {
+
+            List<ClubAdmin> clubAdmins = new ArrayList<>();
+
+            for (int i = 0; i < getAllClubAdmins().size(); i++) {
+                if (getAllClubAdmins().get(i).getClubId().equals(clubId)) {
+                    clubAdmins.add(getAllClubAdmins().get(i));
+                }
             }
+            return clubAdmins;
         }
-        return clubAdmins;
+
+        else {
+            throw new RuntimeException("Club not found with clubId: " + clubId);
+        }
     }
 
     @Override

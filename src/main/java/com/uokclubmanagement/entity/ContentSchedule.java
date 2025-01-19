@@ -1,10 +1,13 @@
 package com.uokclubmanagement.entity;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class ContentSchedule {
@@ -14,6 +17,8 @@ public class ContentSchedule {
     private String publisherName;
     private String responseClub;
     private String description;
+    private List<String> membersLike =new ArrayList<>();
+    private List<String> membersDislike =new ArrayList<>();
 
 
     public ContentSchedule() {}
@@ -56,5 +61,21 @@ public class ContentSchedule {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<String> getMembersLike() {
+        return membersLike;
+    }
+
+    public void setMembersLike(List<String> membersLike) {
+        this.membersLike = membersLike;
+    }
+
+    public List<String> getMembersDislike() {
+        return membersDislike;
+    }
+
+    public void setMembersDislike(List<String> membersDislike) {
+        this.membersDislike = membersDislike;
     }
 }
