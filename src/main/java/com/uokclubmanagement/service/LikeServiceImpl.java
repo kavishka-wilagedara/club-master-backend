@@ -3,7 +3,6 @@ package com.uokclubmanagement.service;
 import com.uokclubmanagement.entity.*;
 import com.uokclubmanagement.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,7 +10,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class ContentScheduleServiceImpl implements ContentScheduleService{
+public class LikeServiceImpl implements LikeService {
 
     @Autowired
     private NewsRepository newsRepository;
@@ -150,7 +149,7 @@ public class ContentScheduleServiceImpl implements ContentScheduleService{
         return optionalNews.get();
     }
 
-    private Event validateClubIdWithEventAndMembers(String eventId, String clubId, String memberId) {
+     public Event validateClubIdWithEventAndMembers(String eventId, String clubId, String memberId) {
 
         // Query the database to check if member, event, club exist by id
         Optional<Event> optionalEvent = eventRepository.findById(eventId);

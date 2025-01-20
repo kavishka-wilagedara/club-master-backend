@@ -31,21 +31,10 @@ public class EventServiceImpl implements EventService {
     @Override
     public Event createEvent(Event event, String clubId,  String clubAdminId){
 
-        // Find club and clubAdmin are exist
-        Optional<ClubAdmin> clubAdminOptional = clubAdminRepository.findById(clubAdminId);
-        Optional<Club> clubOptional = clubRepository.findById(clubId);
+        // Validate clubAdminId and clubId
+        ClubAdmin clubAdmin = validateClubAdminAndClub(clubAdminId, clubId);
 
-        if(clubAdminOptional.isEmpty()){
-            throw new RuntimeException("Invalid Club Admin");
-        }
-
-        else if(clubOptional.isEmpty()){
-            throw new RuntimeException("Invalid Club ID");
-        }
-
-        // Get clubAdmin
-
-        ClubAdmin clubAdmin = clubAdminOptional.get();
+        // Check clubAdmin exist the clubId
         if (!clubAdmin.getClubId().equals(clubId)){
             throw new RuntimeException("Club ID does not match with Club Admin ID");
         }
@@ -309,6 +298,27 @@ public class EventServiceImpl implements EventService {
 
         if (existingEvent.getDescription() != null) {
             existingEvent.setDescription(contentSchedule.getDescription());
+        }
+    }
+
+    public ClubAdmin validateClubAdminAndClub(String clubAdminId, String clubId) {
+
+        // Find club and clubAdmin are exist
+        Optional<ClubAdmin> clubAdminOptional = clubAdminRepository.findById(clubAdminId);
+        Optional<Club> clubOptional = clubRepository.findById(clubId);
+
+        if(clubAdminOptional.isEmpty()){
+            throw new RuntimeException("Invalid Club Admin");
+        }
+
+        else if(clubOptional.isEmpty()){
+            throw new RuntimeException("Invalid Club ID");
+        }
+
+        // Get clubAdmin
+        else {
+            ClubAdmin clubAdmin = clubAdminOptional.get();
+            return clubAdmin;
         }
     }
 }

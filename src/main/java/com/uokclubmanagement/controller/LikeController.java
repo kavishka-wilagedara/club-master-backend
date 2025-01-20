@@ -1,9 +1,8 @@
 package com.uokclubmanagement.controller;
 
-import com.uokclubmanagement.entity.ContentSchedule;
 import com.uokclubmanagement.entity.Event;
 import com.uokclubmanagement.entity.News;
-import com.uokclubmanagement.service.ContentScheduleService;
+import com.uokclubmanagement.service.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,11 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/content")
-public class ContentScheduleController {
+@RequestMapping("/api/v1/like")
+public class LikeController {
 
     @Autowired
-    private ContentScheduleService contentScheduleService;
+    private LikeService contentScheduleService;
 
     @PostMapping("/{newsId}/addLikeNews/{clubId}/{memberId}")
     public News addLikeToNews(@PathVariable("newsId") String newsId, @PathVariable("clubId") String clubId, @PathVariable("memberId") String memberId) {

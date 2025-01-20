@@ -25,30 +25,17 @@ public class NewsServiceImpl implements NewsService{
     @Autowired
     private ClubAdminRepository clubAdminRepository;
     @Autowired
-    private ClubRepository clubRepository;
-    @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
     @Autowired
-    private MemberRepository memberRepository;
+    private EventServiceImpl eventServiceImpl;
 
     @Override
     public News createNews(News news, String clubId, String clubAdminId) {
 
-        // Find club and clubAdmin are exist
-        Optional<ClubAdmin> clubAdminOptional = clubAdminRepository.findById(clubAdminId);
-        Optional<Club> clubOptional = clubRepository.findById(clubId);
+        // Validate clubAdminId and clubId
+        ClubAdmin clubAdmin = eventServiceImpl.validateClubAdminAndClub(clubAdminId, clubId);
 
-        if(clubAdminOptional.isEmpty()){
-            throw new RuntimeException("Invalid Club Admin");
-        }
-
-        else if(clubOptional.isEmpty()){
-            throw new RuntimeException("Invalid Club ID");
-        }
-
-        // Get ClubAdmin
-        ClubAdmin clubAdmin = clubAdminOptional.get();
-
+        // Check clubAdmin exist the clubId
         if (!clubAdmin.getClubId().equals(clubId)){
             throw new RuntimeException("Club ID does not match with Club Admin ID");
         }
