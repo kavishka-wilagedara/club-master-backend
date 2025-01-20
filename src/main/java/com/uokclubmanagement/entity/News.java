@@ -4,11 +4,6 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-
 @Data
 @Document("news")
 public class News extends ContentSchedule{
@@ -17,8 +12,6 @@ public class News extends ContentSchedule{
     private String newsId;
 
     private String newsTitle;
-//    private List<String> membersLike =new ArrayList<>();
-//    private List<String> membersDislike =new ArrayList<>();
 
     public News() {}
 
@@ -38,19 +31,4 @@ public class News extends ContentSchedule{
         this.newsTitle = newsTitle;
     }
 
-//    public List<String> getMembersLike() {
-//        return membersLike;
-//    }
-//
-//    public void setMembersLike(List<String> membersLike) {
-//        this.membersLike = membersLike;
-//    }
-//
-//    public List<String> getMembersDislike() {
-//        return membersDislike;
-//    }
-//
-//    public void setMembersDislike(List<String> membersDislike) {
-//        this.membersDislike = membersDislike;
-//    }
 }
