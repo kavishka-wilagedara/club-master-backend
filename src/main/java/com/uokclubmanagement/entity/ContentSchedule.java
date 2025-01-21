@@ -17,8 +17,8 @@ public class ContentSchedule {
     private String publisherName;
     private String responseClub;
     private String description;
-    private List<String> membersLike =new ArrayList<>();
-    private List<String> membersDislike =new ArrayList<>();
+//    private List<String> membersLike =new ArrayList<>();
+//    private List<String> membersDislike =new ArrayList<>();
 
 
     public ContentSchedule() {}
@@ -63,19 +63,19 @@ public class ContentSchedule {
         this.description = description;
     }
 
-    public List<String> getMembersLike() {
-        return membersLike;
-    }
-
-    public void setMembersLike(List<String> membersLike) {
-        this.membersLike = membersLike;
-    }
-
-    public List<String> getMembersDislike() {
-        return membersDislike;
-    }
-
-    public void setMembersDislike(List<String> membersDislike) {
-        this.membersDislike = membersDislike;
-    }
+//    public List<String> getMembersLike() {
+//        return membersLike;
+//    }
+//
+//    public void setMembersLike(List<String> membersLike) {
+//        this.membersLike = membersLike;
+//    }
+//
+//    public List<String> getMembersDislike() {
+//        return membersDislike;
+//    }
+//
+//    public void setMembersDislike(List<String> membersDislike) {
+//        this.membersDislike = membersDislike;
+//    }
 }

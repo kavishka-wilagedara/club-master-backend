@@ -19,6 +19,8 @@ public class Award {
     private LocalDate awardDate;
     private String awardedClub;
 
+    private byte[] awardedImage;
+
     public Award(){}
 
     public String getAwardId() {
@@ -59,5 +61,13 @@ public class Award {
 
     public void setAwardedClub(String awardedClub) {
         this.awardedClub = awardedClub;
+    }
+
+    public byte[] getAwardedImage() {
+        return awardedImage;
+    }
+
+    public void setAwardedImage(byte[] awardedImage) {
+        this.awardedImage = awardedImage;
     }
 }

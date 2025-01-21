@@ -106,9 +106,10 @@ public class AwardServiceImpl implements AwardService {
         else {
             Award existingAward = awardById.get();
 
-            // Set name and description
+            // Set name, description and image
             existingAward.setAwardName(award.getAwardName());
             existingAward.setAwardDescription(award.getAwardDescription());
+            existingAward.setAwardedImage(award.getAwardedImage());
 
             // Check award date
             LocalDate currentDate = LocalDate.now();
