@@ -8,13 +8,12 @@ import java.time.LocalDate;
 
 @Data
 @Document("projects")
-public class Project {
+public class Project extends ContentSchedule {
 
     @Id
     private String projectId;
 
     private String projectName;
-    private String projectDescription;
     private LocalDate projectDate;
 
     private byte[] projectImage;
@@ -35,14 +34,6 @@ public class Project {
 
     public void setProjectName(String projectName) {
         this.projectName = projectName;
-    }
-
-    public String getProjectDescription() {
-        return projectDescription;
-    }
-
-    public void setProjectDescription(String projectDescription) {
-        this.projectDescription = projectDescription;
     }
 
     public LocalDate getProjectDate() {

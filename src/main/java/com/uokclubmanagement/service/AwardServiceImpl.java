@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,12 +48,19 @@ public class AwardServiceImpl implements AwardService {
                 String awardId = String.format("Award-%04d", seqValue);
                 award.setAwardId(awardId);
             }
-            // Set awarded club
-            award.setAwardedClub(clubId);
 
-            // Check award date
             LocalDate currentDate = LocalDate.now();
+            LocalTime currentTime = LocalTime.now();
+            LocalTime timeWithoutSeconds = currentTime.withNano(0);
 
+
+            // Set ContentSchedule fields
+            award.setResponseClub(clubId);
+            award.setPublisherName(clubAdmin.getFullName());
+            award.setPublishedDate(currentDate);
+            award.setPublishedTime(timeWithoutSeconds);
+
+            // Check award date is before today
             if(award.getAwardDate().isBefore(currentDate)){
                 // Set award date
                 award.setAwardDate(award.getAwardDate());
@@ -77,7 +85,7 @@ public class AwardServiceImpl implements AwardService {
 
         if (club.isPresent()) {
 
-            List<Award> awardsByClubId = awardRepository.findAllAwardsByAwardedClub(clubId);
+            List<Award> awardsByClubId = awardRepository.findAllAwardsByResponseClub(clubId);
             return awardsByClubId;
         }
         else {
@@ -100,20 +108,25 @@ public class AwardServiceImpl implements AwardService {
             throw new RuntimeException("Invalid club admin ID");
         }
 
-        else if(!optionalClubAdmin.get().getClubId().equals(awardById.get().getAwardedClub())){
+        else if(!optionalClubAdmin.get().getClubId().equals(awardById.get().getResponseClub())){
             throw new RuntimeException("Club ID does not match with Club Admin ID");
         }
         else {
             Award existingAward = awardById.get();
 
-            // Set name, description and image
-            existingAward.setAwardName(award.getAwardName());
-            existingAward.setAwardDescription(award.getAwardDescription());
-            existingAward.setAwardedImage(award.getAwardedImage());
-
-            // Check award date
             LocalDate currentDate = LocalDate.now();
+            LocalTime currentTime = LocalTime.now();
+            LocalTime timeWithoutSeconds = currentTime.withNano(0);
 
+            // Set Award and ContentSchedule fields
+            existingAward.setAwardName(award.getAwardName());
+            existingAward.setDescription(award.getDescription());
+            existingAward.setAwardedImage(award.getAwardedImage());
+            existingAward.setPublisherName(optionalClubAdmin.get().getFullName());
+            existingAward.setPublishedDate(currentDate);
+            existingAward.setPublishedTime(timeWithoutSeconds);
+
+            // Check award date is before today
             if(award.getAwardDate().isBefore(currentDate)){
                 existingAward.setAwardDate(award.getAwardDate());
             }

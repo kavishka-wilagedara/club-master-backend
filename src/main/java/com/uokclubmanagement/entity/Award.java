@@ -9,15 +9,13 @@ import java.time.LocalTime;
 
 @Data
 @Document("award")
-public class Award {
+public class Award extends ContentSchedule {
 
     @Id
     private String awardId;
 
     private String awardName;
-    private String awardDescription;
     private LocalDate awardDate;
-    private String awardedClub;
 
     private byte[] awardedImage;
 
@@ -39,28 +37,12 @@ public class Award {
         this.awardName = awardName;
     }
 
-    public String getAwardDescription() {
-        return awardDescription;
-    }
-
-    public void setAwardDescription(String awardDescription) {
-        this.awardDescription = awardDescription;
-    }
-
     public LocalDate getAwardDate() {
         return awardDate;
     }
 
     public void setAwardDate(LocalDate awardDate) {
         this.awardDate = awardDate;
-    }
-
-    public String getAwardedClub() {
-        return awardedClub;
-    }
-
-    public void setAwardedClub(String awardedClub) {
-        this.awardedClub = awardedClub;
     }
 
     public byte[] getAwardedImage() {
