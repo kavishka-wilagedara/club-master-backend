@@ -12,6 +12,7 @@ public class News extends ContentSchedule{
     private String newsId;
 
     private String newsTitle;
+    private Like like = new Like();
 
     public News() {}
 
@@ -25,6 +26,14 @@ public class News extends ContentSchedule{
 
     public String getNewsTitle() {
         return newsTitle;
+    }
+
+    public Like getLike() {
+        return like;
+    }
+
+    public void setLike(Like like) {
+        this.like = like;
     }
 
     public void setNewsTitle(String newsTitle) {

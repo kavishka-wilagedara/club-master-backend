@@ -24,7 +24,7 @@ public class LikeServiceImpl implements LikeService {
     @Override
     public News addLikeToNews(String newsId, String clubId, String memberId) {
         News news = validateClubIdWithNewsAndMembers(newsId, clubId, memberId);
-        handleLike(news, memberId);
+        handleLike(news.getLike(), memberId);
         newsRepository.save(news);
         return news;
     }
@@ -32,7 +32,7 @@ public class LikeServiceImpl implements LikeService {
     @Override
     public News removeLikeFromNews(String newsId, String clubId, String memberId) {
         News news = validateClubIdWithNewsAndMembers(newsId, clubId, memberId);
-        handleDislike(news, memberId);
+        handleDislike(news.getLike(), memberId);
         newsRepository.save(news);
         return news;
     }
@@ -40,7 +40,7 @@ public class LikeServiceImpl implements LikeService {
     @Override
     public Event addLikeToEvent(String eventId, String clubId, String memberId) {
         Event event = validateClubIdWithEventAndMembers(eventId, clubId, memberId);
-        handleLike(event, memberId);
+        handleLike(event.getLike(), memberId);
         eventRepository.save(event);
         return event;
     }
@@ -48,7 +48,7 @@ public class LikeServiceImpl implements LikeService {
     @Override
     public Event removeLikeFromEvent(String eventId, String clubId, String memberId) {
         Event event = validateClubIdWithEventAndMembers(eventId, clubId, memberId);
-        handleDislike(event, memberId);
+        handleDislike(event.getLike(), memberId);
         eventRepository.save(event);
         return event;
     }
@@ -57,7 +57,7 @@ public class LikeServiceImpl implements LikeService {
     public Integer getNewsLikeCount(String newsId, String clubId, String memberId) {
         News news = validateClubIdWithNewsAndMembers(newsId, clubId, memberId);
 
-        int likeCount = news.getMembersLike().size();
+        int likeCount = news.getLike().getMembersLike().size();
         return likeCount;
     }
 
@@ -65,7 +65,7 @@ public class LikeServiceImpl implements LikeService {
     public Integer getNewsDislikeCount(String newsId, String clubId, String memberId) {
         News news = validateClubIdWithNewsAndMembers(newsId, clubId, memberId);
 
-        int dislikeCount = news.getMembersDislike().size();
+        int dislikeCount = news.getLike().getMembersDislike().size();
         return dislikeCount;
     }
 
@@ -73,7 +73,7 @@ public class LikeServiceImpl implements LikeService {
     public Integer getEventLikeCount(String eventId, String clubId, String memberId) {
         Event event = validateClubIdWithEventAndMembers(eventId, clubId, memberId);
 
-        int likeCount = event.getMembersLike().size();
+        int likeCount = event.getLike().getMembersLike().size();
         return likeCount;
     }
 
@@ -81,11 +81,11 @@ public class LikeServiceImpl implements LikeService {
     public Integer getEventDislikeCount(String eventId, String clubId, String memberId) {
         Event event = validateClubIdWithEventAndMembers(eventId, clubId, memberId);
 
-        int dislikeCount = event.getMembersDislike().size();
+        int dislikeCount = event.getLike().getMembersDislike().size();
         return dislikeCount;
     }
 
-    private void handleLike(ContentSchedule contentLike, String memberId){
+    private void handleLike(Like contentLike, String memberId){
 
         // Check member already add a like
         if(contentLike.getMembersLike().contains(memberId)){
@@ -104,7 +104,7 @@ public class LikeServiceImpl implements LikeService {
         }
     }
 
-    private void handleDislike(ContentSchedule contentDislike, String memberId){
+    private void handleDislike(Like contentDislike, String memberId){
 
         // Check member already add a dislike
         if(contentDislike.getMembersDislike().contains(memberId)){

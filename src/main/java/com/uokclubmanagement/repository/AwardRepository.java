@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface AwardRepository extends MongoRepository<Award, String> {
 
-    List<Award> findAllAwardsByAwardedClub(String clubId);
+    List<Award> findAllAwardsByResponseClub(String clubId);
 }
