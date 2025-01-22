@@ -1,6 +1,7 @@
 package com.uokclubmanagement.controller;
 
 import com.uokclubmanagement.entity.Award;
+import com.uokclubmanagement.entity.Club;
 import com.uokclubmanagement.service.AwardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,5 +38,10 @@ public class AwardController {
     @PutMapping("/{clubAdminId}/update/{awardId}")
     public Award updateAward(@PathVariable String clubAdminId, @PathVariable String awardId, @RequestBody Award award) {
         return awardService.updateAward(clubAdminId, awardId, award);
+    }
+
+    @GetMapping("/findAwardById/{awardId}")
+    public Award findAwardById(@PathVariable("awardId") String awardId) {
+        return awardService.getAwardById(awardId);
     }
 }

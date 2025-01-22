@@ -11,5 +11,6 @@ public interface AwardService {
     List<Award> getAllAwardsByClubId(String clubId);
     Award updateAward(String clubAdminId , String awardId, Award award);
     void deleteAward(String awardId);
+    Award getAwardById(String awardId);
 
 }

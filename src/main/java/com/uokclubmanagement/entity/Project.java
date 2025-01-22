@@ -14,7 +14,7 @@ public class Project extends ContentSchedule {
     private String projectId;
 
     private String projectName;
-    private LocalDate projectDate;
+    private LocalDate projectHeldDate;
 
     private byte[] projectImage;
 
@@ -36,12 +36,12 @@ public class Project extends ContentSchedule {
         this.projectName = projectName;
     }
 
-    public LocalDate getProjectDate() {
-        return projectDate;
+    public LocalDate getProjectHeldDate() {
+        return projectHeldDate;
     }
 
-    public void setProjectDate(LocalDate projectDate) {
-        this.projectDate = projectDate;
+    public void setProjectHeldDate(LocalDate projectHeldDate) {
+        this.projectHeldDate = projectHeldDate;
     }
 
     public byte[] getProjectImage() {
