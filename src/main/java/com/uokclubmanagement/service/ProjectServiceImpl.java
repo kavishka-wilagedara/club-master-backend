@@ -121,7 +121,7 @@ public class ProjectServiceImpl implements ProjectService{
             // Set Project and ContentSchedule fields
             existingProject.setProjectName(project.getProjectName());
             existingProject.setDescription(project.getDescription());
-            existingProject.setProjectImage(project.getProjectImage());
+//            existingProject.setProjectImage(project.getProjectImage());
             existingProject.setPublisherName(optionalClubAdmin.get().getFullName());
             existingProject.setPublishedDate(currentDate);
             existingProject.setPublishedTime(timeWithoutSeconds);

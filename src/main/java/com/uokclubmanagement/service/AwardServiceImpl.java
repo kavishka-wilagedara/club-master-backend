@@ -85,7 +85,7 @@ public class AwardServiceImpl implements AwardService {
 
         if (club.isPresent()) {
 
-            List<Award> awardListByClubId = awardRepository.findAllAwardsByResponseClub(clubId);
+            List<Award> awardListByClubId = awardRepository.getAllAwardsByResponseClub(clubId);
             return awardListByClubId;
         }
         else {
@@ -121,7 +121,7 @@ public class AwardServiceImpl implements AwardService {
             // Set Award and ContentSchedule fields
             existingAward.setAwardName(award.getAwardName());
             existingAward.setDescription(award.getDescription());
-            existingAward.setAwardedImage(award.getAwardedImage());
+//            existingAward.setAwardedImage(award.getAwardedImage());
             existingAward.setPublisherName(optionalClubAdmin.get().getFullName());
             existingAward.setPublishedDate(currentDate);
             existingAward.setPublishedTime(timeWithoutSeconds);

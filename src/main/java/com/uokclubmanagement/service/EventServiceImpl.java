@@ -279,9 +279,9 @@ public class EventServiceImpl implements EventService {
             validateDateAndTime(event);
             exisitingEvent.setScheduledDate(event.getScheduledDate());
         }
-        if (exisitingEvent.getEventImage() != null){
-            exisitingEvent.setEventImage(event.getEventImage());
-        }
+//        if (exisitingEvent.getEventImage() != null){
+//            exisitingEvent.setEventImage(event.getEventImage());
+//        }
         if (exisitingEvent.getDescription() != null){
             exisitingEvent.setDescription(event.getDescription());
         }

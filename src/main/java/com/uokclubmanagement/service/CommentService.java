@@ -11,6 +11,6 @@ public interface CommentService {
     void deleteCommentFromEvent(String commentId, String eventId, String clubId, String memberId);
     List<Comment> getAllEventCommentsByMemberId(String eventId, String memberId);
     List<Comment> getAllEventCommentsByEventId(String eventId);
-    Comment updateCommentInEventId(String commentId, String memberId, Comment comment);
+    Comment updateCommentInEvent(String commentId, String memberId, Comment comment);
 
 }

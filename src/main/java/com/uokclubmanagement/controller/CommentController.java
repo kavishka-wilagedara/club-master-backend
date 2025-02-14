@@ -37,6 +37,6 @@ public class CommentController {
 
     @PutMapping("/{memberId}/updateComment/{commentId}")
     public Comment updateComment(@PathVariable String memberId, @PathVariable String commentId, @RequestBody Comment comment) {
-        return commentService.updateCommentInEventId(commentId, memberId, comment);
+        return commentService.updateCommentInEvent(commentId, memberId, comment);
     }
 }

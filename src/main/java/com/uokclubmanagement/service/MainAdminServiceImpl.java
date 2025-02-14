@@ -99,9 +99,9 @@ public class MainAdminServiceImpl implements MainAdminService {
         if (mainAdmin.getMainAdminPassword() != null) {
             existingMainAdmin.setMainAdminPassword(mainAdmin.getMainAdminPassword());
         }
-        if (mainAdmin.getMainAdminImage() != null){
-            existingMainAdmin.setMainAdminImage(mainAdmin.getMainAdminImage());
-        }
+//        if (mainAdmin.getMainAdminImage() != null){
+//            existingMainAdmin.setMainAdminImage(mainAdmin.getMainAdminImage());
+//        }
 
     }
 

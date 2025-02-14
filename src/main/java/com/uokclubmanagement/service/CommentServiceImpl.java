@@ -83,19 +83,19 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public List<Comment> getAllEventCommentsByMemberId(String eventId, String memberId) {
 
-        List<Comment> comments = commentRepository.findByMemberIdAndEventId(memberId, eventId);
+        List<Comment> comments = commentRepository.findCommentsByMemberIdAndEventId(memberId, eventId);
         return comments;
     }
 
     @Override
     public List<Comment> getAllEventCommentsByEventId(String eventId) {
 
-        List<Comment> comments = commentRepository.findByEventId(eventId);
+        List<Comment> comments = commentRepository.findCommentsByEventId(eventId);
         return comments;
     }
 
     @Override
-    public Comment updateCommentInEventId(String commentId, String memberId, Comment comment) {
+    public Comment updateCommentInEvent(String commentId, String memberId, Comment comment) {
 
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
         if (optionalComment.isPresent()) {
