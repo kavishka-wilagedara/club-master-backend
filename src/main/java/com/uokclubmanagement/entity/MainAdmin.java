@@ -20,7 +20,7 @@ public class MainAdmin {
     @Indexed(unique = true)
     private String mainAdminUsername;
     private String mainAdminPassword;
-    private byte[] mainAdminImage;
+//    private byte[] mainAdminImage;
 
     public MainAdmin() {
     }
@@ -73,11 +73,11 @@ public class MainAdmin {
         this.mainAdminUsername = mainAdminUsername;
     }
 
-    public byte[] getMainAdminImage() {
-        return mainAdminImage;
-    }
-
-    public void setMainAdminImage(byte[] mainAdminImage) {
-        this.mainAdminImage = mainAdminImage;
-    }
+//    public byte[] getMainAdminImage() {
+//        return mainAdminImage;
+//    }
+//
+//    public void setMainAdminImage(byte[] mainAdminImage) {
+//        this.mainAdminImage = mainAdminImage;
+//    }
 }

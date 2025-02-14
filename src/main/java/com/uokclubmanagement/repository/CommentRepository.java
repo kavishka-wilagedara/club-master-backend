@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface CommentRepository extends MongoRepository<Comment, String> {
 
-    List<Comment> findByEventId(String eventId);
-    List<Comment> findByMemberIdAndEventId(String memberId, String eventId);
+    List<Comment> findCommentsByEventId(String eventId);
+    List<Comment> findCommentsByMemberIdAndEventId(String memberId, String eventId);
 }

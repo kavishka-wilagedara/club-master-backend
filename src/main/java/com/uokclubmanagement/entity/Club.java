@@ -1,15 +1,15 @@
 package com.uokclubmanagement.entity;
 
+import com.uokclubmanagement.dto.ClubRoleDTO;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
+import static java.util.stream.Collectors.toList;
 
 @Data
 @Document("clubs")
@@ -25,12 +25,14 @@ public class Club {
     @Indexed(unique = true)
     private String clubProducer;
     private String clubVision;
-    private byte[] clubLogo;
-    private byte[] backgroundImage1;
-    private byte[] backgroundImage2;
-    private byte[] backgroundImage3;
+//    private byte[] clubLogo;
+//    private byte[] backgroundImage1;
+//    private byte[] backgroundImage2;
+//    private byte[] backgroundImage3;
 
     private List<String> associatedMembers = new ArrayList<>();
+    private List<ClubRoleDTO> positionHoldingMembersAndRoles = new ArrayList<>();
+
 
     public Club() {
     }
@@ -91,35 +93,44 @@ public class Club {
         this.associatedMembers = associatedMembers;
     }
 
-    public byte[] getClubLogo() {
-        return clubLogo;
+    public List<ClubRoleDTO> getPositionHoldingMembersAndRoles() {
+        return positionHoldingMembersAndRoles;
     }
 
-    public void setClubLogo(byte[] clubLogo) {
-        this.clubLogo = clubLogo;
+    public void setPositionHoldingMembersAndRoles(List<ClubRoleDTO> clubRole) {
+        this.positionHoldingMembersAndRoles = positionHoldingMembersAndRoles.stream()
+                .map(role -> new ClubRoleDTO(role.getMemberId(), role.getMemberName(), role.getEmail(), role.getRole())) // Using constructor on CreateExecutivePanelDTO
+                .collect(toList());
     }
-
-    public byte[] getBackgroundImage1() {
-        return backgroundImage1;
-    }
-
-    public void setBackgroundImage1(byte[] backgroundImage1) {
-        this.backgroundImage1 = backgroundImage1;
-    }
-
-    public byte[] getBackgroundImage2() {
-        return backgroundImage2;
-    }
-
-    public void setBackgroundImage2(byte[] backgroundImage2) {
-        this.backgroundImage2 = backgroundImage2;
-    }
-
-    public byte[] getBackgroundImage3() {
-        return backgroundImage3;
-    }
-
-    public void setBackgroundImage3(byte[] backgroundImage3) {
-        this.backgroundImage3 = backgroundImage3;
-    }
+//    public byte[] getClubLogo() {
+//        return clubLogo;
+//    }
+//
+//    public void setClubLogo(byte[] clubLogo) {
+//        this.clubLogo = clubLogo;
+//    }
+//
+//    public byte[] getBackgroundImage1() {
+//        return backgroundImage1;
+//    }
+//
+//    public void setBackgroundImage1(byte[] backgroundImage1) {
+//        this.backgroundImage1 = backgroundImage1;
+//    }
+//
+//    public byte[] getBackgroundImage2() {
+//        return backgroundImage2;
+//    }
+//
+//    public void setBackgroundImage2(byte[] backgroundImage2) {
+//        this.backgroundImage2 = backgroundImage2;
+//    }
+//
+//    public byte[] getBackgroundImage3() {
+//        return backgroundImage3;
+//    }
+//
+//    public void setBackgroundImage3(byte[] backgroundImage3) {
+//        this.backgroundImage3 = backgroundImage3;
+//    }
 }

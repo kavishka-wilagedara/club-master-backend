@@ -60,8 +60,8 @@ public class AwardServiceImpl implements AwardService {
             award.setPublishedDate(currentDate);
             award.setPublishedTime(timeWithoutSeconds);
 
-            // Check award date is before today
-            if(award.getAwardDate().isBefore(currentDate)){
+            // Check award date is before today or previous day
+            if(award.getAwardDate().isEqual(currentDate) || award.getAwardDate().isBefore(currentDate)){
                 // Set award date
                 award.setAwardDate(award.getAwardDate());
             }
@@ -85,8 +85,8 @@ public class AwardServiceImpl implements AwardService {
 
         if (club.isPresent()) {
 
-            List<Award> awardsByClubId = awardRepository.findAllAwardsByResponseClub(clubId);
-            return awardsByClubId;
+            List<Award> awardListByClubId = awardRepository.getAllAwardsByResponseClub(clubId);
+            return awardListByClubId;
         }
         else {
             throw new RuntimeException("Invalid Club ID");
@@ -121,13 +121,14 @@ public class AwardServiceImpl implements AwardService {
             // Set Award and ContentSchedule fields
             existingAward.setAwardName(award.getAwardName());
             existingAward.setDescription(award.getDescription());
-            existingAward.setAwardedImage(award.getAwardedImage());
+//            existingAward.setAwardedImage(award.getAwardedImage());
             existingAward.setPublisherName(optionalClubAdmin.get().getFullName());
             existingAward.setPublishedDate(currentDate);
             existingAward.setPublishedTime(timeWithoutSeconds);
 
-            // Check award date is before today
-            if(award.getAwardDate().isBefore(currentDate)){
+            // Check award date is before today or previous day
+            if(award.getAwardDate().isEqual(currentDate) || award.getAwardDate().isBefore(currentDate)){
+                // Set awarded date
                 existingAward.setAwardDate(award.getAwardDate());
             }
             else {
@@ -148,7 +149,20 @@ public class AwardServiceImpl implements AwardService {
             awardRepository.delete(awardById.get());
         }
         else {
-            throw new RuntimeException("Award does not exist");
+            throw new RuntimeException("Award does not exist with "+awardId);
+        }
+    }
+
+    @Override
+    public Award getAwardById(String awardId) {
+
+        Optional<Award> awardById = awardRepository.findById(awardId);
+
+        if (awardById.isPresent()) {
+            return awardById.get();
+        }
+        else {
+            throw new RuntimeException("Award does not exist with "+awardId);
         }
     }
 }

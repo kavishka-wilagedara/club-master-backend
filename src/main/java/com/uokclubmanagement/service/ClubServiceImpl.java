@@ -69,10 +69,10 @@ public class ClubServiceImpl implements ClubService {
         // Update the fields
         existingClub.get().setClubAddress(club.getClubAddress());
         existingClub.get().setClubSeniorAdviser(club.getClubSeniorAdviser());
-        existingClub.get().setClubLogo(club.getClubLogo());
-        existingClub.get().setBackgroundImage1(existingClub.get().getBackgroundImage1());
-        existingClub.get().setBackgroundImage2(existingClub.get().getBackgroundImage2());
-        existingClub.get().setBackgroundImage3(existingClub.get().getBackgroundImage3());
+//        existingClub.get().setClubLogo(club.getClubLogo());
+//        existingClub.get().setBackgroundImage1(existingClub.get().getBackgroundImage1());
+//        existingClub.get().setBackgroundImage2(existingClub.get().getBackgroundImage2());
+//        existingClub.get().setBackgroundImage3(existingClub.get().getBackgroundImage3());
 
         return clubRepository.save(existingClub.get());
     }
