@@ -1,24 +1,22 @@
-package com.uokclubmanagement.service;
+package com.uokclubmanagement.service.impl;
 
 import com.uokclubmanagement.entity.*;
 import com.uokclubmanagement.repository.ClubAdminRepository;
-import com.uokclubmanagement.repository.ClubRepository;
-import com.uokclubmanagement.repository.MemberRepository;
 import com.uokclubmanagement.repository.NewsRepository;
+import com.uokclubmanagement.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.uokclubmanagement.service.EventServiceImpl.contentScheduleUpdating;
+import static com.uokclubmanagement.service.impl.EventServiceImpl.contentScheduleUpdating;
 
 
 @Service
-public class NewsServiceImpl implements NewsService{
+public class NewsServiceImpl implements NewsService {
 
     @Autowired
     private NewsRepository newsRepository;

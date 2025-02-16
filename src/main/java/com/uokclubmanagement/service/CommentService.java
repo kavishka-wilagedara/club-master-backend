@@ -12,5 +12,6 @@ public interface CommentService {
     List<Comment> getAllEventCommentsByMemberId(String eventId, String memberId);
     List<Comment> getAllEventCommentsByEventId(String eventId);
     Comment updateCommentInEvent(String commentId, String memberId, Comment comment);
+    Integer getCommentCountByCommentId(String eventId, String clubId, String memberId);
 
 }

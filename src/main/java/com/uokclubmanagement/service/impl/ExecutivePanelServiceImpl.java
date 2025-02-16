@@ -1,4 +1,4 @@
-package com.uokclubmanagement.service;
+package com.uokclubmanagement.service.impl;
 
 import com.uokclubmanagement.dto.ClubRoleDTO;
 import com.uokclubmanagement.dto.DeleteExecutiveDTO;
@@ -7,6 +7,7 @@ import com.uokclubmanagement.entity.Club;
 import com.uokclubmanagement.entity.Member;
 import com.uokclubmanagement.repository.ClubRepository;
 import com.uokclubmanagement.repository.MemberRepository;
+import com.uokclubmanagement.service.ExecutivePanelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
