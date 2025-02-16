@@ -1,4 +1,4 @@
-package com.uokclubmanagement.service;
+package com.uokclubmanagement.service.impl;
 
 import com.uokclubmanagement.entity.Comment;
 import com.uokclubmanagement.entity.Event;
@@ -6,17 +6,17 @@ import com.uokclubmanagement.entity.Member;
 import com.uokclubmanagement.repository.CommentRepository;
 import com.uokclubmanagement.repository.EventRepository;
 import com.uokclubmanagement.repository.MemberRepository;
+import com.uokclubmanagement.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
-public class CommentServiceImpl implements CommentService{
+public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private CommentRepository commentRepository;
@@ -112,5 +112,13 @@ public class CommentServiceImpl implements CommentService{
         else{
             throw new RuntimeException("Comment not found");
         }
+    }
+
+    @Override
+    public Integer getCommentCountByCommentId(String eventId, String clubId, String memberId) {
+        Event event = likeServiceImpl.validateClubIdWithEventAndMembers(eventId, clubId, memberId);
+
+        int commentCount = event.getComments().size();
+        return commentCount;
     }
 }

@@ -1,4 +1,4 @@
-package com.uokclubmanagement.service;
+package com.uokclubmanagement.service.impl;
 
 import com.uokclubmanagement.entity.Club;
 import com.uokclubmanagement.entity.ClubAdmin;
@@ -8,6 +8,7 @@ import com.uokclubmanagement.repository.ClubAdminRepository;
 import com.uokclubmanagement.repository.ClubRepository;
 import com.uokclubmanagement.repository.MainAdminRepository;
 import com.uokclubmanagement.repository.MemberRepository;
+import com.uokclubmanagement.service.ClubAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -81,6 +82,7 @@ public class ClubAdminServiceImpl implements ClubAdminService {
                 clubAdmin.setClubAdminId(clubAdminId);
                 clubAdmin.setMemberId(memberId);
                 clubAdmin.setFullName(member.getFirstName()+" "+member.getLastName());
+                clubAdmin.setEmail(member.getEmail());
 //                clubAdmin.setClubAdminImage(member.getMemberImage());
             }
         }

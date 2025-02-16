@@ -1,9 +1,9 @@
-package com.uokclubmanagement.service;
+package com.uokclubmanagement.service.impl;
 
-import com.uokclubmanagement.entity.ClubAdmin;
 import com.uokclubmanagement.entity.UserHelp;
 import com.uokclubmanagement.entity.UserHelpResponse;
 import com.uokclubmanagement.repository.UserHelpRepository;
+import com.uokclubmanagement.service.UserHelpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class UserHelpServiceImpl implements UserHelpService{
+public class UserHelpServiceImpl implements UserHelpService {
 
     @Autowired
     private UserHelpRepository userHelpRepository;

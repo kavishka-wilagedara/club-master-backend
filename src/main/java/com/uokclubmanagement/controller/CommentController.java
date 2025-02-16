@@ -39,4 +39,9 @@ public class CommentController {
     public Comment updateComment(@PathVariable String memberId, @PathVariable String commentId, @RequestBody Comment comment) {
         return commentService.updateCommentInEvent(commentId, memberId, comment);
     }
+
+    @PostMapping("/{eventId}/commentCountEvent/{clubId}/{memberId}")
+    public int commentCountEvent(@PathVariable("eventId") String eventId, @PathVariable("clubId") String clubId, @PathVariable("memberId") String memberId) {
+        return commentService.getCommentCountByCommentId(eventId, clubId, memberId);
+    }
 }

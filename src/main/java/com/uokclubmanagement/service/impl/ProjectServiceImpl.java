@@ -1,12 +1,12 @@
-package com.uokclubmanagement.service;
+package com.uokclubmanagement.service.impl;
 
-import com.uokclubmanagement.entity.Award;
 import com.uokclubmanagement.entity.Club;
 import com.uokclubmanagement.entity.ClubAdmin;
 import com.uokclubmanagement.entity.Project;
 import com.uokclubmanagement.repository.ClubAdminRepository;
 import com.uokclubmanagement.repository.ClubRepository;
 import com.uokclubmanagement.repository.ProjectRepository;
+import com.uokclubmanagement.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class ProjectServiceImpl implements ProjectService{
+public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
     private ProjectRepository projectRepository;

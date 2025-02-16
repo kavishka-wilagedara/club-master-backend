@@ -1,7 +1,8 @@
-package com.uokclubmanagement.service;
+package com.uokclubmanagement.service.impl;
 
 import com.uokclubmanagement.entity.*;
 import com.uokclubmanagement.repository.*;
+import com.uokclubmanagement.service.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

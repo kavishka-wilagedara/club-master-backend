@@ -1,4 +1,4 @@
-package com.uokclubmanagement.service;
+package com.uokclubmanagement.service.impl;
 
 import com.uokclubmanagement.entity.ClubAdmin;
 import com.uokclubmanagement.entity.MainAdmin;
@@ -6,12 +6,11 @@ import com.uokclubmanagement.entity.Member;
 import com.uokclubmanagement.repository.ClubAdminRepository;
 import com.uokclubmanagement.repository.MainAdminRepository;
 import com.uokclubmanagement.repository.MemberRepository;
+import com.uokclubmanagement.service.MainAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.net.PasswordAuthentication;
 import java.util.List;
 import java.util.Optional;
 

@@ -14,45 +14,45 @@ import org.springframework.web.bind.annotation.RestController;
 public class LikeController {
 
     @Autowired
-    private LikeService contentScheduleService;
+    private LikeService likeService;
 
     @PostMapping("/{newsId}/addLikeNews/{clubId}/{memberId}")
     public News addLikeToNews(@PathVariable("newsId") String newsId, @PathVariable("clubId") String clubId, @PathVariable("memberId") String memberId) {
-        return contentScheduleService.addLikeToNews(newsId, clubId, memberId);
+        return likeService.addLikeToNews(newsId, clubId, memberId);
     }
 
     @PostMapping("/{eventId}/addLikeEvent/{clubId}/{memberId}")
     public Event addLikeToEvent(@PathVariable("eventId") String newsId, @PathVariable("clubId") String clubId, @PathVariable("memberId") String memberId) {
-        return contentScheduleService.addLikeToEvent(newsId, clubId, memberId);
+        return likeService.addLikeToEvent(newsId, clubId, memberId);
     }
 
     @PostMapping("/{newsId}/removeLikeNews/{clubId}/{memberId}")
     public News removeLikeFromNews(@PathVariable("newsId") String newsId, @PathVariable("clubId") String clubId, @PathVariable("memberId") String memberId) {
-        return contentScheduleService.removeLikeFromNews(newsId, clubId, memberId);
+        return likeService.removeLikeFromNews(newsId, clubId, memberId);
     }
 
     @PostMapping("/{eventId}/removeLikeEvent/{clubId}/{memberId}")
     public Event removeLikeFromEvent(@PathVariable("eventId") String eventId, @PathVariable("clubId") String clubId, @PathVariable("memberId") String memberId) {
-        return contentScheduleService.removeLikeFromEvent(eventId, clubId, memberId);
+        return likeService.removeLikeFromEvent(eventId, clubId, memberId);
     }
 
     @PostMapping("/{newsId}/likeCountNews/{clubId}/{memberId}")
     public int likeCountNews(@PathVariable("newsId") String newsId, @PathVariable("clubId") String clubId, @PathVariable("memberId") String memberId) {
-        return contentScheduleService.getNewsLikeCount(newsId, clubId, memberId);
+        return likeService.getNewsLikeCount(newsId, clubId, memberId);
     }
 
     @PostMapping("/{newsId}/dislikeCountNews/{clubId}/{memberId}")
     public int dislikeCountNews(@PathVariable("newsId") String newsId, @PathVariable("clubId") String clubId, @PathVariable("memberId") String memberId) {
-        return contentScheduleService.getNewsDislikeCount(newsId, clubId, memberId);
+        return likeService.getNewsDislikeCount(newsId, clubId, memberId);
     }
 
     @PostMapping("/{eventId}/likeCountEvent/{clubId}/{memberId}")
     public int likeCountEvent(@PathVariable("eventId") String eventId, @PathVariable("clubId") String clubId, @PathVariable("memberId") String memberId) {
-        return contentScheduleService.getEventLikeCount(eventId, clubId, memberId);
+        return likeService.getEventLikeCount(eventId, clubId, memberId);
     }
 
     @PostMapping("/{eventId}/dislikeCountEvent/{clubId}/{memberId}")
     public int dislikeCountEvent(@PathVariable("eventId") String eventId, @PathVariable("clubId") String clubId, @PathVariable("memberId") String memberId) {
-        return contentScheduleService.getEventDislikeCount(eventId, clubId, memberId);
+        return likeService.getEventDislikeCount(eventId, clubId, memberId);
     }
 }
