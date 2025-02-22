@@ -11,6 +11,5 @@ public interface NewsService {
     News getNewsById(String newsId);
     News updateNewsById(String clubAdminId, String newsId, News news);
     void deleteNewsById(String newsId);
-    List<News> getAllNewsByClubId(String clubId);
-
+    List<News> getAllNewsByMemberId(String memberId);
 }
