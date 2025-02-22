@@ -125,16 +125,4 @@ public class NewsServiceImpl implements NewsService {
         }
     }
 
-    @Override
-    public List<News> getAllNewsByClubId(String clubId) {
-        {
-            Optional<News> findNews = newsRepository.findById(clubId);
-            if (findNews.isPresent()) {
-                return newsRepository.getAllNewsByResponseClub(clubId);
-            }
-            else {
-                throw new RuntimeException("Invalid Club ID: "+clubId);
-            }
-        }
-    }
 }
