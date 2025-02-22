@@ -15,4 +15,5 @@ public interface NewsService {
     News removeLikeFromNews(String newsId, String clubId, String memberId);
     Integer getNewsLikeCount(String newsId, String clubId, String memberId);
     Integer getNewsDislikeCount(String newsId, String clubId, String memberId);
+    List<News> getAllNewsByMemberId(String memberId);
 }
