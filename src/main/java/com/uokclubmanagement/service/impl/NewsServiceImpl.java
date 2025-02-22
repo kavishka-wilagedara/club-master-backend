@@ -2,6 +2,7 @@ package com.uokclubmanagement.service.impl;
 
 import com.uokclubmanagement.entity.*;
 import com.uokclubmanagement.repository.ClubAdminRepository;
+import com.uokclubmanagement.repository.MemberRepository;
 import com.uokclubmanagement.repository.NewsRepository;
 import com.uokclubmanagement.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +24,8 @@ public class NewsServiceImpl implements NewsService {
     private NewsRepository newsRepository;
     @Autowired
     private ClubAdminRepository clubAdminRepository;
+    @Autowired
+    private MemberRepository memberRepository;
     @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
     @Autowired
@@ -122,6 +126,27 @@ public class NewsServiceImpl implements NewsService {
         }
         else{
             throw new RuntimeException("Invalid news ID: "+newsId);
+        }
+    }
+
+    @Override
+    public List<News> getAllNewsByMemberId(String memberId) {
+        Optional<Member> findMember = memberRepository.findById(memberId);
+        if (findMember.isPresent()) {
+            Member exisitingMember = findMember.get();
+            List<String> assigningClubs = exisitingMember.getAssociatedClubs();
+            List<News> newsList = new ArrayList<>();
+
+            for(int i = 0; i < assigningClubs.size(); i++){
+                String clubId = assigningClubs.get(i);
+
+                List<News> addNews = newsRepository.getAllNewsByResponseClub(clubId);
+                newsList.addAll(addNews);
+            }
+            return newsList;
+        }
+        else {
+            throw new RuntimeException("Invalid Member ID: "+memberId);
         }
     }
 
