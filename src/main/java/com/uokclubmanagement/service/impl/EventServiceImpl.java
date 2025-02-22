@@ -363,7 +363,7 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-    static void contentScheduleUpdating(ContentSchedule existingEvent, ContentSchedule contentSchedule) {
+    public static void contentScheduleUpdating(ContentSchedule existingEvent, ContentSchedule contentSchedule) {
 
         LocalDate currentDate = LocalDate.now();
         LocalTime currentTime = LocalTime.now();

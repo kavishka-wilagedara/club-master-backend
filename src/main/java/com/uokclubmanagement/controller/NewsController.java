@@ -29,6 +29,11 @@ public class NewsController {
         return newsService.getAllNews();
     }
 
+    @GetMapping("/getAllNews/{memberId}")
+    public List<News> getAllNewsByMemberId(@PathVariable("memberId") String memberId) {
+        return newsService.getAllNewsByMemberId(memberId);
+    }
+
     @PutMapping("/{clubAdminId}/update/{newsId}")
     public News updateNews(@PathVariable("clubAdminId") String clubAdminId, @PathVariable("newsId") String newsId, @RequestBody News news) {
         return newsService.updateNewsById(clubAdminId, newsId, news);
