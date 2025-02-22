@@ -19,4 +19,7 @@ public interface EventService {
     List<Event> getAllOngoingEvents();
     List<Event> getAllUpcomingEvents();
     List<Event> getAllPastEvents();
+    List<Event> getAllOngoingEventsByMemberId(String memberId);
+    List<Event> getAllUpcomingEventsByMemberId(String memberId);
+    List<Event> getAllPastEventsByMemberId(String memberId);
 }

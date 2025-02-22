@@ -1,11 +1,11 @@
-package com.uokclubmanagement.service;
+package com.uokclubmanagement.service.impl;
 
 import com.uokclubmanagement.dto.EnrollmentDTO;
 import com.uokclubmanagement.entity.Club;
-import com.uokclubmanagement.entity.MainAdmin;
 import com.uokclubmanagement.entity.Member;
 import com.uokclubmanagement.repository.ClubRepository;
 import com.uokclubmanagement.repository.MemberRepository;
+import com.uokclubmanagement.service.ClubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,11 +69,10 @@ public class ClubServiceImpl implements ClubService {
         // Update the fields
         existingClub.get().setClubAddress(club.getClubAddress());
         existingClub.get().setClubSeniorAdviser(club.getClubSeniorAdviser());
-        existingClub.get().setClubLogo(club.getClubLogo());
-        existingClub.get().setBackgroundImage1(existingClub.get().getBackgroundImage1());
-        existingClub.get().setBackgroundImage2(existingClub.get().getBackgroundImage2());
-        existingClub.get().setBackgroundImage3(existingClub.get().getBackgroundImage3());
-        System.out.println("New Senior Adviser: " + existingClub.get().getClubSeniorAdviser());
+//        existingClub.get().setClubLogo(club.getClubLogo());
+//        existingClub.get().setBackgroundImage1(existingClub.get().getBackgroundImage1());
+//        existingClub.get().setBackgroundImage2(existingClub.get().getBackgroundImage2());
+//        existingClub.get().setBackgroundImage3(existingClub.get().getBackgroundImage3());
 
         return clubRepository.save(existingClub.get());
     }
