@@ -1,5 +1,6 @@
 package com.uokclubmanagement.service;
 
+import com.uokclubmanagement.dto.EnrollmentDTO;
 import com.uokclubmanagement.entity.Club;
 import com.uokclubmanagement.entity.Member;
 
@@ -12,6 +13,8 @@ public interface ClubService {
     Club updateClubById(String clubId, Club club);
     void deleteClubById(String clubId);
     Club getClubByClubId(String clubId);
-    Member enrollMemberToClub(String memberId, String clubId);
+    Member enrollMemberToClub(String memberId, String clubId, EnrollmentDTO enrollmentKey);
     Member unrollMemberFromClub(String memberId, String clubId);
+
+    List<String> getClubsByMemberId(String memberId);
 }

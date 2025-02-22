@@ -1,9 +1,12 @@
-package com.uokclubmanagement.service;
+package com.uokclubmanagement.service.impl;
 
+import com.uokclubmanagement.entity.ClubAdmin;
 import com.uokclubmanagement.entity.MainAdmin;
 import com.uokclubmanagement.entity.Member;
+import com.uokclubmanagement.repository.ClubAdminRepository;
 import com.uokclubmanagement.repository.MainAdminRepository;
 import com.uokclubmanagement.repository.MemberRepository;
+import com.uokclubmanagement.service.MainAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,18 +21,34 @@ public class MainAdminServiceImpl implements MainAdminService {
     @Autowired
     private MainAdminRepository mainAdminRepository;
     @Autowired
+    private MemberRepository memberRepository;
+    @Autowired
+    private ClubAdminRepository clubAdminRepository;
+    @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
+
+    
 
     @Override
     public MainAdmin createMainAdmin(MainAdmin mainAdmin) {
 
-        // Check username exists
+        // Check username and email exists
         String username = mainAdmin.getMainAdminUsername();
+        String email = mainAdmin.getMainAdminEmail();
 
-        Optional<MainAdmin> optionalMainAdmin = Optional.ofNullable(mainAdminRepository.findMainAdminByMainAdminUsername(username));
+        // Query the database to check if a user with the same username and email exists
+        Optional<Member> existingMemberByUsername = Optional.ofNullable(memberRepository.findMemberByUserName(username));
+        Optional<Member> existingMemberByEmail = Optional.ofNullable(memberRepository.findMemberByEmail(email));
+        Optional<MainAdmin> existingMainAdminByUsername = Optional.ofNullable(mainAdminRepository.findMainAdminByMainAdminUsername(username));
+        Optional<MainAdmin> existingMainAdminByEmail = Optional.ofNullable(mainAdminRepository.findMainAdminByMainAdminEmail(email));
+        Optional<ClubAdmin> existingClubAdminByUsername = Optional.ofNullable(clubAdminRepository.findClubAdminByUsername(username));
 
-        if (optionalMainAdmin.isPresent()) {
-            throw new RuntimeException("username already exists");
+
+        if (existingMemberByUsername.isPresent() || existingMainAdminByUsername.isPresent() || existingClubAdminByUsername.isPresent()) {
+            throw new RuntimeException("Username already exist");
+        }
+        else if (existingMemberByEmail.isPresent() || existingMainAdminByEmail.isPresent()) {
+            throw new RuntimeException("Email already exist");
         }
 
         // If not exist
@@ -40,7 +59,7 @@ public class MainAdminServiceImpl implements MainAdminService {
             String mainAdminId = String.format("Adm-%04d", seqValue);
             mainAdmin.setMainAdminId(mainAdminId);
 
-            }
+         }
             return mainAdminRepository.save(mainAdmin);
         }
     }
@@ -53,16 +72,16 @@ public class MainAdminServiceImpl implements MainAdminService {
     @Override
     public MainAdmin updateMainAdminById(String mainAdminID, MainAdmin mainAdmin) {
 
-        MainAdmin existingMainAdmin = mainAdminRepository.findMainAdminByMainAdminId(mainAdminID);
+        Optional<MainAdmin> existingMainAdmin = mainAdminRepository.findById(mainAdminID);
         // Check if existingMainAdmin is null
-        if (existingMainAdmin == null) {
+        if (existingMainAdmin.isEmpty()) {
             throw new RuntimeException("MainAdmin not found with id: " + mainAdminID);
         }
         // Update the mainAdmin fields
-        updateMainAdminFields(existingMainAdmin, mainAdmin);
+        updateMainAdminFields(existingMainAdmin.get(), mainAdmin);
 
         // Save on mainAdmin collection
-        return mainAdminRepository.save(existingMainAdmin);
+        return mainAdminRepository.save(existingMainAdmin.get());
     }
 
     private void updateMainAdminFields(MainAdmin existingMainAdmin, MainAdmin mainAdmin) {
@@ -79,15 +98,21 @@ public class MainAdminServiceImpl implements MainAdminService {
         if (mainAdmin.getMainAdminPassword() != null) {
             existingMainAdmin.setMainAdminPassword(mainAdmin.getMainAdminPassword());
         }
+//        if (mainAdmin.getMainAdminImage() != null){
+//            existingMainAdmin.setMainAdminImage(mainAdmin.getMainAdminImage());
+//        }
+
     }
 
     @Override
     public void deleteMainAdminById(String mainAdminId) {
-        try {
-            MainAdmin deleteMainAdmin = mainAdminRepository.findMainAdminByMainAdminId(mainAdminId);
-            mainAdminRepository.delete(deleteMainAdmin);
+
+        Optional<MainAdmin> deleteMainAdmin = mainAdminRepository.findById(mainAdminId);
+            if (deleteMainAdmin.isPresent()) {
+                MainAdmin mainAdmin = deleteMainAdmin.get();
+                System.out.println("Deleted mainAdmin: " + mainAdminId);
         }
-        catch (Exception e) {
+        else {
             throw new RuntimeException("MainAdmin not found with id: " + mainAdminId);
         }
     }
@@ -95,12 +120,12 @@ public class MainAdminServiceImpl implements MainAdminService {
     @Override
     public MainAdmin getMainAdminById(String mainAdminId) {
 
-        MainAdmin findMainAdmin = mainAdminRepository.findMainAdminByMainAdminId(mainAdminId);
-        if (findMainAdmin == null) {
+        Optional<MainAdmin> findMainAdmin = mainAdminRepository.findById(mainAdminId);
+        if (findMainAdmin.isEmpty()) {
             throw new RuntimeException("MainAdmin not found with id: " + mainAdminId);
         }
         else {
-            return findMainAdmin;
+            return findMainAdmin.get();
         }
     }
 }
