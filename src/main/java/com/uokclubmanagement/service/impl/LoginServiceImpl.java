@@ -1,4 +1,4 @@
-package com.uokclubmanagement.service;
+package com.uokclubmanagement.service.impl;
 
 import com.uokclubmanagement.entity.ClubAdmin;
 import com.uokclubmanagement.entity.MainAdmin;

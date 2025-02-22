@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/club")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ClubController {
 
     @Autowired
@@ -42,7 +43,7 @@ public class ClubController {
     }
 
     @PostMapping("/{memberId}/enroll-member/{clubId}")
-    public Member assignMember(@PathVariable String memberId, @PathVariable String clubId, @RequestBody EnrollmentDTO enrollmentKey) throws RuntimeException {
+    public Member assignMember(@PathVariable String memberId, @PathVariable String clubId, @RequestBody EnrollmentDTO enrollmentKey) {
         return clubService.enrollMemberToClub(memberId, clubId, enrollmentKey);
     }
 

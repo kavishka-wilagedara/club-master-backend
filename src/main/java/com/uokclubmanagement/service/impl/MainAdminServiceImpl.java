@@ -1,4 +1,4 @@
-package com.uokclubmanagement.service;
+package com.uokclubmanagement.service.impl;
 
 import com.uokclubmanagement.entity.ClubAdmin;
 import com.uokclubmanagement.entity.MainAdmin;
@@ -6,12 +6,11 @@ import com.uokclubmanagement.entity.Member;
 import com.uokclubmanagement.repository.ClubAdminRepository;
 import com.uokclubmanagement.repository.MainAdminRepository;
 import com.uokclubmanagement.repository.MemberRepository;
+import com.uokclubmanagement.service.MainAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.net.PasswordAuthentication;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +20,10 @@ public class MainAdminServiceImpl implements MainAdminService {
 
     @Autowired
     private MainAdminRepository mainAdminRepository;
+    @Autowired
+    private MemberRepository memberRepository;
+    @Autowired
+    private ClubAdminRepository clubAdminRepository;
     @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
 
@@ -33,14 +36,19 @@ public class MainAdminServiceImpl implements MainAdminService {
         String username = mainAdmin.getMainAdminUsername();
         String email = mainAdmin.getMainAdminEmail();
 
-        Optional<MainAdmin> optionalMainAdminByUsername = Optional.ofNullable(mainAdminRepository.findMainAdminByMainAdminUsername(username));
-        Optional<MainAdmin> optionalMainAdminByEmail = Optional.ofNullable(mainAdminRepository.findMainAdminByMainAdminEmail(email));
+        // Query the database to check if a user with the same username and email exists
+        Optional<Member> existingMemberByUsername = Optional.ofNullable(memberRepository.findMemberByUserName(username));
+        Optional<Member> existingMemberByEmail = Optional.ofNullable(memberRepository.findMemberByEmail(email));
+        Optional<MainAdmin> existingMainAdminByUsername = Optional.ofNullable(mainAdminRepository.findMainAdminByMainAdminUsername(username));
+        Optional<MainAdmin> existingMainAdminByEmail = Optional.ofNullable(mainAdminRepository.findMainAdminByMainAdminEmail(email));
+        Optional<ClubAdmin> existingClubAdminByUsername = Optional.ofNullable(clubAdminRepository.findClubAdminByUsername(username));
 
-        if (optionalMainAdminByUsername.isPresent()) {
-            throw new RuntimeException("username already exists");
+
+        if (existingMemberByUsername.isPresent() || existingMainAdminByUsername.isPresent() || existingClubAdminByUsername.isPresent()) {
+            throw new RuntimeException("Username already exist");
         }
-        else if (optionalMainAdminByEmail.isPresent()) {
-            throw new RuntimeException("email already exists");
+        else if (existingMemberByEmail.isPresent() || existingMainAdminByEmail.isPresent()) {
+            throw new RuntimeException("Email already exist");
         }
 
         // If not exist
@@ -90,9 +98,9 @@ public class MainAdminServiceImpl implements MainAdminService {
         if (mainAdmin.getMainAdminPassword() != null) {
             existingMainAdmin.setMainAdminPassword(mainAdmin.getMainAdminPassword());
         }
-        if (mainAdmin.getMainAdminImage() != null){
-            existingMainAdmin.setMainAdminImage(mainAdmin.getMainAdminImage());
-        }
+//        if (mainAdmin.getMainAdminImage() != null){
+//            existingMainAdmin.setMainAdminImage(mainAdmin.getMainAdminImage());
+//        }
 
     }
 

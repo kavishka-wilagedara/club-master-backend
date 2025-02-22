@@ -1,7 +1,9 @@
 package com.uokclubmanagement.entity;
 
+import com.uokclubmanagement.dto.MemberRoleDTO;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -9,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @Document("member")
@@ -21,10 +24,12 @@ public class Member {
     private String lastName;
     private String email;
     private String phoneNo;
+    private String faculty;
+    @Indexed(unique = true)
     private String userName;
     private String password;
-    private byte[] memberImage;
-
+    private List<MemberRoleDTO> positionHoldingClubAndRoles = new ArrayList<>();
+//    private byte[] memberImage;
 
     private List<String> associatedClubs = new ArrayList<>();
 
@@ -71,6 +76,14 @@ public class Member {
         this.phoneNo = phoneNo;
     }
 
+    public String getFaculty() {
+        return faculty;
+    }
+
+    public void setFaculty(String faculty) {
+        this.faculty = faculty;
+    }
+
     public String getUserName() {
         return userName;
     }
@@ -95,11 +108,22 @@ public class Member {
         this.associatedClubs = associatedClubs;
     }
 
-    public byte[] getMemberImage() {
-        return memberImage;
+    public List<MemberRoleDTO>getPositionHoldingClubAndRoles() {
+        return positionHoldingClubAndRoles;
     }
 
-    public void setMemberImage(byte[] memberImage) {
-        this.memberImage = memberImage;
+    public void setPositionHoldingClubAndRoles(List<MemberRoleDTO> positionHoldingClubAndRoles) {
+        this.positionHoldingClubAndRoles = positionHoldingClubAndRoles.stream()
+                .map(role -> new MemberRoleDTO(role.getClubId(), role.getRole())) // Using constructor on ClubRole
+                .collect(Collectors.toList());
     }
+
+
+//    public byte[] getMemberImage() {
+//        return memberImage;
+//    }
+//
+//    public void setMemberImage(byte[] memberImage) {
+//        this.memberImage = memberImage;
+//    }
 }

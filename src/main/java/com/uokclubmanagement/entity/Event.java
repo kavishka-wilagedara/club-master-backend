@@ -6,6 +6,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Document("events")
@@ -17,8 +19,13 @@ public class Event extends ContentSchedule {
     private String eventName;
     private String eventType;
     private String eventLocation;
+    private LocalDate scheduledDate;
+    private LocalTime scheduledTime;
+    private Like like = new Like();
 
-    private byte[] eventImage;
+//    private byte[] eventImage;
+
+    private List<String> comments = new ArrayList<>();
 
     public Event() {}
 
@@ -54,11 +61,44 @@ public class Event extends ContentSchedule {
         this.eventLocation = eventLocation;
     }
 
-    public byte[] getEventImage() {
-        return eventImage;
+//    public byte[] getEventImage() {
+//        return eventImage;
+//    }
+//
+//    public void setEventImage(byte[] eventImage) {
+//        this.eventImage = eventImage;
+//    }
+
+
+    public LocalDate getScheduledDate() {
+        return scheduledDate;
     }
 
-    public void setEventImage(byte[] eventImage) {
-        this.eventImage = eventImage;
+    public void setScheduledDate(LocalDate scheduledDate) {
+        this.scheduledDate = scheduledDate;
+    }
+
+    public LocalTime getScheduledTime() {
+        return scheduledTime;
+    }
+
+    public void setScheduledTime(LocalTime scheduledTime) {
+        this.scheduledTime = scheduledTime;
+    }
+
+    public Like getLike() {
+        return like;
+    }
+
+    public void setLike(Like like) {
+        this.like = like;
+    }
+
+    public List<String> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<String> comments) {
+        this.comments = comments;
     }
 }

@@ -2,6 +2,7 @@ package com.uokclubmanagement.entity;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
@@ -14,6 +15,8 @@ public class ClubAdmin{
     private String clubId;
     private String memberId;
     private String fullName;
+    private String email;
+    @Indexed(unique = true)
     private String username;
     private String password;
     private byte[] clubAdminImage;
@@ -50,6 +53,14 @@ public class ClubAdmin{
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getUsername() {

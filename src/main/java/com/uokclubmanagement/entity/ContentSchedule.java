@@ -1,22 +1,22 @@
 package com.uokclubmanagement.entity;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class ContentSchedule {
 
     private LocalDate publishedDate;
     private LocalTime publishedTime;
-    private LocalDate scheduledDate;
-    private LocalTime scheduledTime;
     private String publisherName;
     private String responseClub;
     private String description;
-
 
     public ContentSchedule() {}
 
@@ -33,23 +33,7 @@ public class ContentSchedule {
     }
 
     public void setPublishedTime(LocalTime publishedTime) {
-        this.publishedTime = publishedTime.withNano(0);
-    }
-
-    public LocalDate getScheduledDate() {
-        return scheduledDate;
-    }
-
-    public void setScheduledDate(LocalDate scheduledDate) {
-        this.scheduledDate = scheduledDate;
-    }
-
-    public LocalTime getScheduledTime() {
-        return scheduledTime;
-    }
-
-    public void setScheduledTime(LocalTime scheduledTime) {
-        this.scheduledTime = scheduledTime.withNano(0);
+        this.publishedTime = publishedTime;
     }
 
     public String getPublisherName() {
@@ -75,4 +59,5 @@ public class ContentSchedule {
     public void setDescription(String description) {
         this.description = description;
     }
+
 }
