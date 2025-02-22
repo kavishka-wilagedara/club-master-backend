@@ -73,4 +73,19 @@ public class EventController {
     public List<Event> getAllPastEvents() {
         return eventService.getAllPastEvents();
     }
+
+    @GetMapping("/all-ongoing-events/{memberId}")
+    public List<Event> getAllOngoingEventsByMemberID(@PathVariable("memberId") String memberId){
+        return eventService.getAllOngoingEventsByMemberId(memberId);
+    }
+
+    @GetMapping("/all-upcoming-events/{memberId}")
+    public List<Event> getAllUpcomingEventsByMemberID(@PathVariable("memberId") String memberId){
+        return eventService.getAllUpcomingEventsByMemberId(memberId);
+    }
+
+    @GetMapping("/all-past-events/{memberId}")
+    public List<Event> getAllPastEventsByMemberID(@PathVariable("memberId") String memberId){
+        return eventService.getAllPastEventsByMemberId(memberId);
+    }
 }
