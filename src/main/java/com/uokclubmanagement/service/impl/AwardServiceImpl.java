@@ -7,6 +7,8 @@ import com.uokclubmanagement.repository.AwardRepository;
 import com.uokclubmanagement.repository.ClubAdminRepository;
 import com.uokclubmanagement.repository.ClubRepository;
 import com.uokclubmanagement.service.AwardService;
+import com.uokclubmanagement.utills.ClubAdminUtils;
+import com.uokclubmanagement.utills.ContentScheduleUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,19 +25,19 @@ public class AwardServiceImpl implements AwardService {
     @Autowired
     private AwardRepository awardRepository;
     @Autowired
-    private EventServiceImpl eventServiceImpl;
-    @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
     @Autowired
     private ClubAdminRepository clubAdminRepository;
     @Autowired
     private ClubRepository clubRepository;
+    @Autowired
+    private ClubAdminUtils clubAdminUtils;
 
     @Override
     public Award createAward(String clubAdminId, String clubId, Award award) {
 
         // Validate clubAdminId and clubId
-        ClubAdmin clubAdmin = eventServiceImpl.validateClubAdminAndClub(clubAdminId, clubId);
+        ClubAdmin clubAdmin = clubAdminUtils.validateClubAdminAndClub(clubAdminId, clubId);
 
         // Check clubAdmin exist the clubId
         if (!clubAdmin.getClubId().equals(clubId)){

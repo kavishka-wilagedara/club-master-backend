@@ -2,10 +2,7 @@ package com.uokclubmanagement.service.impl;
 
 import com.uokclubmanagement.entity.*;
 import com.uokclubmanagement.repository.ClubAdminRepository;
-<<<<<<< HEAD
 import com.uokclubmanagement.repository.ClubRepository;
-=======
->>>>>>> main
 import com.uokclubmanagement.repository.MemberRepository;
 import com.uokclubmanagement.repository.NewsRepository;
 import com.uokclubmanagement.service.NewsService;
@@ -28,11 +25,7 @@ public class NewsServiceImpl implements NewsService {
     @Autowired
     private ClubAdminRepository clubAdminRepository;
     @Autowired
-<<<<<<< HEAD
     private ClubRepository clubRepository;
-=======
-    private MemberRepository memberRepository;
->>>>>>> main
     @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
     @Autowired
