@@ -4,21 +4,17 @@ import com.uokclubmanagement.entity.*;
 import com.uokclubmanagement.repository.ClubAdminRepository;
 import com.uokclubmanagement.repository.ClubRepository;
 import com.uokclubmanagement.repository.EventRepository;
-<<<<<<< HEAD:src/main/java/com/uokclubmanagement/service/EventServiceImpl.java
 import com.uokclubmanagement.repository.MemberRepository;
-=======
 import com.uokclubmanagement.service.EventService;
->>>>>>> main:src/main/java/com/uokclubmanagement/service/impl/EventServiceImpl.java
+import com.uokclubmanagement.utills.ClubAdminUtils;
+import com.uokclubmanagement.utills.ContentScheduleUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-<<<<<<< HEAD:src/main/java/com/uokclubmanagement/service/EventServiceImpl.java
 import java.util.ArrayList;
-=======
->>>>>>> main:src/main/java/com/uokclubmanagement/service/impl/EventServiceImpl.java
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,12 +33,16 @@ public class EventServiceImpl implements EventService {
     private ClubAdminRepository clubAdminRepository;
     @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
+    @Autowired
+    private ClubAdminUtils clubAdminUtils;
+    @Autowired
+    private ContentScheduleUtils contentScheduleUtils;
 
     @Override
     public Event createEvent(Event event, String clubId,  String clubAdminId){
 
         // Validate clubAdminId and clubId
-        ClubAdmin clubAdmin = validateClubAdminAndClub(clubAdminId, clubId);
+        ClubAdmin clubAdmin = clubAdminUtils.validateClubAdminAndClub(clubAdminId, clubId);
 
         // Check clubAdmin exist the clubId
         if (!clubAdmin.getClubId().equals(clubId)){
@@ -96,7 +96,7 @@ public class EventServiceImpl implements EventService {
         else {
             Event exisitingEvent = findEvent.get();
             updateEventFields(exisitingEvent, event);
-            contentScheduleUpdating(exisitingEvent, event);
+            contentScheduleUtils.contentScheduleUpdating(exisitingEvent, event);
 
             // Set publisher name
             exisitingEvent.setPublisherName(findClubAdmin.get().getFullName());
@@ -256,7 +256,6 @@ public class EventServiceImpl implements EventService {
         return allPastEvents;
     }
 
-<<<<<<< HEAD:src/main/java/com/uokclubmanagement/service/EventServiceImpl.java
     @Override
     public List<Event> getAllOngoingEventsByMemberId(String memberId) {
         Optional<Member> findMember = memberRepository.findById(memberId);
@@ -330,10 +329,7 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-    private void validateDateAndTime(ContentSchedule validateDate) {
-=======
     private void validateDateAndTime(Event validateDate) {
->>>>>>> main:src/main/java/com/uokclubmanagement/service/impl/EventServiceImpl.java
         // Check the date is valid
         LocalDate currentDate = LocalDate.now();
 
@@ -374,39 +370,5 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-    static void contentScheduleUpdating(ContentSchedule existingEvent, ContentSchedule contentSchedule) {
-
-        LocalDate currentDate = LocalDate.now();
-        LocalTime currentTime = LocalTime.now();
-        LocalTime timeWithoutSeconds = currentTime.withNano(0);
-
-        existingEvent.setPublishedDate(currentDate);
-        existingEvent.setPublishedTime(timeWithoutSeconds);
-
-        if (existingEvent.getDescription() != null) {
-            existingEvent.setDescription(contentSchedule.getDescription());
-        }
-    }
-
-    public ClubAdmin validateClubAdminAndClub(String clubAdminId, String clubId) {
-
-        // Find club and clubAdmin are exist
-        Optional<ClubAdmin> clubAdminOptional = clubAdminRepository.findById(clubAdminId);
-        Optional<Club> clubOptional = clubRepository.findById(clubId);
-
-        if(clubAdminOptional.isEmpty()){
-            throw new RuntimeException("Invalid Club Admin");
-        }
-
-        else if(clubOptional.isEmpty()){
-            throw new RuntimeException("Invalid Club ID");
-        }
-
-        // Get clubAdmin
-        else {
-            ClubAdmin clubAdmin = clubAdminOptional.get();
-            return clubAdmin;
-        }
-    }
 }
 
