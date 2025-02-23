@@ -7,6 +7,7 @@ import com.uokclubmanagement.repository.ClubAdminRepository;
 import com.uokclubmanagement.repository.ClubRepository;
 import com.uokclubmanagement.repository.ProjectRepository;
 import com.uokclubmanagement.service.ProjectService;
+import com.uokclubmanagement.utills.ClubAdminUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,12 +31,14 @@ public class ProjectServiceImpl implements ProjectService {
     private ClubAdminRepository clubAdminRepository;
     @Autowired
     private ClubRepository clubRepository;
+    @Autowired
+    private ClubAdminUtils clubAdminUtils;
 
     @Override
     public Project createProject(String clubAdminId, String clubId, Project project) {
 
         // Validate clubAdminId and clubId
-        ClubAdmin clubAdmin = eventServiceImpl.validateClubAdminAndClub(clubAdminId, clubId);
+        ClubAdmin clubAdmin = clubAdminUtils.validateClubAdminAndClub(clubAdminId, clubId);
 
         // Check clubAdmin exist the clubId
         if (!clubAdmin.getClubId().equals(clubId)){

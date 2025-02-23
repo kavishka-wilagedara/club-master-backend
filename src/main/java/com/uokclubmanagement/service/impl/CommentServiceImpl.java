@@ -7,6 +7,7 @@ import com.uokclubmanagement.repository.CommentRepository;
 import com.uokclubmanagement.repository.EventRepository;
 import com.uokclubmanagement.repository.MemberRepository;
 import com.uokclubmanagement.service.CommentService;
+import com.uokclubmanagement.utills.LikeCommentUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,18 +22,18 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private CommentRepository commentRepository;
     @Autowired
-    private LikeServiceImpl likeServiceImpl;
-    @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
     private EventRepository eventRepository;
+    @Autowired
+    private LikeCommentUtils likeCommentUtils;
 
     @Override
     public Event addCommentToEvent(String eventId, String clubId, String memberId, Comment comment) {
         // Validate event using method of likeServiceImpl class
-        Event event = likeServiceImpl.validateClubIdWithEventAndMembers(eventId, clubId, memberId);
+        Event event = likeCommentUtils.validateClubIdWithEventAndMembers(eventId, clubId, memberId);
 
         // Create comment ID
         if (comment.getCommentId() == null || comment.getCommentId().isEmpty()) {
@@ -63,7 +64,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void deleteCommentFromEvent(String commentId, String eventId, String clubId, String memberId) {
         // Validate event using method of likeServiceImpl class
-        Event event = likeServiceImpl.validateClubIdWithEventAndMembers(eventId, clubId, memberId);
+        Event event = likeCommentUtils.validateClubIdWithEventAndMembers(eventId, clubId, memberId);
 
         // Find comment by commentId
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
@@ -116,7 +117,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Integer getCommentCountByCommentId(String eventId, String clubId, String memberId) {
-        Event event = likeServiceImpl.validateClubIdWithEventAndMembers(eventId, clubId, memberId);
+        Event event = likeCommentUtils.validateClubIdWithEventAndMembers(eventId, clubId, memberId);
 
         int commentCount = event.getComments().size();
         return commentCount;
