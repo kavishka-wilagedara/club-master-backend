@@ -6,11 +6,8 @@ import com.uokclubmanagement.repository.ClubRepository;
 import com.uokclubmanagement.repository.EventRepository;
 import com.uokclubmanagement.repository.MemberRepository;
 import com.uokclubmanagement.service.EventService;
-<<<<<<< HEAD
 import com.uokclubmanagement.utills.ClubAdminUtils;
 import com.uokclubmanagement.utills.ContentScheduleUtils;
-=======
->>>>>>> main
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -371,43 +368,5 @@ public class EventServiceImpl implements EventService {
             exisitingEvent.setDescription(event.getDescription());
         }
     }
-
-<<<<<<< HEAD
-=======
-    public static void contentScheduleUpdating(ContentSchedule existingEvent, ContentSchedule contentSchedule) {
-
-        LocalDate currentDate = LocalDate.now();
-        LocalTime currentTime = LocalTime.now();
-        LocalTime timeWithoutSeconds = currentTime.withNano(0);
-
-        existingEvent.setPublishedDate(currentDate);
-        existingEvent.setPublishedTime(timeWithoutSeconds);
-
-        if (existingEvent.getDescription() != null) {
-            existingEvent.setDescription(contentSchedule.getDescription());
-        }
-    }
-
-    public ClubAdmin validateClubAdminAndClub(String clubAdminId, String clubId) {
-
-        // Find club and clubAdmin are exist
-        Optional<ClubAdmin> clubAdminOptional = clubAdminRepository.findById(clubAdminId);
-        Optional<Club> clubOptional = clubRepository.findById(clubId);
-
-        if(clubAdminOptional.isEmpty()){
-            throw new RuntimeException("Invalid Club Admin");
-        }
-
-        else if(clubOptional.isEmpty()){
-            throw new RuntimeException("Invalid Club ID");
-        }
-
-        // Get clubAdmin
-        else {
-            ClubAdmin clubAdmin = clubAdminOptional.get();
-            return clubAdmin;
-        }
-    }
->>>>>>> main
 }
 
