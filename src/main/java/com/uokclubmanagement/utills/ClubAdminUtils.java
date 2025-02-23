@@ -6,10 +6,6 @@ import com.uokclubmanagement.repository.ClubAdminRepository;
 import com.uokclubmanagement.repository.ClubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-<<<<<<< HEAD
-=======
-
->>>>>>> main
 import java.util.Optional;
 
 @Component
@@ -20,10 +16,6 @@ public class ClubAdminUtils {
     @Autowired
     private ClubRepository clubRepository;
 
-<<<<<<< HEAD
-
-=======
->>>>>>> main
     public ClubAdmin validateClubAdminAndClub(String clubAdminId, String clubId) {
 
         // Find club and clubAdmin are exist
