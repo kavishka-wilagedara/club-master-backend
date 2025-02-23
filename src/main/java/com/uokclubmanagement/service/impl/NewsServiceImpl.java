@@ -2,6 +2,10 @@ package com.uokclubmanagement.service.impl;
 
 import com.uokclubmanagement.entity.*;
 import com.uokclubmanagement.repository.ClubAdminRepository;
+<<<<<<< HEAD
+import com.uokclubmanagement.repository.ClubRepository;
+=======
+>>>>>>> main
 import com.uokclubmanagement.repository.MemberRepository;
 import com.uokclubmanagement.repository.NewsRepository;
 import com.uokclubmanagement.service.NewsService;
@@ -13,7 +17,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import static com.uokclubmanagement.service.impl.EventServiceImpl.contentScheduleUpdating;
 
 
@@ -25,19 +28,34 @@ public class NewsServiceImpl implements NewsService {
     @Autowired
     private ClubAdminRepository clubAdminRepository;
     @Autowired
+<<<<<<< HEAD
+    private ClubRepository clubRepository;
+=======
     private MemberRepository memberRepository;
+>>>>>>> main
     @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
     @Autowired
-    private EventServiceImpl eventServiceImpl;
+    private MemberRepository memberRepository;
 
     @Override
     public News createNews(News news, String clubId, String clubAdminId) {
 
-        // Validate clubAdminId and clubId
-        ClubAdmin clubAdmin = eventServiceImpl.validateClubAdminAndClub(clubAdminId, clubId);
+        // Find club and clubAdmin are exist
+        Optional<ClubAdmin> clubAdminOptional = clubAdminRepository.findById(clubAdminId);
+        Optional<Club> clubOptional = clubRepository.findById(clubId);
 
-        // Check clubAdmin exist the clubId
+        if(clubAdminOptional.isEmpty()){
+            throw new RuntimeException("Invalid Club Admin");
+        }
+
+        else if(clubOptional.isEmpty()){
+            throw new RuntimeException("Invalid Club ID");
+        }
+
+        // Get ClubAdmin
+        ClubAdmin clubAdmin = clubAdminOptional.get();
+
         if (!clubAdmin.getClubId().equals(clubId)){
             throw new RuntimeException("Club ID does not match with Club Admin ID");
         }
@@ -127,6 +145,28 @@ public class NewsServiceImpl implements NewsService {
         else{
             throw new RuntimeException("Invalid news ID: "+newsId);
         }
+    }
+
+    private News validateClubIdWithNewsAndMembers(String newsId, String clubId, String memberId) {
+
+        Optional<News> optionalNews = newsRepository.findById(newsId);
+        Optional<Club> clubOptional = clubRepository.findById(clubId);
+        Optional<Member> memberOptional = memberRepository.findById(memberId);
+
+        if(optionalNews.isEmpty()) {
+            throw new RuntimeException("Invalid News ID");
+        }
+        else if(clubOptional.isEmpty()){
+            throw new RuntimeException("Invalid Club ID");
+        }
+        else if(memberOptional.isEmpty()){
+            throw new RuntimeException("Invalid Member ID");
+        }
+        else if(!optionalNews.get().getResponseClub().equals(clubId) || !memberOptional.get().getAssociatedClubs().contains(clubId)){
+            throw new RuntimeException("Club ID error");
+        }
+
+        return optionalNews.get();
     }
 
     @Override
