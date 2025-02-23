@@ -6,6 +6,11 @@ import com.uokclubmanagement.repository.ClubRepository;
 import com.uokclubmanagement.repository.EventRepository;
 import com.uokclubmanagement.repository.MemberRepository;
 import com.uokclubmanagement.service.EventService;
+<<<<<<< HEAD
+import com.uokclubmanagement.utills.ClubAdminUtils;
+import com.uokclubmanagement.utills.ContentScheduleUtils;
+=======
+>>>>>>> main
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,12 +35,16 @@ public class EventServiceImpl implements EventService {
     private ClubAdminRepository clubAdminRepository;
     @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
+    @Autowired
+    private ClubAdminUtils clubAdminUtils;
+    @Autowired
+    private ContentScheduleUtils contentScheduleUtils;
 
     @Override
     public Event createEvent(Event event, String clubId,  String clubAdminId){
 
         // Validate clubAdminId and clubId
-        ClubAdmin clubAdmin = validateClubAdminAndClub(clubAdminId, clubId);
+        ClubAdmin clubAdmin = clubAdminUtils.validateClubAdminAndClub(clubAdminId, clubId);
 
         // Check clubAdmin exist the clubId
         if (!clubAdmin.getClubId().equals(clubId)){
@@ -89,7 +98,7 @@ public class EventServiceImpl implements EventService {
         else {
             Event exisitingEvent = findEvent.get();
             updateEventFields(exisitingEvent, event);
-            contentScheduleUpdating(exisitingEvent, event);
+            contentScheduleUtils.contentScheduleUpdating(exisitingEvent, event);
 
             // Set publisher name
             exisitingEvent.setPublisherName(findClubAdmin.get().getFullName());
@@ -363,6 +372,8 @@ public class EventServiceImpl implements EventService {
         }
     }
 
+<<<<<<< HEAD
+=======
     public static void contentScheduleUpdating(ContentSchedule existingEvent, ContentSchedule contentSchedule) {
 
         LocalDate currentDate = LocalDate.now();
@@ -397,5 +408,6 @@ public class EventServiceImpl implements EventService {
             return clubAdmin;
         }
     }
+>>>>>>> main
 }
 
