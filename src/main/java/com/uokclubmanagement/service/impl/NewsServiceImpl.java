@@ -2,13 +2,11 @@ package com.uokclubmanagement.service.impl;
 
 import com.uokclubmanagement.entity.*;
 import com.uokclubmanagement.repository.ClubAdminRepository;
-<<<<<<< HEAD
 import com.uokclubmanagement.repository.ClubRepository;
-=======
->>>>>>> main
 import com.uokclubmanagement.repository.MemberRepository;
 import com.uokclubmanagement.repository.NewsRepository;
 import com.uokclubmanagement.service.NewsService;
+import com.uokclubmanagement.utills.ContentScheduleUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +15,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import static com.uokclubmanagement.service.impl.EventServiceImpl.contentScheduleUpdating;
+
+import static com.uokclubmanagement.utills.ContentScheduleUtils.contentScheduleUpdating;
 
 
 @Service
@@ -28,11 +27,7 @@ public class NewsServiceImpl implements NewsService {
     @Autowired
     private ClubAdminRepository clubAdminRepository;
     @Autowired
-<<<<<<< HEAD
     private ClubRepository clubRepository;
-=======
-    private MemberRepository memberRepository;
->>>>>>> main
     @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
     @Autowired
@@ -125,7 +120,7 @@ public class NewsServiceImpl implements NewsService {
 
             // Set news title and description
             exisitingNews.setNewsTitle(news.getNewsTitle());
-            contentScheduleUpdating(exisitingNews, news);
+            contentScheduleUpdating(exisitingNews, news); // import from utils
 
             // Set publisher name
             exisitingNews.setPublisherName(findClubAdmin.get().getFullName());

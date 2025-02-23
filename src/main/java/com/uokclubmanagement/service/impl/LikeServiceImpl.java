@@ -3,6 +3,7 @@ package com.uokclubmanagement.service.impl;
 import com.uokclubmanagement.entity.*;
 import com.uokclubmanagement.repository.*;
 import com.uokclubmanagement.service.LikeService;
+import com.uokclubmanagement.utills.LikeCommentUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,8 @@ public class LikeServiceImpl implements LikeService {
     private MemberRepository memberRepository;
     @Autowired
     private EventRepository eventRepository;
+    @Autowired
+    private LikeCommentUtils likeCommentUtils;
 
     @Override
     public News addLikeToNews(String newsId, String clubId, String memberId) {
@@ -40,7 +43,7 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     public Event addLikeToEvent(String eventId, String clubId, String memberId) {
-        Event event = validateClubIdWithEventAndMembers(eventId, clubId, memberId);
+        Event event = likeCommentUtils.validateClubIdWithEventAndMembers(eventId, clubId, memberId);
         handleLike(event.getLike(), memberId);
         eventRepository.save(event);
         return event;
@@ -48,7 +51,7 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     public Event removeLikeFromEvent(String eventId, String clubId, String memberId) {
-        Event event = validateClubIdWithEventAndMembers(eventId, clubId, memberId);
+        Event event = likeCommentUtils.validateClubIdWithEventAndMembers(eventId, clubId, memberId);
         handleDislike(event.getLike(), memberId);
         eventRepository.save(event);
         return event;
@@ -72,7 +75,7 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     public Integer getEventLikeCount(String eventId, String clubId, String memberId) {
-        Event event = validateClubIdWithEventAndMembers(eventId, clubId, memberId);
+        Event event = likeCommentUtils.validateClubIdWithEventAndMembers(eventId, clubId, memberId);
 
         int likeCount = event.getLike().getMembersLike().size();
         return likeCount;
@@ -80,7 +83,7 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     public Integer getEventDislikeCount(String eventId, String clubId, String memberId) {
-        Event event = validateClubIdWithEventAndMembers(eventId, clubId, memberId);
+        Event event = likeCommentUtils.validateClubIdWithEventAndMembers(eventId, clubId, memberId);
 
         int dislikeCount = event.getLike().getMembersDislike().size();
         return dislikeCount;
@@ -148,30 +151,5 @@ public class LikeServiceImpl implements LikeService {
         }
 
         return optionalNews.get();
-    }
-
-     public Event validateClubIdWithEventAndMembers(String eventId, String clubId, String memberId) {
-
-        // Query the database to check if member, event, club exist by id
-        Optional<Event> optionalEvent = eventRepository.findById(eventId);
-        Optional<Club> clubOptional = clubRepository.findById(clubId);
-        Optional<Member> memberOptional = memberRepository.findById(memberId);
-
-        if(optionalEvent.isEmpty()) {
-            throw new RuntimeException("Invalid Event ID");
-        }
-        else if(clubOptional.isEmpty()){
-            throw new RuntimeException("Invalid Club ID");
-        }
-        else if(memberOptional.isEmpty()){
-            throw new RuntimeException("Invalid Member ID");
-        }
-
-        // Club id check with member associated clubs and event response club
-        else if(!optionalEvent.get().getResponseClub().equals(clubId) || !memberOptional.get().getAssociatedClubs().contains(clubId)){
-            throw new RuntimeException("Club ID error");
-        }
-
-        return optionalEvent.get();
     }
 }
