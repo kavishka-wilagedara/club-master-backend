@@ -4,13 +4,19 @@ import com.uokclubmanagement.entity.*;
 import com.uokclubmanagement.repository.ClubAdminRepository;
 import com.uokclubmanagement.repository.ClubRepository;
 import com.uokclubmanagement.repository.EventRepository;
+import com.uokclubmanagement.repository.MemberRepository;
 import com.uokclubmanagement.service.EventService;
+<<<<<<< HEAD
+import com.uokclubmanagement.utills.ClubAdminUtils;
+import com.uokclubmanagement.utills.ContentScheduleUtils;
+=======
+>>>>>>> main
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,15 +30,21 @@ public class EventServiceImpl implements EventService {
     @Autowired
     private ClubRepository clubRepository;
     @Autowired
+    private MemberRepository memberRepository;
+    @Autowired
     private ClubAdminRepository clubAdminRepository;
     @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
+    @Autowired
+    private ClubAdminUtils clubAdminUtils;
+    @Autowired
+    private ContentScheduleUtils contentScheduleUtils;
 
     @Override
     public Event createEvent(Event event, String clubId,  String clubAdminId){
 
         // Validate clubAdminId and clubId
-        ClubAdmin clubAdmin = validateClubAdminAndClub(clubAdminId, clubId);
+        ClubAdmin clubAdmin = clubAdminUtils.validateClubAdminAndClub(clubAdminId, clubId);
 
         // Check clubAdmin exist the clubId
         if (!clubAdmin.getClubId().equals(clubId)){
@@ -86,7 +98,7 @@ public class EventServiceImpl implements EventService {
         else {
             Event exisitingEvent = findEvent.get();
             updateEventFields(exisitingEvent, event);
-            contentScheduleUpdating(exisitingEvent, event);
+            contentScheduleUtils.contentScheduleUpdating(exisitingEvent, event);
 
             // Set publisher name
             exisitingEvent.setPublisherName(findClubAdmin.get().getFullName());
@@ -246,6 +258,79 @@ public class EventServiceImpl implements EventService {
         return allPastEvents;
     }
 
+    @Override
+    public List<Event> getAllOngoingEventsByMemberId(String memberId) {
+        Optional<Member> findMember = memberRepository.findById(memberId);
+
+        if(findMember.isPresent()){
+            Member member = findMember.get();
+
+            List<String> assigningClubs = member.getAssociatedClubs();
+            List<Event> allOngoingEvents = new ArrayList<>();
+
+            for (int i = 0; i < assigningClubs.size(); i++) {
+
+                String clubId = assigningClubs.get(i);
+                List<Event> addEvents = getAllOngoingEventsByClubId(clubId);
+                allOngoingEvents.addAll(addEvents);
+
+            }
+            return allOngoingEvents;
+        }
+        else {
+            throw new RuntimeException("Invalid Member ID");
+        }
+
+    }
+
+    @Override
+    public List<Event> getAllUpcomingEventsByMemberId(String memberId) {
+        Optional<Member> findMember = memberRepository.findById(memberId);
+
+        if(findMember.isPresent()){
+            Member member = findMember.get();
+
+            List<String> assigningClubs = member.getAssociatedClubs();
+            List<Event> allUpcomingEvents = new ArrayList<>();
+
+            for (int i = 0; i < assigningClubs.size(); i++) {
+
+                String clubId = assigningClubs.get(i);
+                List<Event> addEvents = getAllUpcomingEventsByClubId(clubId);
+                allUpcomingEvents.addAll(addEvents);
+
+            }
+            return allUpcomingEvents;
+        }
+        else {
+            throw new RuntimeException("Invalid Member ID");
+        }
+    }
+
+    @Override
+    public List<Event> getAllPastEventsByMemberId(String memberId) {
+        Optional<Member> findMember = memberRepository.findById(memberId);
+
+        if(findMember.isPresent()){
+            Member member = findMember.get();
+
+            List<String> assigningClubs = member.getAssociatedClubs();
+            List<Event> allPastEvents = new ArrayList<>();
+
+            for (int i = 0; i < assigningClubs.size(); i++) {
+
+                String clubId = assigningClubs.get(i);
+                List<Event> addEvents = getAllPastEventsByClubId(clubId);
+                allPastEvents.addAll(addEvents);
+
+            }
+            return allPastEvents;
+        }
+        else {
+            throw new RuntimeException("Invalid Member ID");
+        }
+    }
+
     private void validateDateAndTime(Event validateDate) {
         // Check the date is valid
         LocalDate currentDate = LocalDate.now();
@@ -287,7 +372,9 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-    static void contentScheduleUpdating(ContentSchedule existingEvent, ContentSchedule contentSchedule) {
+<<<<<<< HEAD
+=======
+    public static void contentScheduleUpdating(ContentSchedule existingEvent, ContentSchedule contentSchedule) {
 
         LocalDate currentDate = LocalDate.now();
         LocalTime currentTime = LocalTime.now();
@@ -321,5 +408,6 @@ public class EventServiceImpl implements EventService {
             return clubAdmin;
         }
     }
+>>>>>>> main
 }
 

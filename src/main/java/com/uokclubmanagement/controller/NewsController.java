@@ -16,6 +16,8 @@ public class NewsController {
 
     @Autowired
     private NewsService newsService;
+    @Autowired
+    private NewsRepository newsRepository;
 
     @PostMapping("/{clubId}/save/{clubAdminId}")
     public News createNews(@PathVariable("clubId") String clubId, @PathVariable("clubAdminId") String clubAdminId, @RequestBody News news) {
@@ -25,6 +27,11 @@ public class NewsController {
     @GetMapping("/all")
     public List<News> getAllEvents() {
         return newsService.getAllNews();
+    }
+
+    @GetMapping("/getAllNews/{memberId}")
+    public List<News> getAllNewsByMemberId(@PathVariable("memberId") String memberId) {
+        return newsService.getAllNewsByMemberId(memberId);
     }
 
     @PutMapping("/{clubAdminId}/update/{newsId}")
@@ -44,6 +51,6 @@ public class NewsController {
 
     @GetMapping("/{clubId}/getAllNews")
     public List<News> getAllNewsByClubId(@PathVariable("clubId") String clubId) {
-        return newsService.getAllNewsByClubId(clubId);
+        return newsRepository.getAllNewsByResponseClub(clubId);
     }
 }
