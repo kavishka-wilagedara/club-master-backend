@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -176,7 +177,7 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
-    public List<String> getClubsByMemberId(String memberId) {
+    public HashMap<String, String> getClubsByMemberId(String memberId) {
 
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         if (optionalMember.isPresent()) {
@@ -184,7 +185,7 @@ public class ClubServiceImpl implements ClubService {
 
             // Get clubs in to List
             List<String> memberAssociatedClubs = member.getAssociatedClubs();
-            List<String> memberAssociatedClubsName = new ArrayList<String>();
+            HashMap<String, String> memberAssociatedClubsName = new HashMap<>();
 
             // update club names in to List
             for (int i = 0; i < memberAssociatedClubs.size(); i++) {
@@ -192,7 +193,7 @@ public class ClubServiceImpl implements ClubService {
                 if (optionalClub.isPresent()) {
                     Club club = optionalClub.get();
                     club.getClubName();
-                    memberAssociatedClubsName.add(club.getClubName());
+                    memberAssociatedClubsName.put(club.getClubId(), club.getClubName());
                 }
             }
             return memberAssociatedClubsName;

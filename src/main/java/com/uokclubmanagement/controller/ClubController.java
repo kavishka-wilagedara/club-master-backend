@@ -7,6 +7,7 @@ import com.uokclubmanagement.service.ClubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -53,7 +54,7 @@ public class ClubController {
     }
 
     @GetMapping("/{memberId}/getClubs")
-    public List<String> getClubsByMemberId(@PathVariable String memberId) {
+    public HashMap<String, String> getClubsByMemberId(@PathVariable String memberId) {
         return clubService.getClubsByMemberId(memberId);
     }
 }
