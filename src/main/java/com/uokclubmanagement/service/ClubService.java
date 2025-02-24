@@ -4,6 +4,7 @@ import com.uokclubmanagement.dto.EnrollmentDTO;
 import com.uokclubmanagement.entity.Club;
 import com.uokclubmanagement.entity.Member;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface ClubService {
@@ -16,5 +17,5 @@ public interface ClubService {
     Member enrollMemberToClub(String memberId, String clubId, EnrollmentDTO enrollmentKey);
     Member unrollMemberFromClub(String memberId, String clubId);
 
-    List<String> getClubsByMemberId(String memberId);
+    HashMap<String, String> getClubsByMemberId(String memberId);
 }
