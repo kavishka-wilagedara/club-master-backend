@@ -10,8 +10,6 @@ public class UokclubmanagementApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(UokclubmanagementApplication.class, args);
 
-		// commit ekak ghapan getClubsByMemberId updated kiyla
-
 	}
 
 }
