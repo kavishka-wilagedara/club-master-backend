@@ -2,6 +2,7 @@ package com.uokclubmanagement.entity;
 
 import com.uokclubmanagement.dto.MemberRoleDTO;
 import lombok.Data;
+import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -29,6 +30,7 @@ public class Member {
     private String userName;
     private String password;
     private List<MemberRoleDTO> positionHoldingClubAndRoles = new ArrayList<>();
+    private Binary picture;
 //    private byte[] memberImage;
 
     private List<String> associatedClubs = new ArrayList<>();
@@ -118,8 +120,15 @@ public class Member {
                 .collect(Collectors.toList());
     }
 
+    public Binary getPicture() {
+        return picture;
+    }
 
-//    public byte[] getMemberImage() {
+    public void setPicture(Binary picture) {
+        this.picture = picture;
+    }
+
+    //    public byte[] getMemberImage() {
 //        return memberImage;
 //    }
 //

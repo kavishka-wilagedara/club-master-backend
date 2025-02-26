@@ -7,6 +7,7 @@ import com.uokclubmanagement.repository.ClubAdminRepository;
 import com.uokclubmanagement.repository.MainAdminRepository;
 import com.uokclubmanagement.repository.MemberRepository;
 import com.uokclubmanagement.service.MemberService;
+import com.uokclubmanagement.utills.UpdateEmailUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,8 @@ public class MemberServiceImpl implements MemberService {
     private MainAdminRepository mainAdminRepository;
     @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
+    @Autowired
+    private UpdateEmailUtils updateEmailUtils;
 
     @Override
     public Member createMember(Member member) {
@@ -108,7 +111,15 @@ public class MemberServiceImpl implements MemberService {
             existingMember.setLastName(member.getLastName());
         }
         if (member.getEmail() != null) {
-            existingMember.setEmail(member.getEmail());
+            // validate email exist
+            String changingType = updateEmailUtils.validateEmail(member.getEmail());
+
+            if(changingType == "successful"){
+                existingMember.setEmail(member.getEmail());
+            }
+            else {
+                throw new RuntimeException("Email already exists!");
+            }
         }
         if (member.getPhoneNo() != null) {
             existingMember.setPhoneNo(member.getPhoneNo());
