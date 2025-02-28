@@ -34,18 +34,8 @@ public class ClubServiceImpl implements ClubService {
         if (optionalClubByName.isPresent()) {
                 throw new RuntimeException("A club with the same name already exists.");
         }
-
-        Optional<Club> optionalClubByAddress = Optional.ofNullable(clubRepository.findClubByClubAddress(club.getClubAddress()));
-        if (optionalClubByAddress.isPresent()) {
-            throw new RuntimeException("A club with the same address already exists.");
-        }
-
-        Optional<Club> optionalClubByProducer = Optional.ofNullable(clubRepository.findClubByClubProducer(club.getClubProducer()));
-        if (optionalClubByProducer.isPresent()) {
-            throw new RuntimeException("A club with the same producer already exists.");
-        }
-
         // If not exist
+        else {
             if (club.getClubId() == null || club.getClubId().isEmpty()) {
                 long seqValue = sequenceGeneratorService.generateSequence("Clubs Sequence");
                 String clubId = String.format("Club-%03d", seqValue);
@@ -53,6 +43,7 @@ public class ClubServiceImpl implements ClubService {
             }
 
             return clubRepository.save(club);
+        }
     }
 
     @Override
@@ -68,6 +59,14 @@ public class ClubServiceImpl implements ClubService {
             throw new RuntimeException("Club not found with id: " + clubId);
         }
         // Update the fields
+        Optional<Club> findClubByName = Optional.ofNullable(clubRepository.findClubByClubName(club.getClubName()));
+        // Check club name exists
+        if (findClubByName.isPresent()) {
+            throw new RuntimeException("A club with the same name already exists.");
+        }
+        else {
+            existingClub.get().setClubName(club.getClubName());
+        }
         existingClub.get().setClubAddress(club.getClubAddress());
         existingClub.get().setClubSeniorAdviser(club.getClubSeniorAdviser());
         System.out.println("New Senior Adviser: " + existingClub.get().getClubSeniorAdviser());

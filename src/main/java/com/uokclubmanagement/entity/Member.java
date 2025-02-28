@@ -30,7 +30,7 @@ public class Member {
     private String userName;
     private String password;
     private List<MemberRoleDTO> positionHoldingClubAndRoles = new ArrayList<>();
-    private Binary picture;
+    private Binary profilePicture;
 //    private byte[] memberImage;
 
     private List<String> associatedClubs = new ArrayList<>();
@@ -120,12 +120,12 @@ public class Member {
                 .collect(Collectors.toList());
     }
 
-    public Binary getPicture() {
-        return picture;
+    public Binary getProfilePicture() {
+        return profilePicture;
     }
 
-    public void setPicture(Binary picture) {
-        this.picture = picture;
+    public void setProfilePicture(Binary profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
     //    public byte[] getMemberImage() {

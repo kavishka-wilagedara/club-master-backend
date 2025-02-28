@@ -127,9 +127,8 @@ public class MemberServiceImpl implements MemberService {
         if (member.getPassword() != null) {
             existingMember.setPassword(member.getPassword());
         }
-//        if(member.getMemberImage() != null){
-//            existingMember.setMemberImage(member.getMemberImage());
-//        }
+
+
     }
 
     @Override

@@ -60,6 +60,13 @@
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>com.cloudinary</groupId>
+			<artifactId>cloudinary-core</artifactId>
+			<version>1.30.0</version>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>

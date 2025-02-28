@@ -4,7 +4,6 @@ import com.uokclubmanagement.entity.MainAdmin;
 import com.uokclubmanagement.entity.Member;
 import com.uokclubmanagement.repository.MainAdminRepository;
 import com.uokclubmanagement.repository.MemberRepository;
-import com.uokclubmanagement.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
