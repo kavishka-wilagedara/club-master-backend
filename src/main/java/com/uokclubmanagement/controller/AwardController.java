@@ -5,7 +5,9 @@ import com.uokclubmanagement.entity.Club;
 import com.uokclubmanagement.service.AwardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -16,8 +18,8 @@ public class AwardController {
     private AwardService awardService;
 
     @PostMapping("/{clubId}/save/{clubAdminId}")
-    public Award saveAward(@PathVariable String clubId, @PathVariable String clubAdminId, @RequestBody Award award) {
-        return awardService.createAward(clubAdminId, clubId, award);
+    public Award saveAward(@PathVariable String clubId, @PathVariable String clubAdminId, @RequestBody Award award, @RequestParam("image") MultipartFile image) throws IOException {
+        return awardService.createAward(clubAdminId, clubId, award, image);
     }
 
     @GetMapping("/all")
@@ -36,8 +38,8 @@ public class AwardController {
     }
 
     @PutMapping("/{clubAdminId}/update/{awardId}")
-    public Award updateAward(@PathVariable String clubAdminId, @PathVariable String awardId, @RequestBody Award award) {
-        return awardService.updateAward(clubAdminId, awardId, award);
+    public Award updateAward(@PathVariable String clubAdminId, @PathVariable String awardId, @RequestBody Award award, @RequestParam("image") MultipartFile image) throws IOException {
+        return awardService.updateAward(clubAdminId, awardId, award, image);
     }
 
     @GetMapping("/findAwardById/{awardId}")

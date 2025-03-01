@@ -12,7 +12,9 @@ import com.uokclubmanagement.utills.ContentScheduleUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -32,9 +34,11 @@ public class AwardServiceImpl implements AwardService {
     private ClubRepository clubRepository;
     @Autowired
     private ClubAdminUtils clubAdminUtils;
+    @Autowired
+    private CloudinaryService cloudinaryService;
 
     @Override
-    public Award createAward(String clubAdminId, String clubId, Award award) {
+    public Award createAward(String clubAdminId, String clubId, Award award, MultipartFile file) throws IOException {
 
         // Validate clubAdminId and clubId
         ClubAdmin clubAdmin = clubAdminUtils.validateClubAdminAndClub(clubAdminId, clubId);
@@ -62,6 +66,10 @@ public class AwardServiceImpl implements AwardService {
             award.setPublisherName(clubAdmin.getFullName());
             award.setPublishedDate(currentDate);
             award.setPublishedTime(timeWithoutSeconds);
+
+            // Set awardImageUrl
+            String awardImageUrl = cloudinaryService.uploadImage(file);
+            award.setAwardImageUrl(awardImageUrl);
 
             // Check award date is before today or previous day
             if(award.getAwardDate().isEqual(currentDate) || award.getAwardDate().isBefore(currentDate)){
@@ -97,7 +105,7 @@ public class AwardServiceImpl implements AwardService {
     }
 
     @Override
-    public Award updateAward(String clubAdminId, String awardId, Award award) {
+    public Award updateAward(String clubAdminId, String awardId, Award award, MultipartFile file) throws IOException {
 
         // Find award and clubAdmin are existing
         Optional<Award> awardById = awardRepository.findById(awardId);
@@ -124,7 +132,14 @@ public class AwardServiceImpl implements AwardService {
             // Set Award and ContentSchedule fields
             existingAward.setAwardName(award.getAwardName());
             existingAward.setDescription(award.getDescription());
-//            existingAward.setAwardedImage(award.getAwardedImage());
+
+            // Set awardImageUrl
+            if(file != null && !file.isEmpty()){
+                cloudinaryService.deleteImage(existingAward.getAwardImageUrl());
+                String newAwardImageUrl = cloudinaryService.uploadImage(file);
+                existingAward.setAwardImageUrl(newAwardImageUrl);
+            }
+
             existingAward.setPublisherName(optionalClubAdmin.get().getFullName());
             existingAward.setPublishedDate(currentDate);
             existingAward.setPublishedTime(timeWithoutSeconds);

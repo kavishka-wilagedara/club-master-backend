@@ -16,8 +16,7 @@ public class Award extends ContentSchedule {
 
     private String awardName;
     private LocalDate awardDate;
-
-//    private byte[] awardedImage;
+    private String awardImageUrl;
 
     public Award(){}
 
@@ -45,11 +44,11 @@ public class Award extends ContentSchedule {
         this.awardDate = awardDate;
     }
 
-//    public byte[] getAwardedImage() {
-//        return awardedImage;
-//    }
-//
-//    public void setAwardedImage(byte[] awardedImage) {
-//        this.awardedImage = awardedImage;
-//    }
+    public String getAwardImageUrl() {
+        return awardImageUrl;
+    }
+
+    public void setAwardImageUrl(String awardImageUrl) {
+        this.awardImageUrl = awardImageUrl;
+    }
 }
