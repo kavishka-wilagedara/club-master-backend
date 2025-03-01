@@ -176,7 +176,7 @@ public class ClubServiceImpl implements ClubService {
     }
 
     @Override
-    public HashMap<String, String> getClubsByMemberId(String memberId) {
+    public List<Club> getClubsByMemberId(String memberId) {
 
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         if (optionalMember.isPresent()) {
@@ -184,18 +184,18 @@ public class ClubServiceImpl implements ClubService {
 
             // Get clubs in to List
             List<String> memberAssociatedClubs = member.getAssociatedClubs();
-            HashMap<String, String> memberAssociatedClubsName = new HashMap<>();
+            List<Club> memberAssociatedClubsDetails = new ArrayList<>();
+
 
             // update club names in to List
             for (int i = 0; i < memberAssociatedClubs.size(); i++) {
                 Optional<Club> optionalClub = clubRepository.findById(memberAssociatedClubs.get(i));
                 if (optionalClub.isPresent()) {
                     Club club = optionalClub.get();
-                    club.getClubName();
-                    memberAssociatedClubsName.put(club.getClubId(), club.getClubName());
+                    memberAssociatedClubsDetails.add(club);
                 }
             }
-            return memberAssociatedClubsName;
+            return memberAssociatedClubsDetails;
         }
         else {
             throw new RuntimeException("Member not found with id: " + memberId);

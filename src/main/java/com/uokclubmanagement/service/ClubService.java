@@ -17,5 +17,5 @@ public interface ClubService {
     Member enrollMemberToClub(String memberId, String clubId, EnrollmentDTO enrollmentKey);
     Member unrollMemberFromClub(String memberId, String clubId);
 
-    HashMap<String, String> getClubsByMemberId(String memberId);
+    List<Club> getClubsByMemberId(String memberId);
 }
