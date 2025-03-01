@@ -54,7 +54,7 @@ public class ClubController {
     }
 
     @GetMapping("/{memberId}/getClubs")
-    public HashMap<String, String> getClubsByMemberId(@PathVariable String memberId) {
+    public List<Club> getClubsByMemberId(@PathVariable String memberId) {
         return clubService.getClubsByMemberId(memberId);
     }
 }
