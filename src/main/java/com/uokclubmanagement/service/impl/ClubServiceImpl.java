@@ -1,6 +1,8 @@
 package com.uokclubmanagement.service.impl;
 
+import com.uokclubmanagement.dto.ClubRoleDTO;
 import com.uokclubmanagement.dto.EnrollmentDTO;
+import com.uokclubmanagement.dto.MemberRoleDTO;
 import com.uokclubmanagement.entity.Club;
 import com.uokclubmanagement.entity.Member;
 import com.uokclubmanagement.repository.ClubRepository;
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -79,9 +82,41 @@ public class ClubServiceImpl implements ClubService {
 
         Optional<Club> deleteClub = clubRepository.findById(clubId);
             if (deleteClub.isPresent()) {
+
+                List<String> assignMembers = deleteClub.get().getAssociatedMembers();
+
+                for (int i = 0; i < assignMembers.size(); i++) {
+
+                    Optional<Member> findMember = memberRepository.findById(assignMembers.get(i));
+
+                    if (findMember.isPresent()) {
+                        Member member = findMember.get();
+
+                        // Remove clubId from associatedClubs
+                        List<String> associatedClubs = member.getAssociatedClubs();
+                        if (associatedClubs.contains(clubId)) {
+                            member.getAssociatedClubs().remove(clubId);
+                            member.setAssociatedClubs(associatedClubs);
+                        }
+
+                        // Remove clubId from positionHoldingClubAndRoles
+                        List<MemberRoleDTO> positionHoldingClubAndRoles = member.getPositionHoldingClubAndRoles();
+
+                        if (positionHoldingClubAndRoles != null) {
+
+                            List<MemberRoleDTO> updatePositionHoldingClubAndRoles = positionHoldingClubAndRoles.stream()
+                                    .filter(role -> !role.getClubId().equals(clubId))
+                                    .collect(Collectors.toList());
+
+                            member.setPositionHoldingClubAndRoles(updatePositionHoldingClubAndRoles);
+
+                        }
+                        memberRepository.save(member);
+                    }
+                }
                 clubRepository.delete(deleteClub.get());
-                System.out.println("Deleted Club with id: " + clubId);
             }
+
         else{
             throw new RuntimeException("Club not found with id: " + clubId);
         }
@@ -157,6 +192,8 @@ public class ClubServiceImpl implements ClubService {
             // Update member and club
             member.getAssociatedClubs().remove(clubId);
             club.getAssociatedMembers().remove(memberId);
+
+
 
             memberRepository.save(member);
             clubRepository.save(club);
