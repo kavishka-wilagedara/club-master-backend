@@ -25,10 +25,11 @@ public class Club {
     @Indexed(unique = true)
     private String clubProducer;
     private String clubVision;
-//    private byte[] clubLogo;
-//    private byte[] backgroundImage1;
-//    private byte[] backgroundImage2;
-//    private byte[] backgroundImage3;
+    private String clubEmail;
+    private String clubPhone;
+    private String clubDescription;
+    private String clubLogoUrl;
+    private List<String> backgroundImageUrls = new ArrayList<>();
 
     private List<String> associatedMembers = new ArrayList<>();
     private List<ClubRoleDTO> positionHoldingMembersAndRoles = new ArrayList<>();
@@ -102,35 +103,44 @@ public class Club {
                 .map(role -> new ClubRoleDTO(role.getMemberId(), role.getMemberName(), role.getEmail(), role.getRole())) // Using constructor on CreateExecutivePanelDTO
                 .collect(toList());
     }
-//    public byte[] getClubLogo() {
-//        return clubLogo;
-//    }
-//
-//    public void setClubLogo(byte[] clubLogo) {
-//        this.clubLogo = clubLogo;
-//    }
-//
-//    public byte[] getBackgroundImage1() {
-//        return backgroundImage1;
-//    }
-//
-//    public void setBackgroundImage1(byte[] backgroundImage1) {
-//        this.backgroundImage1 = backgroundImage1;
-//    }
-//
-//    public byte[] getBackgroundImage2() {
-//        return backgroundImage2;
-//    }
-//
-//    public void setBackgroundImage2(byte[] backgroundImage2) {
-//        this.backgroundImage2 = backgroundImage2;
-//    }
-//
-//    public byte[] getBackgroundImage3() {
-//        return backgroundImage3;
-//    }
-//
-//    public void setBackgroundImage3(byte[] backgroundImage3) {
-//        this.backgroundImage3 = backgroundImage3;
-//    }
+
+    public String getClubEmail() {
+        return clubEmail;
+    }
+
+    public void setClubEmail(String clubEmail) {
+        this.clubEmail = clubEmail;
+    }
+
+    public String getClubPhone() {
+        return clubPhone;
+    }
+
+    public void setClubPhone(String clubPhone) {
+        this.clubPhone = clubPhone;
+    }
+
+    public String getClubDescription() {
+        return clubDescription;
+    }
+
+    public void setClubDescription(String clubDescription) {
+        this.clubDescription = clubDescription;
+    }
+
+    public String getClubLogoUrl() {
+        return clubLogoUrl;
+    }
+
+    public void setClubLogoUrl(String clubLogoUrl) {
+        this.clubLogoUrl = clubLogoUrl;
+    }
+
+    public List<String> getBackgroundImageUrls() {
+        return backgroundImageUrls;
+    }
+
+    public void setBackgroundImageUrls(List<String> backgroundImageUrls) {
+        this.backgroundImageUrls = backgroundImageUrls;
+    }
 }

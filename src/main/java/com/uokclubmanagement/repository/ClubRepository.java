@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface ClubRepository extends MongoRepository<Club, String> {
 
     Club findClubByClubName(String clubName);
-    Club findClubByClubAddress(String clubAddress);
-    Club findClubByClubProducer(String clubProducer);
+    Club findClubByClubEmail(String emailAddress);
+    Club findClubByClubPhone(String phone);
 
 }

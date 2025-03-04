@@ -1,12 +1,16 @@
 package com.uokclubmanagement.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.uokclubmanagement.dto.EnrollmentDTO;
 import com.uokclubmanagement.entity.Club;
 import com.uokclubmanagement.entity.Member;
 import com.uokclubmanagement.service.ClubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,8 +23,18 @@ public class ClubController {
     private ClubService clubService;
 
     @PostMapping("/save")
-    public Club saveClub(@RequestBody Club club) {
-        return clubService.createClub(club);
+    public Club saveClub(@RequestPart String clubJason,
+                         @RequestPart("clubLogo") MultipartFile clubLogo,
+                         @RequestPart("backgroundImages") MultipartFile[] backgroundImages) throws IOException {
+
+        // Register the JavaTimeModule
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+
+        // Deserialize the JSON string to Club object
+        Club club = objectMapper.readValue(clubJason, Club.class);
+
+        return clubService.createClub(club, clubLogo, backgroundImages);
     }
 
     @GetMapping("/all")
@@ -29,8 +43,19 @@ public class ClubController {
     }
 
     @PutMapping("/update/{clubId}")
-    public Club updateClub(@PathVariable String clubId, @RequestBody Club club) {
-        return clubService.updateClubById(clubId, club);
+    public Club updateClub(@PathVariable String clubId,
+                           @RequestPart String clubJason,
+                           @RequestPart("clubLogo") MultipartFile newClubLogo,
+                           @RequestPart("BackgroundImages") MultipartFile[] newBackgroundImages) throws IOException {
+
+        // Register the JavaTimeModule
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+
+        // Deserialize the JSON string to Club object
+        Club club = objectMapper.readValue(clubJason, Club.class);
+
+        return clubService.updateClubById(clubId, club, newClubLogo, newBackgroundImages);
     }
 
     @DeleteMapping("/delete/{id}")

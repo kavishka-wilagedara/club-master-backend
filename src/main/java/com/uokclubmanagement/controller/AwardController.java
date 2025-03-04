@@ -1,5 +1,7 @@
 package com.uokclubmanagement.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.uokclubmanagement.entity.Award;
 import com.uokclubmanagement.entity.Club;
 import com.uokclubmanagement.service.AwardService;
@@ -18,8 +20,19 @@ public class AwardController {
     private AwardService awardService;
 
     @PostMapping("/{clubId}/save/{clubAdminId}")
-    public Award saveAward(@PathVariable String clubId, @PathVariable String clubAdminId, @RequestBody Award award, @RequestParam("image") MultipartFile image) throws IOException {
-        return awardService.createAward(clubAdminId, clubId, award, image);
+    public Award saveAward(@PathVariable String clubId,
+                           @PathVariable String clubAdminId,
+                           @RequestPart("award") String awardJson,
+                           @RequestPart("awardImage") MultipartFile awardImage) throws IOException{
+
+        // Register the JavaTimeModule
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+
+        // Deserialize the JSON string to an Award object
+        Award award = objectMapper.readValue(awardJson, Award.class);
+
+        return awardService.createAward(clubAdminId, clubId, award, awardImage);
     }
 
     @GetMapping("/all")
