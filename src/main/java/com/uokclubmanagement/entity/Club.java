@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -101,7 +102,7 @@ public class Club {
     public void setPositionHoldingMembersAndRoles(List<ClubRoleDTO> clubRole) {
         this.positionHoldingMembersAndRoles = positionHoldingMembersAndRoles.stream()
                 .map(role -> new ClubRoleDTO(role.getMemberId(), role.getMemberName(), role.getEmail(), role.getRole())) // Using constructor on CreateExecutivePanelDTO
-                .collect(toList());
+                .collect(Collectors.toList());
     }
 
     public String getClubEmail() {

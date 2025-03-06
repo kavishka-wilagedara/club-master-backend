@@ -12,6 +12,8 @@ public class UserDTO {
         this.id = id;
     }
 
+    public UserDTO() {}
+
     public String getRole() {
         return role;
     }

@@ -10,6 +10,8 @@ public class MemberRoleDTO {
         this.role = role;
     }
 
+    public MemberRoleDTO() {}
+
     public String getClubId() {
         return clubId;
     }

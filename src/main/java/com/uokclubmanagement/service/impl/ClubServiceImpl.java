@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -92,26 +91,7 @@ public class ClubServiceImpl implements ClubService {
                     if (findMember.isPresent()) {
                         Member member = findMember.get();
 
-                        // Remove clubId from associatedClubs
-                        List<String> associatedClubs = member.getAssociatedClubs();
-                        if (associatedClubs.contains(clubId)) {
-                            member.getAssociatedClubs().remove(clubId);
-                            member.setAssociatedClubs(associatedClubs);
-                        }
-
-                        // Remove clubId from positionHoldingClubAndRoles
-                        List<MemberRoleDTO> positionHoldingClubAndRoles = member.getPositionHoldingClubAndRoles();
-
-                        if (positionHoldingClubAndRoles != null) {
-
-                            List<MemberRoleDTO> updatePositionHoldingClubAndRoles = positionHoldingClubAndRoles.stream()
-                                    .filter(role -> !role.getClubId().equals(clubId))
-                                    .collect(Collectors.toList());
-
-                            member.setPositionHoldingClubAndRoles(updatePositionHoldingClubAndRoles);
-
-                        }
-                        memberRepository.save(member);
+                        updateMemberAfterClubDeleteAndMemberUnrollClub(member, clubId);
                     }
                 }
                 clubRepository.delete(deleteClub.get());
@@ -189,14 +169,10 @@ public class ClubServiceImpl implements ClubService {
             Member member = optionalMember.get();
             Club club = optionalClub.get();
 
-            // Update member and club
-            member.getAssociatedClubs().remove(clubId);
-            club.getAssociatedMembers().remove(memberId);
-
-
-
-            memberRepository.save(member);
-            clubRepository.save(club);
+            // Update member
+            updateMemberAfterClubDeleteAndMemberUnrollClub(member, clubId);
+            // Update club
+            updateClubAfterUnrollMember(club, member);
 
             return member;
         }
@@ -292,5 +268,60 @@ public class ClubServiceImpl implements ClubService {
         if (club.getClubDescription() != null){
         existingClub.setClubDescription(club.getClubDescription());
         }
+    }
+
+    private void updateMemberAfterClubDeleteAndMemberUnrollClub(Member member, String clubId) {
+
+        // Remove clubId from associatedClubs
+        List<String> associatedClubs = member.getAssociatedClubs();
+        if (associatedClubs.contains(clubId)) {
+            member.getAssociatedClubs().remove(clubId);
+            member.setAssociatedClubs(associatedClubs);
+        }
+
+        // Remove clubId from positionHoldingClubAndRoles
+        List<MemberRoleDTO> positionHoldingClubAndRoles = member.getPositionHoldingClubAndRoles();
+
+        if (positionHoldingClubAndRoles != null) {
+
+            List<MemberRoleDTO> updatePositionHoldingClubAndRoles = positionHoldingClubAndRoles.stream()
+                    .filter(memberRoleDTO -> !memberRoleDTO.getClubId().equals(clubId))
+                    .collect(Collectors.toList());
+
+            member.setPositionHoldingClubAndRoles(updatePositionHoldingClubAndRoles);
+
+        }
+        memberRepository.save(member);
+    }
+
+    private void updateClubAfterUnrollMember(Club club, Member member) {
+
+        String memberId = member.getMemberId();
+
+        // Remove memberId from associated members
+        List<String> associatedMembers = club.getAssociatedMembers();
+        if (associatedMembers.contains(memberId)) {
+            club.getAssociatedMembers().remove(memberId);
+            club.setAssociatedMembers(associatedMembers);
+        }
+
+        // Run une na me part eka
+
+        // Remove memberId from positionHoldingMembersAndRole
+        List<ClubRoleDTO> positionHoldingMembersAndRole = club.getPositionHoldingMembersAndRoles();
+
+        if (positionHoldingMembersAndRole != null) {
+
+            System.out.println("before filtering" + positionHoldingMembersAndRole);
+
+            List<ClubRoleDTO> updatedPositionHoldingMembersAndRole = positionHoldingMembersAndRole.stream()
+                    .filter(clubRoleDTO -> !clubRoleDTO.getMemberId().equals(memberId))
+                    .collect(Collectors.toList());
+
+            System.out.println("After filtering" + updatedPositionHoldingMembersAndRole);
+
+            club.setPositionHoldingMembersAndRoles(updatedPositionHoldingMembersAndRole);
+        }
+        clubRepository.save(club);
     }
 }
