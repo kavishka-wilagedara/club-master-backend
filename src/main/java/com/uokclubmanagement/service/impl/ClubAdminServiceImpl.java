@@ -138,7 +138,22 @@ public class ClubAdminServiceImpl implements ClubAdminService {
         }
 
         clubAdminRepository.delete(optionalClubAdmin.get());
+    }
 
+    @Override
+    public ClubAdmin updateClubAdmin(String clubAdminId, ClubAdmin clubAdmin) {
+
+        Optional<ClubAdmin> optionalClubAdmin = clubAdminRepository.findById(clubAdminId);
+        if (optionalClubAdmin.isEmpty()){
+            throw new RuntimeException("Club admin not found with: "+clubAdminId);
+        }
+        else {
+            ClubAdmin clubAdminToUpdate = optionalClubAdmin.get();
+
+            clubAdminToUpdate.setPassword(clubAdmin.getPassword());
+        }
+        clubAdminRepository.save(clubAdmin);
+        return clubAdmin;
     }
 }
 

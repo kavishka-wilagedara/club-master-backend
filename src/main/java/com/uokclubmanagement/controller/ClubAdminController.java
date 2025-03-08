@@ -40,4 +40,9 @@ public class ClubAdminController {
     public void deleteClubAdmin(@PathVariable("clubAdminId") String clubAdminId) {
         clubAdminService.deleteClubAdmin(clubAdminId);
     }
+
+    @PutMapping("/update/{clubAdminId}")
+    public ClubAdmin updateClubAdmin(@RequestBody ClubAdmin clubAdmin, @PathVariable("clubAdminId") String clubAdminId) {
+        return clubAdminService.updateClubAdmin(clubAdminId, clubAdmin);
+    }
 }

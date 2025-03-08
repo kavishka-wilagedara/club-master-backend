@@ -12,4 +12,6 @@ public interface ClubAdminService {
     List<ClubAdmin> getAllClubAdminsByClubId(String clubId);
     Optional<ClubAdmin> getClubAdminById(String clubAdminId);
     void deleteClubAdmin(String clubAdminId);
+    ClubAdmin updateClubAdmin(String clubAdminId, ClubAdmin clubAdmin);
+
 }
