@@ -11,7 +11,9 @@ import com.uokclubmanagement.utills.UpdateEmailUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,8 +31,8 @@ public class MainAdminServiceImpl implements MainAdminService {
     private SequenceGeneratorService sequenceGeneratorService;
     @Autowired
     private UpdateEmailUtils updateEmailUtils;
-
-    
+    @Autowired
+    private CloudinaryService cloudinaryService;
 
     @Override
     public MainAdmin createMainAdmin(MainAdmin mainAdmin) {
@@ -73,7 +75,7 @@ public class MainAdminServiceImpl implements MainAdminService {
     }
 
     @Override
-    public MainAdmin updateMainAdminById(String mainAdminID, MainAdmin mainAdmin) {
+    public MainAdmin updateMainAdminById(String mainAdminID, MainAdmin mainAdmin, MultipartFile mainAdminImage) throws IOException {
 
         Optional<MainAdmin> existingMainAdmin = mainAdminRepository.findById(mainAdminID);
         // Check if existingMainAdmin is null
@@ -81,13 +83,13 @@ public class MainAdminServiceImpl implements MainAdminService {
             throw new RuntimeException("MainAdmin not found with id: " + mainAdminID);
         }
         // Update the mainAdmin fields
-        updateMainAdminFields(existingMainAdmin.get(), mainAdmin);
+        updateMainAdminFields(existingMainAdmin.get(), mainAdmin, mainAdminImage);
 
         // Save on mainAdmin collection
         return mainAdminRepository.save(existingMainAdmin.get());
     }
 
-    private void updateMainAdminFields(MainAdmin existingMainAdmin, MainAdmin mainAdmin) {
+    private void updateMainAdminFields(MainAdmin existingMainAdmin, MainAdmin mainAdmin, MultipartFile mainAdminImage) throws IOException {
 
         if (mainAdmin.getMainAdminName() != null) {
             existingMainAdmin.setMainAdminName(mainAdmin.getMainAdminName());
@@ -109,9 +111,12 @@ public class MainAdminServiceImpl implements MainAdminService {
         if (mainAdmin.getMainAdminPassword() != null) {
             existingMainAdmin.setMainAdminPassword(mainAdmin.getMainAdminPassword());
         }
-//        if (mainAdmin.getMainAdminImage() != null){
-//            existingMainAdmin.setMainAdminImage(mainAdmin.getMainAdminImage());
-//        }
+
+        if(mainAdminImage != null && !mainAdminImage.isEmpty()){
+            cloudinaryService.deleteImage(existingMainAdmin.getMainAdminImageUrl());
+            String mainAdminImageUrl = cloudinaryService.uploadImage(mainAdminImage);
+            existingMainAdmin.setMainAdminImageUrl(mainAdminImageUrl);
+        }
 
     }
 

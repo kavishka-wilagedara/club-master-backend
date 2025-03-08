@@ -19,7 +19,6 @@ public class ClubAdmin{
     @Indexed(unique = true)
     private String username;
     private String password;
-    private byte[] clubAdminImage;
 
     public ClubAdmin() {}
 
@@ -77,13 +76,5 @@ public class ClubAdmin{
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public byte[] getClubAdminImage() {
-        return clubAdminImage;
-    }
-
-    public void setClubAdminImage(byte[] clubAdminImage) {
-        this.clubAdminImage = clubAdminImage;
     }
 }

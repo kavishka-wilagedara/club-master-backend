@@ -1,5 +1,7 @@
 package com.uokclubmanagement.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.uokclubmanagement.entity.Club;
 import com.uokclubmanagement.entity.Member;
 import com.uokclubmanagement.repository.ClubRepository;
@@ -10,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,19 +35,27 @@ public class MemberController {
     private MemberRepository memberRepository;
 
     @PostMapping("/save")
-    public Member save(@RequestBody Member member) {
-        return memberService.createMember(member);
+    public Member saveMember(@RequestBody Member member) {
+            return memberService.createMember(member);
     }
 
     @GetMapping("/all")
-    public List<Member> getAll() {
+    public List<Member> getAllMembers() {
         return memberService.getAllMembers();
     }
 
     @PutMapping("/update/{memberId}")
-    public ResponseEntity<?> updateMember(@PathVariable("memberId") String memberId, @RequestBody Member member) {
+    public ResponseEntity<?> updateMember(@PathVariable("memberId") String memberId,
+                                          @RequestPart("member") String memberJason,
+                                          @RequestPart("file") MultipartFile memberImage) throws IOException {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+
+        Member member = objectMapper.readValue(memberJason, Member.class);
+
         try {
-            memberService.updateMemberById(memberId, member);
+            memberService.updateMemberById(memberId, member, memberImage);
             return ResponseEntity.ok().build();
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

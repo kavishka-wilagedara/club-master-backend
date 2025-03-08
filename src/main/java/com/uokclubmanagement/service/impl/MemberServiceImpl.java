@@ -11,7 +11,9 @@ import com.uokclubmanagement.utills.UpdateEmailUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +31,8 @@ public class MemberServiceImpl implements MemberService {
     private SequenceGeneratorService sequenceGeneratorService;
     @Autowired
     private UpdateEmailUtils updateEmailUtils;
+    @Autowired
+    private CloudinaryService cloudinaryService;
 
     @Override
     public Member createMember(Member member) {
@@ -78,7 +82,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member updateMemberById(String memberId, Member member) {
+    public Member updateMemberById(String memberId, Member member, MultipartFile memberImage) throws IOException {
 
         Optional<Member> existingMember = memberRepository.findById(memberId);
 
@@ -88,7 +92,7 @@ public class MemberServiceImpl implements MemberService {
         }
 
         // Update the fields
-        updateMemberFields(existingMember.get(), member);
+        updateMemberFields(existingMember.get(), member, memberImage);
 
         // Check if member is clubAdmin
         Optional<ClubAdmin> optionalClubAdmin = Optional.ofNullable(clubAdminRepository.findClubAdminByMemberId(memberId));
@@ -103,7 +107,7 @@ public class MemberServiceImpl implements MemberService {
 
     }
 
-    private void updateMemberFields(Member existingMember, Member member) {
+    private void updateMemberFields(Member existingMember, Member member, MultipartFile memberImage) throws IOException {
         if (member.getFirstName() != null) {
             existingMember.setFirstName(member.getFirstName());
         }
@@ -128,6 +132,11 @@ public class MemberServiceImpl implements MemberService {
             existingMember.setPassword(member.getPassword());
         }
 
+        if(memberImage != null && !memberImage.isEmpty()){
+            cloudinaryService.deleteImage(existingMember.getMemberImageUrl());
+            String memberImageUrl = cloudinaryService.uploadImage(memberImage);
+            existingMember.setMemberImageUrl(memberImageUrl);
+        }
     }
 
     @Override
