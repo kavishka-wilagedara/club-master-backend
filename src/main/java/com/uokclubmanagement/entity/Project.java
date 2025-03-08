@@ -16,7 +16,7 @@ public class Project extends ContentSchedule {
     private String projectName;
     private LocalDate projectHeldDate;
 
-//    private byte[] projectImage;
+    private String projectImageUrl;
 
     public Project() {}
 
@@ -44,11 +44,11 @@ public class Project extends ContentSchedule {
         this.projectHeldDate = projectHeldDate;
     }
 
-//    public byte[] getProjectImage() {
-//        return projectImage;
-//    }
-//
-//    public void setProjectImage(byte[] projectImage) {
-//        this.projectImage = projectImage;
-//    }
+    public String getProjectImageUrl() {
+        return projectImageUrl;
+    }
+
+    public void setProjectImageUrl(String projectImageUrl) {
+        this.projectImageUrl = projectImageUrl;
+    }
 }

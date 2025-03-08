@@ -38,7 +38,7 @@ public class AwardServiceImpl implements AwardService {
     private CloudinaryService cloudinaryService;
 
     @Override
-    public Award createAward(String clubAdminId, String clubId, Award award, MultipartFile file) throws IOException {
+    public Award createAward(String clubAdminId, String clubId, Award award, MultipartFile awardImage) throws IOException {
 
         // Validate clubAdminId and clubId
         ClubAdmin clubAdmin = clubAdminUtils.validateClubAdminAndClub(clubAdminId, clubId);
@@ -56,6 +56,10 @@ public class AwardServiceImpl implements AwardService {
                 award.setAwardId(awardId);
             }
 
+            // Set awardImageUrl
+            String awardImageUrl = cloudinaryService.uploadImage(awardImage);
+            award.setAwardImageUrl(awardImageUrl);
+
             LocalDate currentDate = LocalDate.now();
             LocalTime currentTime = LocalTime.now();
             LocalTime timeWithoutSeconds = currentTime.withNano(0);
@@ -66,10 +70,6 @@ public class AwardServiceImpl implements AwardService {
             award.setPublisherName(clubAdmin.getFullName());
             award.setPublishedDate(currentDate);
             award.setPublishedTime(timeWithoutSeconds);
-
-            // Set awardImageUrl
-            String awardImageUrl = cloudinaryService.uploadImage(file);
-            award.setAwardImageUrl(awardImageUrl);
 
             // Check award date is before today or previous day
             if(award.getAwardDate().isEqual(currentDate) || award.getAwardDate().isBefore(currentDate)){
@@ -133,7 +133,7 @@ public class AwardServiceImpl implements AwardService {
             existingAward.setAwardName(award.getAwardName());
             existingAward.setDescription(award.getDescription());
 
-            // Set awardImageUrl
+            // Set new award image url
             if(file != null && !file.isEmpty()){
                 cloudinaryService.deleteImage(existingAward.getAwardImageUrl());
                 String newAwardImageUrl = cloudinaryService.uploadImage(file);

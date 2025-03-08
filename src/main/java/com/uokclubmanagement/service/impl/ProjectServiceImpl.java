@@ -11,7 +11,9 @@ import com.uokclubmanagement.utills.ClubAdminUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -24,8 +26,6 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
     @Autowired
-    private EventServiceImpl eventServiceImpl;
-    @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
     @Autowired
     private ClubAdminRepository clubAdminRepository;
@@ -33,9 +33,11 @@ public class ProjectServiceImpl implements ProjectService {
     private ClubRepository clubRepository;
     @Autowired
     private ClubAdminUtils clubAdminUtils;
+    @Autowired
+    private CloudinaryService cloudinaryService;
 
     @Override
-    public Project createProject(String clubAdminId, String clubId, Project project) {
+    public Project createProject(String clubAdminId, String clubId, Project project, MultipartFile projectImage) throws IOException {
 
         // Validate clubAdminId and clubId
         ClubAdmin clubAdmin = clubAdminUtils.validateClubAdminAndClub(clubAdminId, clubId);
@@ -52,6 +54,10 @@ public class ProjectServiceImpl implements ProjectService {
                 String projectId = String.format("Project-%04d", seqValue);
                 project.setProjectId(projectId);
             }
+
+            // Set projectImageUrl
+            String projectImageUrl = cloudinaryService.uploadImage(projectImage);
+            project.setProjectImageUrl(projectImageUrl);
 
             LocalDate currentDate = LocalDate.now();
             LocalTime currentTime = LocalTime.now();
@@ -97,7 +103,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project updateProject(String clubAdminId, String projectId, Project project) {
+    public Project updateProject(String clubAdminId, String projectId, Project project, MultipartFile newProjectImage) throws IOException {
 
         // Find project and clubAdmin are existing
         Optional<Project> projectById = projectRepository.findById(projectId);
@@ -124,10 +130,16 @@ public class ProjectServiceImpl implements ProjectService {
             // Set Project and ContentSchedule fields
             existingProject.setProjectName(project.getProjectName());
             existingProject.setDescription(project.getDescription());
-//            existingProject.setProjectImage(project.getProjectImage());
             existingProject.setPublisherName(optionalClubAdmin.get().getFullName());
             existingProject.setPublishedDate(currentDate);
             existingProject.setPublishedTime(timeWithoutSeconds);
+
+            // Set new project image url
+            if(newProjectImage != null && !newProjectImage.isEmpty()){
+                cloudinaryService.deleteImage(existingProject.getProjectImageUrl());
+                String newProjectImageUrl = cloudinaryService.uploadImage(newProjectImage);
+                existingProject.setProjectImageUrl(newProjectImageUrl);
+            }
 
             // Check project held date is before today or previous day
             if(project.getProjectHeldDate().isEqual(currentDate) || project.getProjectHeldDate().isBefore(currentDate)){

@@ -11,6 +11,9 @@ import com.uokclubmanagement.utills.ContentScheduleUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -36,9 +39,12 @@ public class EventServiceImpl implements EventService {
     private ClubAdminUtils clubAdminUtils;
     @Autowired
     private ContentScheduleUtils contentScheduleUtils;
+    @Autowired
+    private CloudinaryService cloudinaryService;
+
 
     @Override
-    public Event createEvent(Event event, String clubId,  String clubAdminId){
+    public Event createEvent(Event event, String clubId, String clubAdminId, MultipartFile eventImage) throws IOException {
 
         // Validate clubAdminId and clubId
         ClubAdmin clubAdmin = clubAdminUtils.validateClubAdminAndClub(clubAdminId, clubId);
@@ -57,6 +63,10 @@ public class EventServiceImpl implements EventService {
                 event.setEventId(eventId);
             }
 
+            // Set eventImage url
+            String eventImageUrl = cloudinaryService.uploadImage(eventImage);
+            event.setEventImageUrl(eventImageUrl);
+
             // Validate date and time
             validateDateAndTime(event);
 
@@ -74,7 +84,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event updateEventById(String clubAdminId, String eventId, Event event) {
+    public Event updateEventById(String clubAdminId, String eventId, Event event, MultipartFile newEventImage) throws IOException {
 
         // Find event and clubAdmin are existing
         Optional<Event> findEvent = eventRepository.findById(eventId);
@@ -99,6 +109,13 @@ public class EventServiceImpl implements EventService {
 
             // Set publisher name
             exisitingEvent.setPublisherName(findClubAdmin.get().getFullName());
+
+            // Set new event image url
+            if(newEventImage != null && !newEventImage.isEmpty()){
+                cloudinaryService.deleteImage(exisitingEvent.getEventImageUrl());
+                String newEventImageUrl = cloudinaryService.uploadImage(newEventImage);
+                exisitingEvent.setEventImageUrl(newEventImageUrl);
+            }
 
             // Save updated fields on events collection
             return eventRepository.save(exisitingEvent);

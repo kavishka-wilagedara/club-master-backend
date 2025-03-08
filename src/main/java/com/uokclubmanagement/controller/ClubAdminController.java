@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/clubAdmin")
+@CrossOrigin(origins = "http://localhost:${frontend.port}")
 public class ClubAdminController {
 
     @Autowired

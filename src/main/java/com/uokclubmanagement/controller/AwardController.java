@@ -14,16 +14,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/award")
+@CrossOrigin(origins = "http://localhost:${frontend.port}")
 public class AwardController {
 
     @Autowired
     private AwardService awardService;
 
     @PostMapping("/{clubId}/save/{clubAdminId}")
-    public Award saveAward(@PathVariable String clubId,
-                           @PathVariable String clubAdminId,
-                           @RequestPart("award") String awardJson,
-                           @RequestPart("awardImage") MultipartFile awardImage) throws IOException{
+    public Award saveAward(
+            @PathVariable String clubId,
+            @PathVariable String clubAdminId,
+            @RequestPart("award") String awardJson,
+            @RequestPart("file") MultipartFile image) throws IOException {
 
         // Register the JavaTimeModule
         ObjectMapper objectMapper = new ObjectMapper();
@@ -32,7 +34,8 @@ public class AwardController {
         // Deserialize the JSON string to an Award object
         Award award = objectMapper.readValue(awardJson, Award.class);
 
-        return awardService.createAward(clubAdminId, clubId, award, awardImage);
+        // Call the service method
+        return awardService.createAward(clubAdminId, clubId, award, image);
     }
 
     @GetMapping("/all")
@@ -51,8 +54,17 @@ public class AwardController {
     }
 
     @PutMapping("/{clubAdminId}/update/{awardId}")
-    public Award updateAward(@PathVariable String clubAdminId, @PathVariable String awardId, @RequestBody Award award, @RequestParam("image") MultipartFile image) throws IOException {
-        return awardService.updateAward(clubAdminId, awardId, award, image);
+    public Award updateAward(@PathVariable String clubAdminId,
+                             @PathVariable String awardId,
+                             @RequestPart("award") String awardJson,
+                             @RequestPart("file") MultipartFile newImage) throws IOException {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+
+        Award award = objectMapper.readValue(awardJson, Award.class);
+
+        return awardService.updateAward(clubAdminId, awardId, award, newImage);
     }
 
     @GetMapping("/findAwardById/{awardId}")

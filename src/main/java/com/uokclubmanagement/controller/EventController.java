@@ -1,23 +1,41 @@
 package com.uokclubmanagement.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.uokclubmanagement.entity.Award;
 import com.uokclubmanagement.entity.Event;
 import com.uokclubmanagement.repository.EventRepository;
 import com.uokclubmanagement.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/event")
+@CrossOrigin(origins = "http://localhost:${frontend.port}")
 public class EventController {
 
     @Autowired
     private EventService eventService;
 
     @PostMapping("/{clubId}/save/{clubAdminId}")
-    public Event createEvent(@PathVariable("clubId") String clubId, @PathVariable("clubAdminId") String clubAdminId, @RequestBody Event event) {
-        return eventService.createEvent(event, clubId, clubAdminId);
+    public Event createEvent(
+            @PathVariable("clubId") String clubId,
+            @PathVariable("clubAdminId") String clubAdminId,
+            @RequestPart("event") String eventJason,
+            @RequestPart("file") MultipartFile image) throws IOException {
+
+        // Register the JavaTimeModule
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+
+        // Deserialize the JSON string to an Award object
+        Event event = objectMapper.readValue(eventJason, Event.class);
+
+        return eventService.createEvent(event, clubId, clubAdminId, image);
     }
 
     @GetMapping("/all")
@@ -26,8 +44,17 @@ public class EventController {
     }
 
     @PutMapping("/{clubAdminId}/update/{eventId}")
-    public Event updateEvent(@PathVariable("clubAdminId") String clubAdminId, @PathVariable("eventId") String eventId, @RequestBody Event event) {
-        return eventService.updateEventById(clubAdminId, eventId, event);
+    public Event updateEvent(@PathVariable("clubAdminId") String clubAdminId,
+                             @PathVariable("eventId") String eventId,
+                             @RequestPart("event") String eventJason,
+                             @RequestPart("file") MultipartFile newImage) throws IOException {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+
+        Event event = objectMapper.readValue(eventJason, Event.class);
+
+        return eventService.updateEventById(clubAdminId, eventId, event, newImage);
     }
 
     @DeleteMapping("/delete/{eventId}")

@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/execution-panel")
+@CrossOrigin(origins = "http://localhost:${frontend.port}")
 public class ExecutionPanelController {
 
     @Autowired

@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/member")
-@CrossOrigin(origins = "http://localhost:5174")
+@CrossOrigin(origins = "http://localhost:${frontend.port}")
 public class MemberController {
 
     @Autowired
@@ -32,7 +32,7 @@ public class MemberController {
 
     @PostMapping("/save")
     public Member save(@RequestBody Member member) {
-            return memberService.createMember(member);
+        return memberService.createMember(member);
     }
 
     @GetMapping("/all")
