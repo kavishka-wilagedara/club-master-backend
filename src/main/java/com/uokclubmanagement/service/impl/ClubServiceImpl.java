@@ -79,6 +79,25 @@ public class ClubServiceImpl implements ClubService {
 
         Optional<Club> deleteClub = clubRepository.findById(clubId);
         if (deleteClub.isPresent()) {
+
+            List<String> associatedMembers = new ArrayList<>();
+            associatedMembers = deleteClub.get().getAssociatedMembers();
+
+            for (int i = 0; i < associatedMembers.size(); i++) {
+
+                Optional<Member> member = memberRepository.findById(associatedMembers.get(i));
+                if (member.isPresent()) {
+                    Member memberEntity = member.get();
+                    List<String> associatedClub = new ArrayList<>();
+                    associatedClub = memberEntity.getAssociatedClubs();
+
+                    if(associatedClub.contains(clubId)){
+                        associatedClub.remove(clubId);
+                    }
+                    memberRepository.save(memberEntity);
+                }
+            }
+
             clubRepository.delete(deleteClub.get());
             System.out.println("Deleted Club with id: " + clubId);
         }
