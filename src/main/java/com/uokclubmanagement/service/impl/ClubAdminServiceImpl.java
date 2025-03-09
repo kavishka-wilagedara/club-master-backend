@@ -10,6 +10,7 @@ import com.uokclubmanagement.repository.MainAdminRepository;
 import com.uokclubmanagement.repository.MemberRepository;
 import com.uokclubmanagement.service.ClubAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,6 +30,8 @@ public class ClubAdminServiceImpl implements ClubAdminService {
     private MainAdminRepository mainAdminRepository;
     @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public ClubAdmin createClubAdmin(String memberId, String clubId, ClubAdmin clubAdmin) {
@@ -83,7 +86,10 @@ public class ClubAdminServiceImpl implements ClubAdminService {
                 clubAdmin.setMemberId(memberId);
                 clubAdmin.setFullName(member.getFirstName()+" "+member.getLastName());
                 clubAdmin.setEmail(member.getEmail());
-//                clubAdmin.setClubAdminImage(member.getMemberImage());
+
+                // Encode password
+                String newEncodedPassword = passwordEncoder.encode(member.getPassword());
+                member.setPassword(newEncodedPassword);
             }
         }
         return clubAdminRepository.save(clubAdmin);
@@ -150,7 +156,9 @@ public class ClubAdminServiceImpl implements ClubAdminService {
         else {
             ClubAdmin clubAdminToUpdate = optionalClubAdmin.get();
 
-            clubAdminToUpdate.setPassword(clubAdmin.getPassword());
+            // Encode password
+            String newEncodedPassword = passwordEncoder.encode(clubAdminToUpdate.getPassword());
+            clubAdminToUpdate.setPassword(newEncodedPassword);
         }
         clubAdminRepository.save(clubAdmin);
         return clubAdmin;

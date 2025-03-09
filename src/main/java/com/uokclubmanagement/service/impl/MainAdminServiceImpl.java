@@ -9,6 +9,7 @@ import com.uokclubmanagement.repository.MemberRepository;
 import com.uokclubmanagement.service.MainAdminService;
 import com.uokclubmanagement.utills.UpdateEmailUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,6 +34,8 @@ public class MainAdminServiceImpl implements MainAdminService {
     private UpdateEmailUtils updateEmailUtils;
     @Autowired
     private CloudinaryService cloudinaryService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public MainAdmin createMainAdmin(MainAdmin mainAdmin) {
@@ -63,6 +66,10 @@ public class MainAdminServiceImpl implements MainAdminService {
             long seqValue = sequenceGeneratorService.generateSequence("Main Admin Sequence");
             String mainAdminId = String.format("Adm-%04d", seqValue);
             mainAdmin.setMainAdminId(mainAdminId);
+
+            // Encode password
+            String encodedPassword = passwordEncoder.encode(mainAdmin.getMainAdminPassword());
+            mainAdmin.setMainAdminPassword(encodedPassword);
 
          }
             return mainAdminRepository.save(mainAdmin);
@@ -109,7 +116,9 @@ public class MainAdminServiceImpl implements MainAdminService {
             existingMainAdmin.setMainAdminPhone(mainAdmin.getMainAdminPhone());
         }
         if (mainAdmin.getMainAdminPassword() != null) {
-            existingMainAdmin.setMainAdminPassword(mainAdmin.getMainAdminPassword());
+            // Encode password
+            String newEncodedPassword = passwordEncoder.encode(mainAdmin.getMainAdminPassword());
+            existingMainAdmin.setMainAdminPassword(newEncodedPassword);
         }
 
         if(mainAdminImage != null && !mainAdminImage.isEmpty()){

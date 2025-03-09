@@ -9,6 +9,7 @@ import com.uokclubmanagement.repository.MemberRepository;
 import com.uokclubmanagement.service.MemberService;
 import com.uokclubmanagement.utills.UpdateEmailUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,6 +34,8 @@ public class MemberServiceImpl implements MemberService {
     private UpdateEmailUtils updateEmailUtils;
     @Autowired
     private CloudinaryService cloudinaryService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public Member createMember(Member member) {
@@ -62,6 +65,10 @@ public class MemberServiceImpl implements MemberService {
             long seqValue = sequenceGeneratorService.generateSequence("Member Sequence");
             String memberId = String.format("Mem-%05d", seqValue);
             member.setMemberId(memberId);
+
+            // Encode password
+            String newEncodedPassword = passwordEncoder.encode(member.getPassword());
+            member.setPassword(newEncodedPassword);
             }
             return memberRepository.save(member);
         }
@@ -129,7 +136,8 @@ public class MemberServiceImpl implements MemberService {
             existingMember.setPhoneNo(member.getPhoneNo());
         }
         if (member.getPassword() != null) {
-            existingMember.setPassword(member.getPassword());
+            String newEncodedPassword = passwordEncoder.encode(member.getPassword());
+            existingMember.setPassword(newEncodedPassword);
         }
 
         if(memberImage != null && !memberImage.isEmpty()){
