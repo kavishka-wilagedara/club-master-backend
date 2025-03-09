@@ -62,9 +62,10 @@ public class ExecutivePanelServiceImpl implements ExecutivePanelService {
                     // Set member full name and mail
                     String memberFullName = member.getFirstName()+" "+(member.getLastName());
                     String email = member.getEmail();
+                    String imageUrl = member.getMemberImageUrl();
 
                     MemberRoleDTO memberInput = new MemberRoleDTO(clubId, role);
-                    ClubRoleDTO clubInput = new ClubRoleDTO(memberId, memberFullName, email, role);
+                    ClubRoleDTO clubInput = new ClubRoleDTO(memberId, memberFullName, email, role, imageUrl);
 
                     List<MemberRoleDTO> memberClubRoles = member.getPositionHoldingClubAndRoles();
                     List<ClubRoleDTO> clubRoles = club.getPositionHoldingMembersAndRoles();

@@ -100,7 +100,7 @@ public class Club {
 
     public void setPositionHoldingMembersAndRoles(List<ClubRoleDTO> clubRole) {
         this.positionHoldingMembersAndRoles = positionHoldingMembersAndRoles.stream()
-                .map(role -> new ClubRoleDTO(role.getMemberId(), role.getMemberName(), role.getEmail(), role.getRole())) // Using constructor on CreateExecutivePanelDTO
+                .map(role -> new ClubRoleDTO(role.getMemberId(), role.getMemberName(), role.getEmail(), role.getRole(), role.getImageUrl())) // Using constructor on CreateExecutivePanelDTO
                 .collect(toList());
     }
 

@@ -9,12 +9,14 @@ public class ClubRoleDTO {
     private String memberName;
     private String role;
     private String email;
+    private String imageUrl;
 
-    public ClubRoleDTO(String memberId, String memberName, String email, String role) {
+    public ClubRoleDTO(String memberId, String memberName, String email, String role, String imageUrl) {
         this.memberId = memberId;
         this.memberName = memberName;
         this.email = email;
         this.role = role;
+        this.imageUrl = imageUrl;
     }
 
     public ClubRoleDTO() {}
@@ -49,5 +51,13 @@ public class ClubRoleDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
