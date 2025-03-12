@@ -10,7 +10,7 @@ public interface ClubAdminService {
     ClubAdmin createClubAdmin(String memberId, String clubId, ClubAdmin clubAdmin);
     List<ClubAdmin> getAllClubAdmins();
     List<ClubAdmin> getAllClubAdminsByClubId(String clubId);
-    Optional<ClubAdmin> getClubAdminById(String clubAdminId);
+    ClubAdmin getClubAdminById(String clubAdminId);
     void deleteClubAdmin(String clubAdminId);
     ClubAdmin updateClubAdmin(String clubAdminId, ClubAdmin clubAdmin);
 

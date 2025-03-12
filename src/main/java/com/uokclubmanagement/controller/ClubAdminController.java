@@ -32,7 +32,7 @@ public class ClubAdminController {
     }
 
     @GetMapping("/getClubAdmin/{clubAdminId}")
-    public Optional<ClubAdmin> getClubAdmin(@PathVariable("clubAdminId") String clubAdminId) {
+    public ClubAdmin getClubAdmin(@PathVariable("clubAdminId") String clubAdminId) {
         return clubAdminService.getClubAdminById(clubAdminId);
     }
 
