@@ -106,15 +106,7 @@ public class ClubAdminServiceImpl implements ClubAdminService {
         Optional<Club> optionalClub = clubRepository.findById(clubId);
 
         if (optionalClub.isPresent()) {
-
-            List<ClubAdmin> clubAdmins = new ArrayList<>();
-
-            for (int i = 0; i < getAllClubAdmins().size(); i++) {
-                if (getAllClubAdmins().get(i).getClubId().equals(clubId)) {
-                    clubAdmins.add(getAllClubAdmins().get(i));
-                }
-            }
-            return clubAdmins;
+            return clubAdminRepository.findClubAdminByClubId(clubId);  // Use repository method to directly
         }
 
         else {
